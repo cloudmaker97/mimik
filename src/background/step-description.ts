@@ -16,6 +16,7 @@ export function buildFallbackDescription(action: string, meta: ElementMeta): str
 
   switch (action) {
     case 'click':
+    case 'auxclick':
       if (meta.tag === 'input' && meta.inputType === 'checkbox') return `Toggle checkbox ${target}`;
       if (meta.tag === 'input' && meta.inputType === 'radio') return `Select radio ${target}`;
       if (meta.href) return `Click link "${target}"`;
@@ -23,8 +24,14 @@ export function buildFallbackDescription(action: string, meta: ElementMeta): str
     case 'input':
       if (meta.inputType) return `Type into ${meta.inputType} field ${target}`;
       return `Type into ${target}`;
-    case 'scroll':
-      return 'Scroll the page';
+    case 'copy':
+      return `Copy from ${target}`;
+    case 'paste':
+      return `Paste into ${target}`;
+    case 'cut':
+      return `Cut from ${target}`;
+    case 'drag':
+      return `Drag ${target}`;
     case 'navigate':
       return 'Navigate to page';
     default:
