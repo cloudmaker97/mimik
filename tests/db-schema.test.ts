@@ -48,7 +48,7 @@ describe('MimikDB Schema', () => {
     expect(typeof retrieved!.blob).not.toBe('string');
   });
 
-  it('has version 1 with three tables', () => {
-    expect(db.tables.map(t => t.name).sort()).toEqual(['guides', 'screenshots', 'steps']);
+  it('has version 2 with four tables including rrwebEvents', () => {
+    expect(db.tables.map(t => t.name).sort()).toEqual(['guides', 'rrwebEvents', 'screenshots', 'steps']);
   });
 });

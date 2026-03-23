@@ -9,7 +9,7 @@ export default defineConfig({
   manifest: {
     name: 'Mimik',
     description: 'Auto-capture browser workflows and generate step-by-step guides with annotated screenshots.',
-    permissions: ['storage', 'activeTab', 'tabs', 'scripting', 'unlimitedStorage', 'sidePanel'],
+    permissions: ['storage', 'activeTab', 'tabs', 'scripting', 'unlimitedStorage', 'sidePanel', 'webNavigation'],
     host_permissions: ['<all_urls>'],
     minimum_chrome_version: '118',
     action: {},

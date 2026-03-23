@@ -11,10 +11,10 @@ export interface Step {
   guideId: string;
   index: number;
   description: string;
-  action: 'click' | 'input' | 'scroll' | 'navigate';
+  action: string;
   url: string;
   timestamp: number;
-  screenshotId: string;
+  screenshotId?: string;
 }
 
 export interface Screenshot {
@@ -30,3 +30,14 @@ export interface Settings {
   aiApiKey: string;
   aiProvider: 'openai' | 'anthropic';
 }
+
+export interface ElementMeta {
+  tag: string; cssSelector: string; textContent: string | null;
+  ariaLabel: string | null; placeholder: string | null; altText: string | null;
+  name: string | null; role: string | null; href: string | null;
+  inputType: string | null; dataTestId: string | null;
+  rect: { x: number; y: number; width: number; height: number };
+  devicePixelRatio: number;
+}
+
+export interface RrwebEventChunk { id: string; guideId: string; events: unknown[]; timestamp: number; }

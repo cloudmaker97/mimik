@@ -1,3 +1,5 @@
+import type { ElementMeta } from './types';
+
 export type MessageType = 'PING' | 'CAPTURE_SCREENSHOT' | 'GET_STATE';
 
 export interface PingMessage { type: 'PING'; }
@@ -9,4 +11,25 @@ export interface CaptureScreenshotResponse { screenshotId: string; }
 export interface GetStateMessage { type: 'GET_STATE'; }
 export interface GetStateResponse { state: string; }
 
-export type ExtensionMessage = PingMessage | CaptureScreenshotMessage | GetStateMessage;
+export interface StartRecordingMessage { type: 'START_RECORDING'; url: string; }
+export interface StopRecordingMessage { type: 'STOP_RECORDING'; }
+export interface UserActionMessage {
+  type: 'USER_ACTION';
+  guideId: string;
+  action: 'click' | 'input' | 'scroll';
+  elementMeta: ElementMeta;
+}
+export interface RrwebChunkMessage {
+  type: 'RRWEB_CHUNK';
+  guideId: string;
+  events: unknown[];
+  timestamp: number;
+}
+export interface SpaNavigateMessage {
+  type: 'SPA_NAVIGATE';
+  url: string;
+  guideId: string;
+}
+
+export type ExtensionMessage = PingMessage | CaptureScreenshotMessage | GetStateMessage
+  | StartRecordingMessage | StopRecordingMessage | UserActionMessage | RrwebChunkMessage | SpaNavigateMessage;

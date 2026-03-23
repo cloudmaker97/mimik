@@ -6,6 +6,7 @@ export const captureMachine = createMachine({
   context: {
     currentGuideId: null as string | null,
     stepCount: 0,
+    currentUrl: '' as string,
   },
   states: {
     idle: {
@@ -15,6 +16,7 @@ export const captureMachine = createMachine({
           actions: assign({
             currentGuideId: () => crypto.randomUUID(),
             stepCount: 0,
+            currentUrl: ({ event }) => (event as { type: 'START_RECORDING'; url?: string }).url ?? '',
           }),
         },
       },
@@ -26,6 +28,17 @@ export const captureMachine = createMachine({
           actions: assign({
             currentGuideId: null,
             stepCount: 0,
+            currentUrl: '',
+          }),
+        },
+        USER_ACTION: {
+          actions: assign({
+            stepCount: ({ context }) => context.stepCount + 1,
+          }),
+        },
+        SPA_NAVIGATE: {
+          actions: assign({
+            currentUrl: ({ event }) => (event as { type: 'SPA_NAVIGATE'; url: string }).url,
           }),
         },
       },
