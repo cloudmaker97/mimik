@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Trash2, FileText } from 'lucide-react';
-import { getGuides, deleteGuide } from '../shared/guide-service';
+import { getGuides, softDeleteGuide } from '../shared/guide-service';
 import type { Guide } from '../shared/types';
 
 function formatRelativeTime(timestamp: number): string {
@@ -44,7 +44,7 @@ export default function LibraryView({ onOpen, onStartRecording, isAlive }: Libra
   const handleDelete = useCallback(async (e: React.MouseEvent, guideId: string) => {
     e.stopPropagation();
     if (!window.confirm('Delete this guide?')) return;
-    await deleteGuide(guideId);
+    await softDeleteGuide(guideId);
     await loadGuides();
   }, [loadGuides]);
 
