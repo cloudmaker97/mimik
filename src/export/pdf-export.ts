@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import { jsPDF } from 'jspdf';
 import type { Guide, Step, Screenshot } from '@/guides/types';
 
@@ -64,7 +65,7 @@ export async function exportGuideAsPDF(
         doc.addImage(dataUrl, 'JPEG', margin, y, imgWidth, finalHeight);
         y += finalHeight + 8;
       } catch (err) {
-        console.warn('[Mimik] PDF: failed to embed screenshot for step', step.index, err);
+        logger.warn(' PDF: failed to embed screenshot for step', step.index, err);
         y += 4;
       }
     }

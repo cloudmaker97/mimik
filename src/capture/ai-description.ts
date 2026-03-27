@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import OpenAI from 'openai';
 import type { ElementMeta } from '@/guides/types';
 
@@ -50,7 +51,7 @@ export async function getAIDescription(
       return block.type === 'text' ? block.text.trim() : null;
     }
   } catch (err) {
-    console.error('[Mimik] AI description failed, using fallback', err);
+    logger.error(' AI description failed, using fallback', err);
     return null;
   }
 }

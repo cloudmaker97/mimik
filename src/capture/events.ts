@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import { sendMessage } from '@/lib/messaging';
 import { extractElementMeta } from './element-meta';
 
@@ -104,7 +105,7 @@ export function startCapture(guideId: string): () => void {
 
   function enqueue(fn: () => void) {
     eventQueue = eventQueue.then(() => {
-      try { fn(); } catch (err) { console.warn('[Mimik] Event handler error', err); }
+      try { fn(); } catch (err) { logger.warn(' Event handler error', err); }
     });
   }
 
@@ -146,7 +147,7 @@ export function startCapture(guideId: string): () => void {
 
   function sendAction(action: string, meta: ReturnType<typeof extractElementMeta>) {
     sendMessage('userAction', { guideId, action, elementMeta: meta })
-      .catch(err => console.warn('[Mimik] Failed to send action', err));
+      .catch(err => logger.warn(' Failed to send action', err));
   }
 
   function resetWindow() {
@@ -172,7 +173,7 @@ export function startCapture(guideId: string): () => void {
       const meta = extractElementMeta(target);
       sendAction(action, meta);
     } catch (err) {
-      console.warn('[Mimik] Failed to capture action', err);
+      logger.warn(' Failed to capture action', err);
     }
   }
 
@@ -227,7 +228,7 @@ export function startCapture(guideId: string): () => void {
         const meta = extractElementMeta(target);
         sendAction(`keydown:${e.key}`, meta);
       } catch (err) {
-        console.warn('[Mimik] Failed to capture keydown', err);
+        logger.warn(' Failed to capture keydown', err);
       }
     });
   }
@@ -245,7 +246,7 @@ export function startCapture(guideId: string): () => void {
         const meta = extractElementMeta(target);
         sendAction('input', meta);
       } catch (err) {
-        console.warn('[Mimik] Failed to capture input', err);
+        logger.warn(' Failed to capture input', err);
       }
     });
   }
@@ -260,7 +261,7 @@ export function startCapture(guideId: string): () => void {
         const meta = extractElementMeta(target);
         sendAction(e.type, meta); // 'copy', 'paste', or 'cut'
       } catch (err) {
-        console.warn('[Mimik] Failed to capture clipboard', err);
+        logger.warn(' Failed to capture clipboard', err);
       }
     });
   }
@@ -289,7 +290,7 @@ export function startCapture(guideId: string): () => void {
             const meta = extractElementMeta(target);
             sendAction('drag', meta);
           } catch (err) {
-            console.warn('[Mimik] Failed to capture drag', err);
+            logger.warn(' Failed to capture drag', err);
           }
         });
       }

@@ -1,30 +1,53 @@
-import { createMachine, assign } from 'xstate';
+import { createMachine, assign, type SnapshotFrom } from 'xstate';
+
+export const CaptureState = {
+  IDLE: 'IDLE',
+  RECORDING: 'RECORDING',
+} as const;
+
+export type CaptureStateValue = (typeof CaptureState)[keyof typeof CaptureState];
+
+type CaptureEvent =
+  | { type: 'START_RECORDING'; url?: string }
+  | { type: 'STOP_RECORDING' }
+  | { type: 'USER_ACTION' }
+  | { type: 'URL_CHANGED'; url: string };
+
+interface CaptureContext {
+  currentGuideId: string | null;
+  stepCount: number;
+  currentUrl: string;
+}
 
 export const captureMachine = createMachine({
   id: 'capture',
-  initial: 'idle',
+  initial: CaptureState.IDLE,
+  types: {} as {
+    context: CaptureContext;
+    events: CaptureEvent;
+  },
   context: {
-    currentGuideId: null as string | null,
+    currentGuideId: null,
     stepCount: 0,
-    currentUrl: '' as string,
+    currentUrl: '',
   },
   states: {
-    idle: {
+    [CaptureState.IDLE]: {
       on: {
         START_RECORDING: {
-          target: 'recording',
+          target: CaptureState.RECORDING,
           actions: assign({
             currentGuideId: () => crypto.randomUUID(),
             stepCount: 0,
-            currentUrl: ({ event }) => (event as { type: 'START_RECORDING'; url?: string }).url ?? '',
+            currentUrl: ({ event }) => event.url ?? '',
           }),
         },
       },
     },
-    recording: {
+    [CaptureState.RECORDING]: {
       on: {
         STOP_RECORDING: {
-          target: 'idle',
+          target: CaptureState.IDLE,
           actions: assign({
             currentGuideId: null,
             stepCount: 0,
@@ -36,12 +59,14 @@ export const captureMachine = createMachine({
             stepCount: ({ context }) => context.stepCount + 1,
           }),
         },
-        SPA_NAVIGATE: {
+        URL_CHANGED: {
           actions: assign({
-            currentUrl: ({ event }) => (event as { type: 'SPA_NAVIGATE'; url: string }).url,
+            currentUrl: ({ event }) => event.url,
           }),
         },
       },
     },
   },
 });
+
+export type CaptureSnapshot = SnapshotFrom<typeof captureMachine>;

@@ -1,6 +1,8 @@
+import { logger } from '@/lib/logger';
 import { sessionStorage } from '@/lib/browser-api';
 import { createActor } from 'xstate';
-import { captureMachine } from '@/capture/machine';
+import { captureMachine, type CaptureSnapshot, type CaptureStateValue } from '@/capture/machine';
+import type { PanelStateUpdate } from '@/lib/port';
 import type { ActorRef } from './types';
 
 const STORAGE_KEY = 'machineSnapshot';
@@ -8,9 +10,13 @@ const STORAGE_KEY = 'machineSnapshot';
 let actor: ActorRef;
 let readyResolve!: () => void;
 
-export const ready = new Promise<void>((resolve) => {
+const readyPromise = new Promise<void>((resolve) => {
   readyResolve = resolve;
 });
+
+export function waitUntilReady(): Promise<void> {
+  return readyPromise;
+}
 
 export function getActor(): ActorRef {
   return actor;
@@ -19,26 +25,39 @@ export function getActor(): ActorRef {
 export async function initActor(): Promise<void> {
   try {
     const result = await sessionStorage.get(STORAGE_KEY);
-    const snapshot = result[STORAGE_KEY] ?? undefined;
+    const snapshot = (result[STORAGE_KEY] as CaptureSnapshot) ?? undefined;
     actor = createActor(captureMachine, { snapshot });
     actor.start();
+    logger.info('Actor restored from snapshot → state:', actor.getSnapshot().value);
   } catch (err) {
-    console.warn('[Mimik] Failed to restore snapshot, starting fresh', err);
+    logger.warn('Failed to restore snapshot, starting fresh', err);
     await sessionStorage.remove(STORAGE_KEY);
     actor = createActor(captureMachine);
     actor.start();
   }
 
   actor.subscribe(() => {
-    const persisted = actor.getPersistedSnapshot();
-    sessionStorage.set({ [STORAGE_KEY]: persisted });
+    const snap = actor.getSnapshot();
+    logger.debug('State transition →', snap.value, '| steps:', snap.context.stepCount);
+    sessionStorage.set({ [STORAGE_KEY]: actor.getPersistedSnapshot() });
   });
 
   readyResolve();
+  logger.info('Actor ready');
+}
+
+export function getStateUpdate(): PanelStateUpdate {
+  const snap = actor.getSnapshot();
+  return {
+    type: 'STATE_UPDATE',
+    state: snap.value as CaptureStateValue,
+    stepCount: snap.context.stepCount,
+    currentGuideId: snap.context.currentGuideId,
+  };
 }
 
 export function initActorFallback(): void {
-  console.error('[Mimik] initActor failed, starting fresh');
+  logger.error(' initActor failed, starting fresh');
   actor = createActor(captureMachine);
   actor.start();
   readyResolve();

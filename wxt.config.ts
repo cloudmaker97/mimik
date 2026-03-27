@@ -5,6 +5,9 @@ export default defineConfig({
   modules: ["@wxt-dev/module-react"],
   srcDir: "src",
   imports: false,
+  webExt: {
+    chromiumArgs: ['--user-data-dir=/home/light/.config/chromium'],
+  },
   alias: {
     '@': 'src',
   },

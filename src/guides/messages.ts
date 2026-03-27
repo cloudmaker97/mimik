@@ -26,7 +26,7 @@ export interface RrwebChunkMessage {
   timestamp: number;
 }
 export interface SpaNavigateMessage {
-  type: 'SPA_NAVIGATE';
+  type: 'URL_CHANGED';
   url: string;
   guideId: string;
 }

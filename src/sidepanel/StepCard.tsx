@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import { useState, useEffect } from 'react';
 import { Trash2, GripVertical, EyeOff, Copy, Check } from 'lucide-react';
 import type { Step, Screenshot } from '@/guides/types';
@@ -66,7 +67,7 @@ export default function StepCard({
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch (err) {
-      console.error('[Mimik] Copy to clipboard failed', err);
+      logger.error(' Copy to clipboard failed', err);
     }
   };
 
