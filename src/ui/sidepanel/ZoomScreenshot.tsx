@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import type { Screenshot } from '@/guides/types';
+import type { Screenshot } from '@/core/guides/types';
 
 interface ZoomScreenshotProps {
   screenshot: Screenshot;

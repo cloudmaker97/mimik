@@ -1,6 +1,6 @@
 import { defineExtensionMessaging } from '@webext-core/messaging';
-import type { ElementMeta } from '@/guides/types';
-import type { CaptureStateValue } from '@/capture/machine';
+import type { ElementMeta } from '@/core/guides/types';
+import type { CaptureStateValue } from '@/core/capture/machine';
 
 export interface GetStateResponse {
   state: CaptureStateValue;

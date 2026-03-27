@@ -3,10 +3,10 @@ import { browser } from '#imports';
 import { defineContentScript } from 'wxt/utils/define-content-script';
 import { sendMessage } from '@/lib/messaging';
 import { TabMessage } from '@/lib/tab-messages';
-import { CaptureState } from '@/capture/machine';
-import { startCapture } from '@/capture/events';
-import { startRrwebRecording } from '@/capture/rrweb-recorder';
-import { updateUrl } from '@/capture/spa-nav';
+import { CaptureState } from '@/core/capture/machine';
+import { startCapture } from '@/core/capture/events';
+import { startRrwebRecording } from '@/core/capture/rrweb-recorder';
+import { updateUrl } from '@/core/capture/spa-nav';
 
 const CLEANUP_EVENT = `mimik_remove_content_script_${browser.runtime.id}`;
 

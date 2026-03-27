@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { jsPDF } from 'jspdf';
-import type { Guide, Step, Screenshot } from '@/guides/types';
+import type { Guide, Step, Screenshot } from '@/core/guides/types';
 
 function blobToDataUrl(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {

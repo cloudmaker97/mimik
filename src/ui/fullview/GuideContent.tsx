@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { getGuide, updateGuideTitle, updateStepDescription, deleteStep, reorderSteps, updateScreenshotBlob } from '@/guides/service';
-import type { Guide, Step, Screenshot } from '@/guides/types';
-import StepCard from '@/sidepanel/StepCard';
-import BlurCanvas from '@/sidepanel/BlurCanvas';
-import ExportMenu from '@/sidepanel/ExportMenu';
+import { getGuide, updateGuideTitle, updateStepDescription, deleteStep, reorderSteps, updateScreenshotBlob } from '@/core/guides/service';
+import type { Guide, Step, Screenshot } from '@/core/guides/types';
+import StepCard from '@/ui/sidepanel/StepCard';
+import BlurCanvas from '@/ui/sidepanel/BlurCanvas';
+import ExportMenu from '@/ui/sidepanel/ExportMenu';
 import { navigate } from './router';
 
 interface GuideContentProps {

@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { sessionStorage } from '@/lib/browser-api';
 import { createActor } from 'xstate';
-import { captureMachine, type CaptureSnapshot, type CaptureStateValue } from '@/capture/machine';
+import { captureMachine, type CaptureSnapshot, type CaptureStateValue } from '@/core/capture/machine';
 import type { PanelStateUpdate } from '@/lib/port';
 import type { ActorRef } from './types';
 

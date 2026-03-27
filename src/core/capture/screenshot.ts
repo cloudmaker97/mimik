@@ -1,6 +1,6 @@
 import { captureVisibleTab } from '@/lib/browser-api';
-import { saveScreenshot } from '@/guides/service';
-import type { Screenshot, ElementMeta } from '@/guides/types';
+import { saveScreenshot } from '@/core/guides/service';
+import type { Screenshot, ElementMeta } from '@/core/guides/types';
 
 export async function captureAndStore(tabId: number, stepId: string): Promise<Screenshot> {
   const dataUrl = await captureVisibleTab('jpeg', 90);

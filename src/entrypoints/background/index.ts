@@ -3,7 +3,7 @@ import { logger } from "@/lib/logger";
 import { setSidePanelBehavior } from "@/lib/browser-api";
 import { onMessage } from "@/lib/messaging";
 import { setupPortListener, broadcastStateToPanel } from "@/lib/port";
-import { createGuide, saveRrwebChunk } from "@/guides/service";
+import { createGuide, saveRrwebChunk } from "@/core/guides/service";
 import {
   initActor,
   initActorFallback,

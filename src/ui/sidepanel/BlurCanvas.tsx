@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { Undo, Check, X } from 'lucide-react';
-import type { Screenshot } from '@/guides/types';
+import type { Screenshot } from '@/core/guides/types';
 
 interface BlurCanvasProps {
   screenshot: Screenshot;

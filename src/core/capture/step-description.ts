@@ -1,4 +1,4 @@
-import type { ElementMeta } from '@/guides/types';
+import type { ElementMeta } from '@/core/guides/types';
 
 export function buildFallbackDescription(action: string, meta: ElementMeta): string {
   const target = meta.ariaLabel

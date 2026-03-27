@@ -10,26 +10,10 @@ export class MimikDB extends Dexie {
   constructor() {
     super('mimik');
     this.version(1).stores({
-      guides: 'id, createdAt, updatedAt',
-      steps: 'id, guideId, index',
-      screenshots: 'id, stepId',
-    });
-    this.version(2).stores({
-      guides: 'id, createdAt, updatedAt',
-      steps: 'id, guideId, index',
-      screenshots: 'id, stepId',
-      rrwebEvents: 'id, guideId, timestamp',
-    });
-    this.version(3).stores({
       guides: 'id, createdAt, updatedAt, starred, deletedAt',
       steps: 'id, guideId, index',
       screenshots: 'id, stepId',
       rrwebEvents: 'id, guideId, timestamp',
-    }).upgrade(tx => {
-      return tx.table('guides').toCollection().modify(guide => {
-        if (guide.starred === undefined) guide.starred = false;
-        if (guide.deletedAt === undefined) guide.deletedAt = null;
-      });
     });
   }
 }

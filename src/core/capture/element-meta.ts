@@ -1,5 +1,5 @@
 import { getCssSelector } from 'css-selector-generator';
-import type { ElementMeta } from '@/guides/types';
+import type { ElementMeta } from '@/core/guides/types';
 
 export function extractElementMeta(el: HTMLElement): ElementMeta {
   const rect = el.getBoundingClientRect();

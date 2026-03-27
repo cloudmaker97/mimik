@@ -4,7 +4,7 @@ import TopNav from './TopNav';
 import LibraryContent from './LibraryContent';
 import GuideContent from './GuideContent';
 import GuideOutline from './GuideOutline';
-import type { Step } from '@/guides/types';
+import type { Step } from '@/core/guides/types';
 
 export default function FullViewApp() {
   const route = useRoute();

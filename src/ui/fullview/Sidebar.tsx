@@ -1,7 +1,7 @@
 import { FileText, Star, Trash2, ArrowLeft } from 'lucide-react';
 import type { Route } from './router';
 import { navigate } from './router';
-import type { Step } from '@/guides/types';
+import type { Step } from '@/core/guides/types';
 
 interface SidebarProps {
   route: Route;

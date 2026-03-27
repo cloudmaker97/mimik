@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Trash2, FileText } from 'lucide-react';
-import { getGuides, softDeleteGuide, getFirstStepUrl } from '@/guides/service';
-import type { Guide } from '@/guides/types';
+import { getGuides, softDeleteGuide, getFirstStepUrl } from '@/core/guides/service';
+import type { Guide } from '@/core/guides/types';
 
 function formatRelativeTime(timestamp: number): string {
   const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });

@@ -4,7 +4,7 @@ import { Video, Search } from 'lucide-react';
 import { sendMessage } from '@/lib/messaging';
 import { getActiveTab } from '@/lib/browser-api';
 import { connectToBackground } from '@/lib/port';
-import { CaptureState } from '@/capture/machine';
+import { CaptureState } from '@/core/capture/machine';
 import LibraryView from './LibraryView';
 import GuideEditor from './GuideEditor';
 import RecordingView from './RecordingView';
@@ -116,7 +116,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Stripe-style gradient header */}
+      {/* Header */}
       <div className="relative overflow-hidden px-6 pt-6 pb-7" style={{ background: 'linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%)' }}>
         {/* Glow accent */}
         <div className="absolute -top-12 -right-8 w-44 h-44 rounded-full opacity-15 blur-[40px]" style={{ background: 'linear-gradient(135deg, #FDE68A, #fff)' }} />

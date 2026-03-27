@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Check, Trash2, Square } from 'lucide-react';
 import { getActiveTab } from '@/lib/browser-api';
-import { getStepsForGuide, getScreenshotsForSteps, deleteStep, getGuide } from '@/guides/service';
-import type { Step, Screenshot } from '@/guides/types';
+import { getStepsForGuide, getScreenshotsForSteps, deleteStep, getGuide } from '@/core/guides/service';
+import type { Step, Screenshot } from '@/core/guides/types';
 import ZoomScreenshot from './ZoomScreenshot';
 
 interface RecordingViewProps {

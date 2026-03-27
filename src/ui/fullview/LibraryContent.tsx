@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { LayoutGrid, LayoutList, Star, Trash2, RotateCcw, FileText } from 'lucide-react';
-import { getGuides, getStarredGuides, getTrashedGuides, softDeleteGuide, permanentlyDeleteGuide, restoreGuide, toggleStar, getFirstScreenshot } from '@/guides/service';
-import type { Guide, Screenshot } from '@/guides/types';
+import { getGuides, getStarredGuides, getTrashedGuides, softDeleteGuide, permanentlyDeleteGuide, restoreGuide, toggleStar, getFirstScreenshot } from '@/core/guides/service';
+import type { Guide, Screenshot } from '@/core/guides/types';
 import { navigate } from './router';
-import ZoomScreenshot from '@/sidepanel/ZoomScreenshot';
+import ZoomScreenshot from '@/ui/sidepanel/ZoomScreenshot';
 
 interface LibraryContentProps {
   category: 'all' | 'starred' | 'trash';

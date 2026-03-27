@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import OpenAI from 'openai';
-import type { ElementMeta } from '@/guides/types';
+import type { ElementMeta } from '@/core/guides/types';
 
 export async function getAIDescription(
   blob: Blob,

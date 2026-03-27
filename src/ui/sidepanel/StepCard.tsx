@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import { useState, useEffect } from 'react';
 import { Trash2, GripVertical, EyeOff, Copy, Check } from 'lucide-react';
-import type { Step, Screenshot } from '@/guides/types';
+import type { Step, Screenshot } from '@/core/guides/types';
 import ZoomScreenshot from './ZoomScreenshot';
 
 interface DragHandleProps {

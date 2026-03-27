@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, Maximize2 } from 'lucide-react';
 import { getExtensionURL, queryTabs, updateTab, focusWindow, createTab } from '@/lib/browser-api';
-import { getGuide, updateGuideTitle, updateStepDescription, deleteStep, reorderSteps, updateScreenshotBlob } from '@/guides/service';
-import type { Guide, Step, Screenshot } from '@/guides/types';
+import { getGuide, updateGuideTitle, updateStepDescription, deleteStep, reorderSteps, updateScreenshotBlob } from '@/core/guides/service';
+import type { Guide, Step, Screenshot } from '@/core/guides/types';
 import StepCard from './StepCard';
 import BlurCanvas from './BlurCanvas';
 import ExportMenu from './ExportMenu';

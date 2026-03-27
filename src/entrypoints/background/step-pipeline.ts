@@ -1,12 +1,12 @@
 import { logger } from '@/lib/logger';
 import { localStorage } from '@/lib/browser-api';
-import { captureAnnotated } from '@/capture/screenshot';
-import { buildFallbackDescription } from '@/capture/step-description';
-import { getAIDescription } from '@/capture/ai-description';
-import { createStep, addStepToGuide, updateStepDescription } from '@/guides/service';
+import { captureAnnotated } from '@/core/capture/screenshot';
+import { buildFallbackDescription } from '@/core/capture/step-description';
+import { getAIDescription } from '@/core/capture/ai-description';
+import { createStep, addStepToGuide, updateStepDescription } from '@/core/guides/service';
 import { getActor } from './actor';
 import type { Browser } from '#imports';
-import { CaptureState } from '@/capture/machine';
+import { CaptureState } from '@/core/capture/machine';
 import type { UserActionData, UserActionResponse } from '@/lib/messaging';
 
 let captureQueue: Promise<void> = Promise.resolve();

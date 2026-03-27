@@ -10,7 +10,7 @@ import {
 import { TabMessage } from "@/lib/tab-messages";
 import { isInjectableTab, injectContentScript } from "./tab-manager";
 import { getActor, waitUntilReady } from "./actor";
-import { CaptureState } from "@/capture/machine";
+import { CaptureState } from "@/core/capture/machine";
 
 export function registerNavigationListeners() {
   onNavigationCompleted(async (details) => {

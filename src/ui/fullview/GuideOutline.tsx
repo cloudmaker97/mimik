@@ -1,4 +1,4 @@
-import type { Step } from '@/guides/types';
+import type { Step } from '@/core/guides/types';
 
 interface GuideOutlineProps {
   steps: Step[];
