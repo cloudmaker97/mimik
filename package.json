@@ -12,6 +12,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
     "@tailwindcss/vite": "^4.2.2",
+    "@webext-core/messaging": "^2.3.0",
     "@wxt-dev/module-react": "^1.2.2",
     "@xstate/react": "^6.1.0",
     "clsx": "^2.1.1",

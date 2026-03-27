@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Check, Trash2, Square } from 'lucide-react';
-import { db } from '../shared/db-schema';
-import type { Step, Screenshot } from '../shared/types';
+import { getActiveTab } from '@/lib/browser-api';
+import { db } from '@/guides/db';
+import type { Step, Screenshot } from '@/guides/types';
 import ZoomScreenshot from './ZoomScreenshot';
 
 interface RecordingViewProps {
@@ -86,8 +87,8 @@ export default function RecordingView({ guideId, onStop }: RecordingViewProps) {
   }, [steps.length]);
 
   useEffect(() => {
-    chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
-      if (tabs[0]?.url) setSiteUrl(tabs[0].url);
+    getActiveTab().then(tab => {
+      if (tab?.url) setSiteUrl(tab.url);
     });
   }, []);
 

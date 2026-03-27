@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, Maximize2 } from 'lucide-react';
-import { getGuide, updateGuideTitle, updateStepDescription, deleteStep, reorderSteps, updateScreenshotBlob } from '../shared/guide-service';
-import type { Guide, Step, Screenshot } from '../shared/types';
+import { getExtensionURL, queryTabs, updateTab, focusWindow, createTab } from '@/lib/browser-api';
+import { getGuide, updateGuideTitle, updateStepDescription, deleteStep, reorderSteps, updateScreenshotBlob } from '@/guides/service';
+import type { Guide, Step, Screenshot } from '@/guides/types';
 import StepCard from './StepCard';
 import BlurCanvas from './BlurCanvas';
 import ExportMenu from './ExportMenu';
@@ -130,13 +131,13 @@ export default function GuideEditor({ guideId, onBack }: GuideEditorProps) {
           />
           <button
             onClick={() => {
-              const url = chrome.runtime.getURL(`/fullview.html?guideId=${guideId}`);
-              chrome.tabs.query({ url: chrome.runtime.getURL('/fullview.html*') }).then(tabs => {
+              const url = getExtensionURL(`/fullview.html?guideId=${guideId}`);
+              queryTabs({ url: getExtensionURL('/fullview.html') }).then(tabs => {
                 if (tabs.length > 0 && tabs[0].id) {
-                  chrome.tabs.update(tabs[0].id, { active: true, url: chrome.runtime.getURL(`/fullview.html?guideId=${guideId}`) });
-                  if (tabs[0].windowId) chrome.windows.update(tabs[0].windowId, { focused: true });
+                  updateTab(tabs[0].id, { active: true, url: getExtensionURL(`/fullview.html?guideId=${guideId}`) });
+                  if (tabs[0].windowId) focusWindow(tabs[0].windowId);
                 } else {
-                  chrome.tabs.create({ url });
+                  createTab({ url });
                 }
               });
             }}

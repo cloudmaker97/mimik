@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Video, Search } from 'lucide-react';
+import { sendMessage } from '@/lib/messaging';
+import { getActiveTab } from '@/lib/browser-api';
 import LibraryView from './LibraryView';
 import GuideEditor from './GuideEditor';
 import RecordingView from './RecordingView';
@@ -39,60 +41,58 @@ export default function App() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    chrome.runtime.sendMessage({ type: 'PING' }, (response) => {
-      if (response?.alive) setIsAlive(true);
-    });
+    sendMessage('ping', undefined).then(res => {
+      if (res.alive) setIsAlive(true);
+    }).catch(() => {});
 
     const interval = setInterval(() => {
-      chrome.runtime.sendMessage({ type: 'GET_STATE' }, (response) => {
-        if (chrome.runtime.lastError) return;
-        if (response?.state === 'recording') {
+      sendMessage('getState', undefined).then(res => {
+        if (res.state === 'recording') {
           setIsRecording(true);
-          if (response.currentGuideId) {
+          if (res.currentGuideId) {
             setView(prev => {
               if (prev.name === 'recording') return prev;
-              return { name: 'recording', guideId: response.currentGuideId };
+              return { name: 'recording', guideId: res.currentGuideId! };
             });
           }
         } else {
           setIsRecording(false);
         }
-      });
+      }).catch(() => {});
     }, 1000);
 
     return () => clearInterval(interval);
   }, []);
 
   const handleStartRecording = useCallback(async () => {
-    const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-    const url = tabs[0]?.url || '';
+    const tab = await getActiveTab();
+    const url = tab?.url || '';
 
-    chrome.runtime.sendMessage(
-      { type: 'START_RECORDING', url },
-      (response) => {
-        if (chrome.runtime.lastError) {
-          console.error('[Mimik] START_RECORDING error', chrome.runtime.lastError);
-          return;
-        }
-        if (response?.guideId) {
-          setIsRecording(true);
-          setView({ name: 'recording', guideId: response.guideId });
-        }
+    try {
+      const res = await sendMessage('startRecording', { url });
+      if (res.guideId) {
+        setIsRecording(true);
+        setView({ name: 'recording', guideId: res.guideId });
       }
-    );
+    } catch (err) {
+      console.error('[Mimik] START_RECORDING error', err);
+    }
   }, []);
 
-  const handleStopRecording = useCallback(() => {
-    chrome.runtime.sendMessage({ type: 'STOP_RECORDING' }, (response) => {
-      if (response?.success) {
+  const handleStopRecording = useCallback(async () => {
+    try {
+      const res = await sendMessage('stopRecording', undefined);
+      if (res.success) {
         setIsRecording(false);
-        if (response.guideId) {
-          setView({ name: 'editor', guideId: response.guideId });
+        if (res.guideId) {
+          setView({ name: 'editor', guideId: res.guideId });
         } else {
           setView({ name: 'library' });
         }
       }
-    });
+    } catch (err) {
+      console.error('[Mimik] STOP_RECORDING error', err);
+    }
   }, []);
 
   if (view.name === 'recording') {

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { localStorage } from '@/lib/browser-api';
 
 export default function App() {
   const [apiKey, setApiKey] = useState('');
@@ -6,14 +7,14 @@ export default function App() {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    chrome.storage.local.get(['aiApiKey', 'aiProvider']).then((result) => {
-      if (result.aiApiKey) setApiKey(result.aiApiKey);
-      if (result.aiProvider) setProvider(result.aiProvider);
+    localStorage.get(['aiApiKey', 'aiProvider']).then((result) => {
+      if (result.aiApiKey) setApiKey(result.aiApiKey as string);
+      if (result.aiProvider) setProvider(result.aiProvider as 'openai' | 'anthropic');
     });
   }, []);
 
   const handleSave = async () => {
-    await chrome.storage.local.set({ aiApiKey: apiKey, aiProvider: provider });
+    await localStorage.set({ aiApiKey: apiKey, aiProvider: provider });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
