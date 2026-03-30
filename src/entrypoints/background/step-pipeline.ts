@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
-import { localStorage } from '@/lib/browser-api';
+import { localStorage, sendMessageToTab } from '@/lib/browser-api';
+import { TabMessage } from '@/lib/tab-messages';
 import { captureAnnotated } from '@/core/capture/screenshot';
 import { buildFallbackDescription } from '@/core/capture/step-description';
 import { getAIDescription } from '@/core/capture/ai-description';
@@ -45,11 +46,24 @@ export function handleUserAction(
     let screenshotId: string | undefined;
     let screenshotBlob: Blob | undefined;
     try {
+      logger.debug('Hiding overlay before screenshot...');
+      const hideResp = await sendMessageToTab(tabId, { type: TabMessage.HIDE_OVERLAY }).catch((e) => {
+        logger.warn('HIDE_OVERLAY failed:', e);
+        return null;
+      });
+      logger.debug('HIDE_OVERLAY response:', hideResp);
+
+      await new Promise(r => setTimeout(r, 150));
+      logger.debug('Taking screenshot...');
+
       const screenshot = await captureAnnotated(tabId, stepId, data.elementMeta);
+      logger.debug('Screenshot taken, showing overlay...');
+      await sendMessageToTab(tabId, { type: TabMessage.SHOW_OVERLAY }).catch(() => {});
       screenshotId = screenshot.id;
       screenshotBlob = screenshot.blob;
     } catch (err) {
-      logger.warn(' Screenshot capture failed, storing step without screenshot', err);
+      await sendMessageToTab(tabId, { type: TabMessage.SHOW_OVERLAY }).catch(() => {});
+      logger.warn('Screenshot capture failed, storing step without screenshot', err);
     }
 
     await createStep({

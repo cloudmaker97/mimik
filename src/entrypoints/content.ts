@@ -6,6 +6,7 @@ import { TabMessage } from '@/lib/tab-messages';
 import { CaptureState } from '@/core/capture/machine';
 import { CaptureSession } from '@/core/capture/session';
 import { updateUrl } from '@/core/capture/spa-nav';
+import { showStartNotification } from '@/core/capture/start-notification';
 
 const CLEANUP_EVENT = `mimik_cleanup_${browser.runtime.id}`;
 
@@ -43,6 +44,25 @@ function createTabMessageHandler(session: CaptureSession) {
           updateUrl(msg.url as string);
           sendResponse({ updated: true });
         }
+        return true;
+
+      case TabMessage.SHOW_NOTIFICATION:
+        logger.debug('Received SHOW_NOTIFICATION message');
+        showStartNotification().then(() => {
+          sendResponse({ done: true });
+        });
+        return true;
+
+      case TabMessage.HIDE_OVERLAY:
+        logger.debug('Received HIDE_OVERLAY message');
+        session.hideOverlay();
+        sendResponse({ hidden: true });
+        return true;
+
+      case TabMessage.SHOW_OVERLAY:
+        logger.debug('Received SHOW_OVERLAY message');
+        session.showOverlay();
+        sendResponse({ shown: true });
         return true;
 
       default:
