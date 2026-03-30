@@ -9,5 +9,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/entrypoints*", "tests/**/*", "wxt.config.ts", ".wxt/wxt.d.ts"]
+  "include": ["src/**/*", "tests/**/*", "wxt.config.ts", ".wxt/wxt.d.ts"]
 }
