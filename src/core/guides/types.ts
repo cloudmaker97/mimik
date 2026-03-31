@@ -40,6 +40,7 @@ export interface Screenshot {
 export interface Settings {
   aiApiKey: string;
   aiProvider: 'openai' | 'anthropic';
+  aiModel: string;
 }
 
 export interface ElementMeta {
