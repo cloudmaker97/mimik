@@ -93,67 +93,76 @@ export default function StepCard({
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDragEnd={handleDragEnd}
-      className={`p-3 border rounded-lg mb-2 ${dragOver ? 'border-t-2 border-amber-500' : 'border-gray-200'}`}
+      className={`rounded-xl mb-3 overflow-hidden transition-shadow ${dragOver ? 'ring-2 ring-amber-500' : ''}`}
+      style={{ border: '1px solid #E8E2DA', background: '#fff' }}
     >
-      <div className="flex items-start gap-2">
-        {dragHandleProps && (
-          <div className="flex-shrink-0 mt-1 cursor-grab active:cursor-grabbing">
-            <GripVertical size={14} className="text-gray-300" />
-          </div>
-        )}
-        <span className="flex items-center justify-center w-6 h-6 rounded-full bg-amber-600 text-white text-xs font-bold flex-shrink-0 mt-0.5">
-          {step.index + 1}
-        </span>
-        <div className="flex-1 min-w-0">
-          {screenshot ? (
-            <ZoomScreenshot
-              screenshot={screenshot}
-              alt={`Step ${step.index + 1} screenshot`}
-              className="mb-2"
-            />
-          ) : (
-            <div className="w-full h-32 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-sm mb-2">
-              No screenshot
-            </div>
-          )}
+      {/* Screenshot */}
+      {screenshot ? (
+        <ZoomScreenshot
+          screenshot={screenshot}
+          alt={`Step ${step.index + 1} screenshot`}
+          className="!rounded-none !border-0"
+        />
+      ) : (
+        <div className="w-full h-32 flex items-center justify-center text-sm" style={{ background: '#f5f3ef', color: '#9ca3af' }}>
+          No screenshot
+        </div>
+      )}
+
+      {/* Body */}
+      <div className="px-3 pt-2 pb-2">
+        <div className="flex items-center gap-2">
+          <span
+            className="flex items-center justify-center w-[22px] h-[22px] rounded-full text-[11px] font-bold flex-shrink-0"
+            style={{ background: '#451a03', color: '#FDE68A' }}
+          >
+            {step.index + 1}
+          </span>
           <textarea
-            className="w-full text-sm border border-transparent hover:border-gray-300 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded p-1 resize-none"
+            className="w-full text-[13px] font-medium resize-none outline-none border-0 bg-transparent p-0 leading-snug flex-1"
+            style={{ color: '#451a03' }}
             value={description}
-            rows={2}
+            rows={1}
             onChange={(e) => setDescription(e.target.value)}
             onBlur={handleDescriptionBlur}
           />
-          <div className="flex items-center justify-between mt-1">
-            <span className="text-xs text-gray-500 bg-gray-100 rounded px-1.5 py-0.5">
-              {step.action}
-            </span>
-            <div className="flex items-center gap-1">
-              {screenshot && (
-                <>
-                  <button
-                    onClick={() => onBlur?.(step.id)}
-                    className="text-gray-400 hover:text-amber-500 p-1 rounded"
-                    title="Blur sensitive area"
-                  >
-                    <EyeOff size={14} />
-                  </button>
-                  <button
-                    onClick={handleCopy}
-                    className={`p-1 rounded ${copied ? 'text-green-500' : 'text-gray-400 hover:text-green-500'}`}
-                    title="Copy screenshot"
-                  >
-                    {copied ? <Check size={14} /> : <Copy size={14} />}
-                  </button>
-                </>
-              )}
-              <button
-                onClick={handleDelete}
-                className="text-gray-400 hover:text-red-500 p-1 rounded"
-                title="Delete step"
-              >
-                <Trash2 size={14} />
-              </button>
-            </div>
+        </div>
+        <div className="flex items-center justify-end mt-1">
+          <div className="flex items-center gap-0.5">
+            {screenshot && (
+              <>
+                <button
+                  onClick={() => onBlur?.(step.id)}
+                  className="p-1 rounded-md transition-colors"
+                  style={{ color: '#d1d5db' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = '#F59E0B'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = '#d1d5db'; }}
+                  title="Blur sensitive area"
+                >
+                  <EyeOff size={13} />
+                </button>
+                <button
+                  onClick={handleCopy}
+                  className="p-1 rounded-md transition-colors"
+                  style={{ color: copied ? '#16a34a' : '#d1d5db' }}
+                  onMouseEnter={(e) => { if (!copied) e.currentTarget.style.color = '#16a34a'; }}
+                  onMouseLeave={(e) => { if (!copied) e.currentTarget.style.color = '#d1d5db'; }}
+                  title="Copy screenshot"
+                >
+                  {copied ? <Check size={13} /> : <Copy size={13} />}
+                </button>
+              </>
+            )}
+            <button
+              onClick={handleDelete}
+              className="p-1 rounded-md transition-colors"
+              style={{ color: '#d1d5db' }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = '#ef4444'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = '#d1d5db'; }}
+              title="Delete step"
+            >
+              <Trash2 size={13} />
+            </button>
           </div>
         </div>
       </div>

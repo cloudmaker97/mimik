@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Maximize2 } from 'lucide-react';
+import { ArrowLeft, Maximize2, Layers } from 'lucide-react';
 import { getExtensionURL, queryTabs, updateTab, focusWindow, createTab } from '@/lib/browser-api';
 import { getGuide, updateGuideTitle, updateStepDescription, deleteStep, reorderSteps, updateScreenshotBlob } from '@/core/guides/service';
 import type { Guide, Step, Screenshot } from '@/core/guides/types';
@@ -114,20 +114,24 @@ export default function GuideEditor({ guideId, onBack }: GuideEditorProps) {
           onCancel={() => setBlurringStepId(null)}
         />
       )}
-      <div className="p-4 border-b border-gray-100">
-        <div className="flex items-center gap-2 mb-1">
+      <div className="px-4 pt-3 pb-2">
+        <div className="flex items-center gap-2">
           <button
             onClick={onBack}
-            className="flex-shrink-0 text-gray-500 hover:text-gray-700 p-1 rounded"
+            className="flex-shrink-0 p-1 rounded"
+            style={{ color: '#9ca3af' }}
             title="Back to library"
           >
             <ArrowLeft size={18} />
           </button>
           <input
-            className="text-lg font-bold bg-transparent border-b border-transparent hover:border-gray-300 focus:border-amber-500 focus:outline-none w-full"
+            className="text-lg font-bold bg-transparent border-b border-transparent hover:border-gray-300 focus:outline-none w-full"
+            style={{ color: '#451a03' }}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onBlur={handleTitleBlur}
+            onFocus={(e) => { e.target.style.borderColor = '#F59E0B'; }}
+            onBlurCapture={(e) => { e.target.style.borderColor = 'transparent'; }}
           />
           <button
             onClick={() => {
@@ -141,10 +145,13 @@ export default function GuideEditor({ guideId, onBack }: GuideEditorProps) {
                 }
               });
             }}
-            className="flex-shrink-0 text-gray-400 hover:text-amber-600 p-1 rounded"
-            title="Open full view"
+            className="flex-shrink-0 p-1.5 rounded-md transition-colors hover:bg-amber-50"
+            style={{ color: '#9ca3af' }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = '#F59E0B'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = '#9ca3af'; }}
+            title="Open in full view"
           >
-            <Maximize2 size={16} />
+            <Maximize2 size={15} />
           </button>
           <div className="ml-auto flex-shrink-0">
             <ExportMenu
@@ -155,9 +162,12 @@ export default function GuideEditor({ guideId, onBack }: GuideEditorProps) {
             />
           </div>
         </div>
-        <p className="text-xs text-gray-500 mt-1">{data.steps.length} step{data.steps.length !== 1 ? 's' : ''}</p>
+        <p className="text-[11px] flex items-center gap-1" style={{ color: '#92400E', marginLeft: '34px' }}>
+          <Layers size={11} />
+          {data.steps.length} step{data.steps.length !== 1 ? 's' : ''}
+        </p>
       </div>
-      <div className="p-4">
+      <div className="px-4 pt-1 pb-4">
         {data.steps.length === 0 ? (
           <p className="text-sm text-gray-500">No steps in this guide.</p>
         ) : (
