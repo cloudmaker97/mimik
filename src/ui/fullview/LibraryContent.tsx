@@ -108,7 +108,7 @@ export default function LibraryContent({ category, onCountsChange, searchQuery =
       ) : filtered.length === 0 ? (
         <div className="text-center py-20">
           <FileText size={40} className="mx-auto text-gray-300 mb-3" />
-          <p className="text-lg text-gray-500">{search ? 'No matching guides' : emptyMessages[category]}</p>
+          <p className="text-lg text-gray-500">{searchQuery ? 'No matching guides' : emptyMessages[category]}</p>
         </div>
       ) : display === 'list' ? (
         <div className="border border-gray-200 rounded-xl overflow-hidden bg-white">

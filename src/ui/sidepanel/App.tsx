@@ -2,7 +2,7 @@ import { logger } from '@/lib/logger';
 import { useState, useEffect, useCallback } from 'react';
 import { Video, Search } from 'lucide-react';
 import { sendMessage } from '@/lib/messaging';
-import { getActiveTab } from '@/lib/browser-api';
+import { getActiveTab, getExtensionURL, queryTabs, updateTab, focusWindow, createTab } from '@/lib/browser-api';
 import { connectToBackground } from '@/lib/port';
 import { CaptureState } from '@/core/capture/machine';
 import LibraryView from './LibraryView';
@@ -79,10 +79,16 @@ export default function App() {
       const res = await sendMessage('stopRecording', undefined);
       if (res.success) {
         setIsRecording(false);
+        setView({ name: 'library' });
         if (res.guideId) {
-          setView({ name: 'editor', guideId: res.guideId });
-        } else {
-          setView({ name: 'library' });
+          const url = getExtensionURL(`/fullview.html?guideId=${res.guideId}`);
+          const tabs = await queryTabs({ url: getExtensionURL('/fullview.html') });
+          if (tabs.length > 0 && tabs[0].id) {
+            await updateTab(tabs[0].id, { active: true, url });
+            if (tabs[0].windowId) await focusWindow(tabs[0].windowId);
+          } else {
+            await createTab({ url });
+          }
         }
       }
     } catch (err) {

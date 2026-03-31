@@ -3,8 +3,6 @@ import { getGuide, updateGuideTitle, updateStepDescription, deleteStep, reorderS
 import type { Guide, Step, Screenshot } from '@/core/guides/types';
 import StepCard from '@/ui/sidepanel/StepCard';
 import BlurCanvas from '@/ui/sidepanel/BlurCanvas';
-import ExportMenu from '@/ui/sidepanel/ExportMenu';
-import { navigate } from './router';
 
 interface GuideContentProps {
   guideId: string;
@@ -12,6 +10,7 @@ interface GuideContentProps {
   scrollToStepId: string | null;
   onActiveStepChange: (stepId: string | null) => void;
   onTitleChange?: (title: string) => void;
+  onGuideDataLoaded?: (data: { guideId: string; guide: Guide; steps: Step[]; screenshots: Map<string, Screenshot> }) => void;
 }
 
 interface GuideData {
@@ -27,7 +26,7 @@ function getFaviconUrl(url: string): string {
   try { return `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=32`; } catch { return ''; }
 }
 
-export default function GuideContent({ guideId, onStepsLoaded, scrollToStepId, onActiveStepChange, onTitleChange }: GuideContentProps) {
+export default function GuideContent({ guideId, onStepsLoaded, scrollToStepId, onActiveStepChange, onTitleChange, onGuideDataLoaded }: GuideContentProps) {
   const [data, setData] = useState<GuideData | null>(null);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');
@@ -43,6 +42,7 @@ export default function GuideContent({ guideId, onStepsLoaded, scrollToStepId, o
       setTitle(result.guide.title);
       document.title = `${result.guide.title} — Mimik`;
       onTitleChange?.(result.guide.title);
+      onGuideDataLoaded?.({ guideId, guide: result.guide, steps: result.steps, screenshots: result.screenshots });
       const firstUrl = result.steps[0]?.url || '';
       onStepsLoaded(result.steps, extractDomain(firstUrl), getFaviconUrl(firstUrl));
     }
@@ -122,42 +122,27 @@ export default function GuideContent({ guideId, onStepsLoaded, scrollToStepId, o
         <BlurCanvas screenshot={blurScreenshot} onSave={handleBlurSave} onCancel={() => setBlurringStepId(null)} />
       )}
 
-      {/* Breadcrumb + Export */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-2 text-sm text-gray-400">
-          <button onClick={() => navigate({ page: 'library', category: 'all' })} className="hover:text-gray-600">
-            All Guides
-          </button>
-          <span>&gt;</span>
-          <span className="text-gray-700 font-medium truncate max-w-xs">{data.guide.title}</span>
-        </div>
-        <ExportMenu guideId={guideId} guide={data.guide} steps={data.steps} screenshots={data.screenshots} />
-      </div>
-
-      {/* Created date */}
-      <p className="text-sm text-gray-400 mb-2">Created {new Date(data.guide.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
-
       {/* Title */}
       <input
-        className="text-3xl font-bold bg-transparent border-b-2 border-transparent hover:border-gray-300 focus:border-amber-500 focus:outline-none w-full mb-6"
+        className="text-[32px] font-extrabold bg-transparent border-b-2 border-transparent hover:border-gray-200 focus:outline-none w-full"
+        style={{ color: '#451a03' }}
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={(e) => { setTitle(e.target.value); onTitleChange?.(e.target.value); }}
         onBlur={handleTitleBlur}
+        onFocus={(e) => { e.target.style.borderColor = '#F59E0B'; }}
+        onBlurCapture={(e) => { e.target.style.borderColor = 'transparent'; }}
       />
 
-      {/* Site card */}
-      {domain && (
-        <div className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl mb-8">
-          {favicon && <img src={favicon} alt="" className="w-6 h-6 rounded" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />}
-          <span className="text-sm font-medium text-gray-700">{domain}</span>
-        </div>
-      )}
+      {/* Meta */}
+      <p className="text-xs mt-1 mb-8" style={{ color: '#92400E' }}>
+        Created {new Date(data.guide.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} · {data.steps.length} step{data.steps.length !== 1 ? 's' : ''}{domain ? ` · ${domain}` : ''}
+      </p>
 
       {/* Steps */}
       {data.steps.length === 0 ? (
         <p className="text-sm text-gray-500 text-center py-12">No steps in this guide.</p>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-6">
           {data.steps.map((step, idx) => (
             <div
               key={step.id}

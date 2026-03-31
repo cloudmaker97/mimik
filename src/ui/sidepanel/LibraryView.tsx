@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Trash2, FileText } from 'lucide-react';
-import { getGuides, softDeleteGuide, getFirstStepUrl } from '@/core/guides/service';
+import { Trash2, FileText, Star } from 'lucide-react';
+import { getGuides, softDeleteGuide, toggleStar, getFirstStepUrl } from '@/core/guides/service';
 import type { Guide } from '@/core/guides/types';
 
 function formatRelativeTime(timestamp: number): string {
@@ -73,9 +73,14 @@ export default function LibraryView({ onOpen, searchQuery = '' }: LibraryViewPro
     loadGuides();
   }, [loadGuides]);
 
+  const handleStar = useCallback(async (e: React.MouseEvent, guideId: string) => {
+    e.stopPropagation();
+    await toggleStar(guideId);
+    await loadGuides();
+  }, [loadGuides]);
+
   const handleDelete = useCallback(async (e: React.MouseEvent, guideId: string) => {
     e.stopPropagation();
-    if (!window.confirm('Delete this guide?')) return;
     await softDeleteGuide(guideId);
     await loadGuides();
   }, [loadGuides]);
@@ -145,17 +150,29 @@ export default function LibraryView({ onOpen, searchQuery = '' }: LibraryViewPro
             </p>
           </div>
 
-          {/* Delete */}
-          <button
-            onClick={(e) => handleDelete(e, guide.id)}
-            className="ml-1 p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-50 transition-all flex-shrink-0"
-            style={{ color: '#D4BFA8' }}
-            onMouseEnter={(e) => { (e.target as HTMLElement).style.color = '#EF4444'; }}
-            onMouseLeave={(e) => { (e.target as HTMLElement).style.color = '#D4BFA8'; }}
-            title="Delete guide"
-          >
-            <Trash2 size={14} />
-          </button>
+          {/* Actions */}
+          <div className="flex items-center gap-0.5 ml-1 flex-shrink-0">
+            <button
+              onClick={(e) => handleStar(e, guide.id)}
+              className={`p-1.5 rounded-lg transition-all ${guide.starred ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+              style={{ color: guide.starred ? '#F59E0B' : '#D4BFA8' }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = '#F59E0B'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = guide.starred ? '#F59E0B' : '#D4BFA8'; }}
+              title={guide.starred ? 'Unstar' : 'Star'}
+            >
+              <Star size={14} fill={guide.starred ? 'currentColor' : 'none'} />
+            </button>
+            <button
+              onClick={(e) => handleDelete(e, guide.id)}
+              className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+              style={{ color: '#D4BFA8' }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = '#EF4444'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = '#D4BFA8'; }}
+              title="Move to trash"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
         </div>
       ))}
     </div>
