@@ -1,6 +1,6 @@
 import { logger } from '@/lib/logger';
 import { useState, useEffect, useCallback } from 'react';
-import { Video, Search } from 'lucide-react';
+import { Video, Search, Settings } from 'lucide-react';
 import { sendMessage } from '@/lib/messaging';
 import { getActiveTab, getExtensionURL, queryTabs, updateTab, focusWindow, createTab } from '@/lib/browser-api';
 import { connectToBackground } from '@/lib/port';
@@ -10,11 +10,13 @@ import { Input } from '@/ui/components/ui/input';
 import LibraryView from './LibraryView';
 import GuideEditor from './GuideEditor';
 import RecordingView from './RecordingView';
+import SettingsView from '@/ui/shared/SettingsView';
 
 type View =
   | { name: 'library' }
   | { name: 'editor'; guideId: string }
-  | { name: 'recording'; guideId: string };
+  | { name: 'recording'; guideId: string }
+  | { name: 'settings' };
 
 function MascotIcon({ size = 44 }: { size?: number }) {
   return (
@@ -106,6 +108,10 @@ export default function App() {
     return <GuideEditor guideId={view.guideId} onBack={() => setView({ name: 'library' })} />;
   }
 
+  if (view.name === 'settings') {
+    return <SettingsView onBack={() => setView({ name: 'library' })} />;
+  }
+
   return (
     <div className="min-h-screen bg-card flex flex-col">
       {/* Header */}
@@ -113,7 +119,15 @@ export default function App() {
         <div className="absolute -top-12 -right-8 w-44 h-44 rounded-full opacity-15 blur-[40px] bg-gradient-to-br from-gold to-white" />
 
         <div className="relative flex items-center justify-between mb-6">
-          <span className="text-[17px] font-bold tracking-tight text-foreground">Mimik</span>
+          <div className="flex items-center gap-2">
+            <span className="text-[17px] font-bold tracking-tight text-foreground">Mimik</span>
+            <button
+              onClick={() => setView({ name: 'settings' })}
+              className="w-7 h-7 rounded-lg flex items-center justify-center text-foreground/60 hover:text-foreground hover:bg-white/20 transition-colors"
+            >
+              <Settings size={15} />
+            </button>
+          </div>
           <span className={`text-[10px] font-medium px-2.5 py-0.5 rounded-full ${isAlive ? 'text-foreground bg-white/30' : 'text-brown/50 bg-white/15'}`}>
             {isAlive ? 'Connected' : 'Connecting...'}
           </span>
