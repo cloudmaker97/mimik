@@ -5,3 +5,4 @@ dist/
 .planning/
 docs/
 .source/
+.claude/
