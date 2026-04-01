@@ -3,7 +3,7 @@ import { ArrowLeft, Shield } from 'lucide-react';
 import { localStorage } from '@/lib/browser-api';
 import { Button } from '@/ui/components/ui/button';
 import { Input } from '@/ui/components/ui/input';
-import { AI_PROVIDERS, type AIProviderKey } from '@/core/capture/ai-models';
+import { AI_PROVIDERS, type AIProviderKey } from '@/core/capture/ai/models';
 
 interface SettingsViewProps {
   onBack?: () => void;

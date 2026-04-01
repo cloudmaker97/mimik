@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import { startCapture, type CaptureHandle } from './events';
+import { startCapture, type CaptureHandle } from './events/handlers';
 import { startRrwebRecording } from './rrweb-recorder';
 
 export class CaptureSession {
