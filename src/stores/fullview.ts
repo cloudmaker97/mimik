@@ -21,6 +21,8 @@ interface FullviewStore {
   // Guide view
   guideTitle: string;
   setGuideTitle: (title: string) => void;
+  guideStepCount: number;
+  setGuideStepCount: (count: number) => void;
   guideExportData: GuideExportData | null;
   setGuideExportData: (data: GuideExportData | null) => void;
   scrollToStepId: string | null;
@@ -39,6 +41,8 @@ export const useFullviewStore = create<FullviewStore>((set) => ({
 
   guideTitle: '',
   setGuideTitle: (guideTitle) => set({ guideTitle }),
+  guideStepCount: 0,
+  setGuideStepCount: (guideStepCount) => set({ guideStepCount }),
   guideExportData: null,
   setGuideExportData: (guideExportData) => set({ guideExportData }),
   scrollToStepId: null,

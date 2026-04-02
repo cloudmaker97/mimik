@@ -19,6 +19,7 @@ const navItems = [
 export default function TopNav({ route }: TopNavProps) {
   const counts = useFullviewStore((s) => s.counts);
   const guideTitle = useFullviewStore((s) => s.guideTitle);
+  const guideStepCount = useFullviewStore((s) => s.guideStepCount);
   const exportData = useFullviewStore((s) => s.guideExportData);
   const setSearchOpen = useFullviewStore((s) => s.setSearchOpen);
 
@@ -39,7 +40,13 @@ export default function TopNav({ route }: TopNavProps) {
         ? guideTitle && (
             <>
               <ChevronRight size={14} className="text-foreground opacity-25" />
-              <span className="text-[13px] font-medium truncate max-w-sm text-foreground">{guideTitle}</span>
+              {guideTitle === 'Untitled Guide' && guideStepCount > 0 ? (
+                <span className="text-[13px] font-medium truncate max-w-sm animate-gradient-text bg-[length:300%_100%] bg-clip-text text-transparent bg-gradient-to-r from-muted-foreground via-amber to-muted-foreground">
+                  Generating title...
+                </span>
+              ) : (
+                <span className="text-[13px] font-medium truncate max-w-sm text-foreground">{guideTitle}</span>
+              )}
             </>
           )
         : navItems.map((item) => {

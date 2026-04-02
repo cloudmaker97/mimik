@@ -67,6 +67,7 @@ export async function getTrashedGuides(): Promise<Guide[]> {
 
 export async function updateGuideTitle(id: string, title: string): Promise<void> {
   await db.guides.update(id, { title, updatedAt: Date.now() });
+  notifyGuidesChanged({ type: 'mutated' });
 }
 
 export async function addStepToGuide(guideId: string, stepId: string): Promise<void> {

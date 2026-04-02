@@ -42,3 +42,21 @@
 body {
   font-family: "Poppins", sans-serif;
 }
+
+@keyframes gradient-text {
+  0% { background-position: 100% 50%; }
+  100% { background-position: -100% 50%; }
+}
+
+@utility animate-gradient-text {
+  animation: gradient-text 3s ease infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@utility animate-blink {
+  animation: blink 0.7s step-end infinite;
+}
