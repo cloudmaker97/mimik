@@ -2,14 +2,14 @@ import { FileText, Star, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import {
   type GuideChangeEvent,
-  getFirstStepUrl,
+  getGuideDomain,
   getGuides,
   onGuidesChanged,
   softDeleteGuide,
   toggleStar,
 } from '@/core/guides/service';
 import type { Guide } from '@/core/guides/types';
-import { extractDomain, formatRelativeTime, getFaviconUrl } from '@/lib/utils';
+import { formatRelativeTime, getFaviconUrl } from '@/lib/utils';
 
 interface LibraryViewProps {
   onOpen: (guideId: string) => void;
@@ -33,11 +33,11 @@ export default function LibraryView({ onOpen, searchQuery = '' }: LibraryViewPro
       const result = await getGuides();
       const withMeta: GuideWithMeta[] = await Promise.all(
         result.map(async (guide) => {
-          const url = await getFirstStepUrl(guide.id);
+          const domain = await getGuideDomain(guide.id);
           return {
             ...guide,
-            favicon: url ? getFaviconUrl(url) : '',
-            domain: url ? extractDomain(url) : '',
+            favicon: domain ? getFaviconUrl(domain) : '',
+            domain,
           };
         }),
       );

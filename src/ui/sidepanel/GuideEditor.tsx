@@ -12,6 +12,7 @@ import type { Guide, Screenshot, Step } from '@/core/guides/types';
 import { createTab, focusWindow, getExtensionURL, queryTabs, updateTab } from '@/lib/browser-api';
 import { getFaviconUrl, getMostCommonDomain } from '@/lib/utils';
 import { Input } from '@/ui/components/ui/input';
+import EmptyGuideState from '@/ui/shared/EmptyGuideState';
 import BlurCanvas from './BlurCanvas';
 import ExportMenu from './ExportMenu';
 import StepCard from './StepCard';
@@ -116,7 +117,7 @@ export default function GuideEditor({ guideId, onBack }: GuideEditorProps) {
   const blurScreenshot = blurringStepId ? data.screenshots.get(blurringStepId) : undefined;
 
   return (
-    <div className="min-h-screen bg-card">
+    <div className="min-h-screen bg-card flex flex-col">
       {blurringStepId && blurScreenshot && (
         <BlurCanvas screenshot={blurScreenshot} onSave={handleBlurSave} onCancel={() => setBlurringStepId(null)} />
       )}
@@ -181,9 +182,9 @@ export default function GuideEditor({ guideId, onBack }: GuideEditorProps) {
           })()}
         </div>
       </div>
-      <div className="px-4 pt-1 pb-4">
+      <div className="px-4 pt-1 pb-4 flex-1 flex flex-col">
         {data.steps.length === 0 ? (
-          <p className="text-sm text-warm">No steps in this guide.</p>
+          <EmptyGuideState />
         ) : (
           data.steps.map((step, idx) => (
             <div key={step.id}>

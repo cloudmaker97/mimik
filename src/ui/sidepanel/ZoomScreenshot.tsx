@@ -60,8 +60,8 @@ async function renderScreenshot(
   const bh = bounds.height * dpr;
 
   fullCtx.strokeStyle = '#F59E0B';
-  fullCtx.lineWidth = 6;
-  fullCtx.setLineDash([12, 6]);
+  fullCtx.lineWidth = 3.5;
+  fullCtx.setLineDash([8, 5]);
   drawRoundedRect(fullCtx, bx, by, bw, bh, 12);
   fullCtx.setLineDash([]);
 
@@ -101,8 +101,8 @@ async function renderScreenshot(
   const scaleX = imgW / visW;
   const scaleY = imgH / visH;
   cropCtx.strokeStyle = '#F59E0B';
-  cropCtx.lineWidth = 6;
-  cropCtx.setLineDash([12, 6]);
+  cropCtx.lineWidth = 3.5;
+  cropCtx.setLineDash([8, 5]);
   drawRoundedRect(cropCtx, (bx - cropX) * scaleX, (by - cropY) * scaleY, bw * scaleX, bh * scaleY, 12);
   cropCtx.setLineDash([]);
 

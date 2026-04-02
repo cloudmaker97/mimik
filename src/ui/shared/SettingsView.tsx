@@ -1,4 +1,4 @@
-import { ArrowLeft, Shield } from 'lucide-react';
+import { ArrowLeft, Check, Shield } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AI_PROVIDERS, type AIProviderKey } from '@/core/capture/ai/models';
 import { localStorage } from '@/lib/browser-api';
@@ -38,7 +38,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
   const providerConfig = AI_PROVIDERS[provider];
 
   return (
-    <div className="min-h-screen bg-card flex flex-col">
+    <div className="bg-card flex flex-col">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
         {onBack && (
@@ -96,8 +96,14 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
         </div>
 
         {/* Save */}
-        <Button onClick={handleSave} className="w-full">
-          {saved ? 'Saved!' : 'Save Settings'}
+        <Button
+          onClick={handleSave}
+          disabled={saved}
+          className="w-full transition-all duration-300"
+          style={saved ? { backgroundColor: '#2d5a27', color: '#d4edda', opacity: 0.9 } : undefined}
+        >
+          {saved && <Check size={16} />}
+          {saved ? 'Saved' : 'Save Settings'}
         </Button>
 
         {/* Privacy note */}

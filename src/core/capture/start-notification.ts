@@ -1,22 +1,6 @@
 const ANIMATION_DURATION_MS = 4000;
-
-const MASCOT_FILLED = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 50 160 120" width="200" height="150">
-  <rect x="30" y="95" width="140" height="68" rx="5" fill="#451a03"/>
-  <path d="M30 95 L30 80 Q30 60, 100 60 Q170 60, 170 80 L170 95 Z" fill="#572508"/>
-  <rect x="30" y="93" width="140" height="3" fill="#FDE68A"/>
-  <path d="M68 122 Q76 112 84 122" stroke="#FDE68A" stroke-width="5" fill="none" stroke-linecap="round"/>
-  <path class="wink-eye" d="M116 122 Q124 112 132 122" stroke="#FDE68A" stroke-width="5" fill="none" stroke-linecap="round"/>
-  <path d="M84 138 Q100 148 116 138" stroke="#FDE68A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-</svg>`;
-
-const MASCOT_GHOST = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 50 160 120" width="200" height="150">
-  <rect x="30" y="95" width="140" height="68" rx="5" fill="#451a03"/>
-  <path d="M30 95 L30 80 Q30 60, 100 60 Q170 60, 170 80 L170 95 Z" fill="#572508"/>
-  <rect x="30" y="93" width="140" height="3" fill="#FDE68A"/>
-  <path d="M68 122 Q76 112 84 122" stroke="#FDE68A" stroke-width="5" fill="none" stroke-linecap="round"/>
-  <path d="M116 122 Q124 112 132 122" stroke="#FDE68A" stroke-width="5" fill="none" stroke-linecap="round"/>
-  <path d="M84 138 Q100 148 116 138" stroke="#FDE68A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-</svg>`;
+const FILL_DURATION = '2s';
+const FILL_DELAY = '0.5s';
 
 const STYLES = `
   :host {
@@ -56,27 +40,9 @@ const STYLES = `
     display: block;
   }
 
-  .ghost {
-    position: absolute;
-    inset: 0;
-    opacity: 0.15;
-  }
-
-  .fill {
-    position: absolute;
-    inset: 0;
-    clip-path: inset(100% 0 0 0);
-    animation: fillUp 1.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.8s forwards;
-  }
-
-  .fill .wink-eye {
+  .wink-eye {
     transform-origin: 124px 117px;
-    animation: wink 0.45s ease 2.5s;
-  }
-
-  @keyframes fillUp {
-    0%   { clip-path: inset(100% 0 0 0); }
-    100% { clip-path: inset(0 0 0 0); }
+    animation: wink 0.45s ease 2.8s;
   }
 
   @keyframes bounceSquash {
@@ -97,6 +63,35 @@ const STYLES = `
   }
 `;
 
+function buildMascotSVG(): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 50 160 120" width="200" height="150">
+    <defs>
+      <mask id="riseMask">
+        <rect x="20" y="50" width="160" height="120" fill="black"/>
+        <rect x="20" y="170" width="160" height="120" fill="white">
+          <animate attributeName="y" from="170" to="50" dur="${FILL_DURATION}" begin="${FILL_DELAY}" fill="freeze" calcMode="spline" keySplines="0.22 0.61 0.36 1"/>
+        </rect>
+      </mask>
+    </defs>
+    <g opacity="0.3">
+      <rect x="30" y="95" width="140" height="68" rx="5" fill="#3d2a14"/>
+      <path d="M30 95 L30 80 Q30 60, 100 60 Q170 60, 170 80 L170 95 Z" fill="#3d2a14"/>
+      <rect x="30" y="93" width="140" height="3" fill="#6b5630"/>
+      <path d="M68 122 Q76 112 84 122" stroke="#6b5630" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M116 122 Q124 112 132 122" stroke="#6b5630" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M84 138 Q100 148 116 138" stroke="#6b5630" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    </g>
+    <g mask="url(#riseMask)">
+      <rect x="30" y="95" width="140" height="68" rx="5" fill="#451a03"/>
+      <path d="M30 95 L30 80 Q30 60, 100 60 Q170 60, 170 80 L170 95 Z" fill="#572508"/>
+      <rect x="30" y="93" width="140" height="3" fill="#FDE68A"/>
+      <path d="M68 122 Q76 112 84 122" stroke="#FDE68A" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path class="wink-eye" d="M116 122 Q124 112 132 122" stroke="#FDE68A" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M84 138 Q100 148 116 138" stroke="#FDE68A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    </g>
+  </svg>`;
+}
+
 export function showStartNotification(): Promise<void> {
   return new Promise((resolve) => {
     const host = document.createElement('mimik-notification');
@@ -112,17 +107,8 @@ export function showStartNotification(): Promise<void> {
 
     const mascotWrap = document.createElement('div');
     mascotWrap.className = 'mascot-wrap';
+    mascotWrap.innerHTML = buildMascotSVG();
 
-    const ghost = document.createElement('div');
-    ghost.className = 'ghost';
-    ghost.innerHTML = MASCOT_GHOST;
-
-    const fill = document.createElement('div');
-    fill.className = 'fill';
-    fill.innerHTML = MASCOT_FILLED;
-
-    mascotWrap.appendChild(ghost);
-    mascotWrap.appendChild(fill);
     wrap.appendChild(mascotWrap);
     shadow.appendChild(wrap);
     document.documentElement.appendChild(host);
