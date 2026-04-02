@@ -109,6 +109,8 @@ export default function RecordingView({ guideId, onStop }: RecordingViewProps) {
                         screenshot={liveStep.screenshot}
                         alt={liveStep.step.description}
                         className="shadow-sm"
+                        crop
+                        animate
                       />
                     </div>
                   )}
