@@ -2,14 +2,7 @@ import PQueue from 'p-queue';
 import { sendMessage } from '@/lib/messaging';
 import { extractDOMContext } from '../dom/context';
 import { extractElementMeta } from '../dom/element-meta';
-import {
-  findFocusableAncestor,
-  isMimikElement,
-  isNavigatingClick,
-  isTextField,
-  isTooLarge,
-} from '../dom/element-utils';
-import { HighlightManager } from './highlight';
+import { findFocusableAncestor, isMimikElement, isNavigatingClick, isTextField } from '../dom/element-utils';
 import { InputSession } from './input-session';
 
 const DEDUP_MS = 300;
@@ -21,77 +14,53 @@ let lastClickTime = 0;
 
 export interface CaptureHandle {
   stop: () => void;
-  hideOverlay: () => void;
-  showOverlay: () => void;
 }
 
+const PASSIVE_CAPTURE = { capture: true, passive: true } as const;
+const ACTIVE_CAPTURE = { capture: true } as const;
+
 class CaptureController {
-  private hl = new HighlightManager();
   private input: InputSession;
   private queue = new PQueue({ concurrency: 1 });
-  private listeners: [string, EventListener][] = [];
+  private listeners: [string, EventListener, AddEventListenerOptions][] = [];
   private dragStartX: number | null = null;
   private dragStartY: number | null = null;
   private dragStartElement: Element | null = null;
 
-  constructor(private guideId: string) {
-    this.input = new InputSession(guideId, this.hl);
+  constructor(
+    private guideId: string,
+    isTopFrame: boolean,
+  ) {
+    this.input = new InputSession(guideId);
     this.listeners = [
-      ['click', this.onClick.bind(this)],
-      ['auxclick', this.onAuxClick.bind(this)],
-      ['keydown', this.onKeydown.bind(this)],
-      ['input', this.onInput.bind(this)],
-      ['copy', this.onClipboard.bind(this)],
-      ['paste', this.onClipboard.bind(this)],
-      ['cut', this.onClipboard.bind(this)],
-      ['pointerdown', this.onPointerDown.bind(this)],
-      ['pointerup', this.onPointerUp.bind(this)],
-      ['dragend', this.onDragEnd.bind(this)],
-      ['mouseover', this.onMouseOver.bind(this)],
-      ['mouseout', this.onMouseOut.bind(this)],
-      ['focusin', this.onFocusIn.bind(this)],
-      ['focusout', this.onFocusOut.bind(this)],
+      ['click', this.onClick.bind(this), ACTIVE_CAPTURE],
+      ['auxclick', this.onAuxClick.bind(this), ACTIVE_CAPTURE],
+      ['keydown', this.onKeydown.bind(this), ACTIVE_CAPTURE],
+      ['input', this.onInput.bind(this), PASSIVE_CAPTURE],
+      ['focusout', this.onFocusOut.bind(this), PASSIVE_CAPTURE],
     ];
-    for (const [event, handler] of this.listeners) {
-      window.addEventListener(event, handler, { capture: true });
+    if (isTopFrame) {
+      this.listeners.push(
+        ['copy', this.onClipboard.bind(this), PASSIVE_CAPTURE],
+        ['paste', this.onClipboard.bind(this), PASSIVE_CAPTURE],
+        ['cut', this.onClipboard.bind(this), PASSIVE_CAPTURE],
+        ['pointerdown', this.onPointerDown.bind(this), PASSIVE_CAPTURE],
+        ['pointerup', this.onPointerUp.bind(this), PASSIVE_CAPTURE],
+        ['dragend', this.onDragEnd.bind(this), PASSIVE_CAPTURE],
+      );
+    }
+    for (const [event, handler, opts] of this.listeners) {
+      window.addEventListener(event, handler, opts);
     }
   }
 
   private async captureAction(action: string, target: HTMLElement) {
-    await this.hl.hideInstant();
-    try {
-      await sendMessage('captureStep', {
-        guideId: this.guideId,
-        action,
-        elementMeta: extractElementMeta(target),
-        domContext: extractDOMContext(target, action),
-      });
-    } finally {
-      this.hl.showInstant();
-    }
-  }
-
-  private resolveTarget(raw: EventTarget | null): HTMLElement | null {
-    if (!raw || !(raw instanceof Element) || isMimikElement(raw)) return null;
-    const target = findFocusableAncestor(raw);
-    if (target === document.body || target === document.documentElement || isTooLarge(target)) return null;
-    return target;
-  }
-
-  private onMouseOver(e: Event) {
-    const target = this.resolveTarget((e as MouseEvent).target);
-    if (target) this.hl.scheduleShow(target);
-  }
-
-  private onMouseOut(e: Event) {
-    const related = (e as MouseEvent).relatedTarget;
-    if (related instanceof Element && this.hl.hoveredElement?.contains(related)) return;
-    this.hl.scheduleHide();
-  }
-
-  private onFocusIn(e: Event) {
-    const target = this.resolveTarget((e as FocusEvent).target);
-    if (target) this.hl.scheduleShow(target);
+    await sendMessage('captureStep', {
+      guideId: this.guideId,
+      action,
+      elementMeta: extractElementMeta(target),
+      domContext: extractDOMContext(target, action),
+    });
   }
 
   private onClick(e: Event) {
@@ -233,26 +202,16 @@ class CaptureController {
   }
 
   stop() {
-    for (const [event, handler] of this.listeners) {
-      window.removeEventListener(event, handler, { capture: true });
+    for (const [event, handler, opts] of this.listeners) {
+      window.removeEventListener(event, handler, opts);
     }
     this.queue.add(() => this.input.finalize());
-    this.hl.dispose();
-  }
-
-  hideOverlay() {
-    this.hl.hideInstant();
-  }
-  showOverlay() {
-    this.hl.showInstant();
   }
 }
 
-export function startCapture(guideId: string): CaptureHandle {
-  const controller = new CaptureController(guideId);
+export function startCapture(guideId: string, isTopFrame = true): CaptureHandle {
+  const controller = new CaptureController(guideId, isTopFrame);
   return {
     stop: () => controller.stop(),
-    hideOverlay: () => controller.hideOverlay(),
-    showOverlay: () => controller.showOverlay(),
   };
 }

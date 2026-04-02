@@ -28,8 +28,11 @@ export class CaptureSession {
 
     logger.info('Capture started → guideId:', guideId);
     this.activeGuideId = guideId;
-    this.capture = startCapture(guideId);
-    this.stopReplay = startRrwebRecording(guideId);
+    const isTopFrame = window.self === window.top;
+    this.capture = startCapture(guideId, isTopFrame);
+    if (isTopFrame) {
+      this.stopReplay = startRrwebRecording(guideId);
+    }
   }
 
   stop(): void {
@@ -41,16 +44,6 @@ export class CaptureSession {
     this.capture = null;
     this.stopReplay = null;
     this.activeGuideId = null;
-  }
-
-  hideOverlay(): void {
-    logger.debug('CaptureSession.hideOverlay, capture exists:', !!this.capture);
-    this.capture?.hideOverlay();
-  }
-
-  showOverlay(): void {
-    logger.debug('CaptureSession.showOverlay');
-    this.capture?.showOverlay();
   }
 
   dispose(): void {

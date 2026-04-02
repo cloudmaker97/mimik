@@ -3,18 +3,15 @@ import { sendMessage } from '@/lib/messaging';
 import { extractDOMContext } from '../dom/context';
 import { extractElementMeta } from '../dom/element-meta';
 import { getFieldLabel, getFieldValue } from '../dom/element-utils';
-import type { HighlightManager } from './highlight';
 
 export class InputSession {
   stepId: string | null = null;
   target: HTMLElement | null = null;
 
   private guideId: string;
-  private hl: HighlightManager;
 
-  constructor(guideId: string, hl: HighlightManager) {
+  constructor(guideId: string) {
     this.guideId = guideId;
-    this.hl = hl;
   }
 
   get active() {
@@ -22,20 +19,15 @@ export class InputSession {
   }
 
   async start(target: HTMLElement) {
-    await this.hl.hideInstant();
-    try {
-      const res = await sendMessage('captureStep', {
-        guideId: this.guideId,
-        action: 'input',
-        elementMeta: extractElementMeta(target),
-        domContext: extractDOMContext(target, 'input'),
-      });
-      if ('stepId' in res) {
-        this.stepId = res.stepId;
-        this.target = target;
-      }
-    } finally {
-      this.hl.showInstant();
+    const res = await sendMessage('captureStep', {
+      guideId: this.guideId,
+      action: 'input',
+      elementMeta: extractElementMeta(target),
+      domContext: extractDOMContext(target, 'input'),
+    });
+    if ('stepId' in res) {
+      this.stepId = res.stepId;
+      this.target = target;
     }
   }
 
@@ -54,15 +46,10 @@ export class InputSession {
     const stepId = this.stepId;
     this.stepId = null;
     this.target = null;
-    await this.hl.hideInstant();
-    try {
-      await sendMessage('finalizeInputStep', {
-        stepId,
-        elementMeta: extractElementMeta(target),
-        domContext: extractDOMContext(target, 'input'),
-      });
-    } finally {
-      this.hl.showInstant();
-    }
+    await sendMessage('finalizeInputStep', {
+      stepId,
+      elementMeta: extractElementMeta(target),
+      domContext: extractDOMContext(target, 'input'),
+    });
   }
 }

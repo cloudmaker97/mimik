@@ -49,18 +49,6 @@ function createTabMessageHandler(session: CaptureSession) {
         });
         return true;
 
-      case TabMessage.HIDE_OVERLAY:
-        logger.debug('Received HIDE_OVERLAY message');
-        session.hideOverlay();
-        sendResponse({ hidden: true });
-        return true;
-
-      case TabMessage.SHOW_OVERLAY:
-        logger.debug('Received SHOW_OVERLAY message');
-        session.showOverlay();
-        sendResponse({ shown: true });
-        return true;
-
       default:
         return false;
     }

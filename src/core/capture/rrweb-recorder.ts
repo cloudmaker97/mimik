@@ -1,4 +1,3 @@
-// @ts-expect-error rrweb 1.1.3 type resolution
 import { record } from 'rrweb';
 import { sendMessage } from '@/lib/messaging';
 
@@ -25,6 +24,13 @@ export function startRrwebRecording(guideId: string): () => void {
       }
     },
     checkoutEveryNms: 30_000,
+    recordCanvas: false,
+    sampling: {
+      mousemove: 200,
+      mouseInteraction: true,
+      scroll: 200,
+      input: 'last',
+    },
   });
 
   flushTimer = setInterval(flushChunk, 30_000);
