@@ -1,6 +1,9 @@
 import { Search, Settings, Video } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+import { browser } from '#imports';
 import { CaptureState } from '@/core/capture/machine';
+import type { GuideMeSession } from '@/core/guideme/session';
+import { SESSION_KEY } from '@/core/guideme/session';
 import { createTab, focusWindow, getActiveTab, getExtensionURL, queryTabs, updateTab } from '@/lib/browser-api';
 import { logger } from '@/lib/logger';
 import { sendMessage } from '@/lib/messaging';
@@ -9,6 +12,7 @@ import { Button } from '@/ui/components/ui/button';
 import { Input } from '@/ui/components/ui/input';
 import SettingsView from '@/ui/shared/SettingsView';
 import GuideEditor from './GuideEditor';
+import GuideMeView from './GuideMeView';
 import LibraryView from './LibraryView';
 import RecordingView from './RecordingView';
 
@@ -16,7 +20,9 @@ type View =
   | { name: 'library' }
   | { name: 'editor'; guideId: string }
   | { name: 'recording'; guideId: string }
-  | { name: 'settings' };
+  | { name: 'settings' }
+  | { name: 'guideme'; guideId: string }
+  | { name: 'guideme-done'; guideId: string };
 
 function MascotIcon({ size = 44 }: { size?: number }) {
   return (
@@ -81,6 +87,15 @@ export default function App() {
     return disconnect;
   }, []);
 
+  useEffect(() => {
+    browser.storage.local.get([SESSION_KEY]).then((data: Record<string, unknown>) => {
+      const session = data[SESSION_KEY] as GuideMeSession | null;
+      if (session?.active) {
+        setView({ name: 'guideme', guideId: session.guideId });
+      }
+    });
+  }, []);
+
   const handleStartRecording = useCallback(async () => {
     const tab = await getActiveTab();
     const url = tab?.url || '';
@@ -122,8 +137,31 @@ export default function App() {
     return <RecordingView guideId={view.guideId} onStop={handleStopRecording} />;
   }
 
+  if (view.name === 'guideme') {
+    return (
+      <GuideMeView
+        guideId={view.guideId}
+        onExit={() => {
+          sendMessage('guideMeCancel', undefined).catch(() => {});
+          setView({ name: 'library' });
+        }}
+        onComplete={(id) => setView({ name: 'guideme-done', guideId: id })}
+      />
+    );
+  }
+
+  if (view.name === 'guideme-done') {
+    return <p className="p-8 text-center text-foreground font-semibold">Completed! (placeholder)</p>;
+  }
+
   if (view.name === 'editor') {
-    return <GuideEditor guideId={view.guideId} onBack={() => setView({ name: 'library' })} />;
+    return (
+      <GuideEditor
+        guideId={view.guideId}
+        onBack={() => setView({ name: 'library' })}
+        onGuideMe={(id) => setView({ name: 'guideme', guideId: id })}
+      />
+    );
   }
 
   if (view.name === 'settings') {

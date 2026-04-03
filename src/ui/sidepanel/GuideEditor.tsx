@@ -21,6 +21,7 @@ import StepCard from './StepCard';
 interface GuideEditorProps {
   guideId: string;
   onBack: () => void;
+  onGuideMe?: (guideId: string) => void;
 }
 
 interface GuideData {
@@ -29,7 +30,7 @@ interface GuideData {
   screenshots: Map<string, Screenshot>;
 }
 
-export default function GuideEditor({ guideId, onBack }: GuideEditorProps) {
+export default function GuideEditor({ guideId, onBack, onGuideMe }: GuideEditorProps) {
   const [data, setData] = useState<GuideData | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -157,7 +158,7 @@ export default function GuideEditor({ guideId, onBack }: GuideEditorProps) {
           <button
             onClick={async () => {
               await sendMessage('startGuideMe', { guideId });
-              window.close();
+              onGuideMe?.(guideId);
             }}
             disabled={!data.steps.some((s) => s.elementMeta)}
             className="shrink-0 p-1.5 rounded-md transition-colors text-warm hover:text-accent hover:bg-secondary disabled:opacity-30 disabled:cursor-not-allowed"
