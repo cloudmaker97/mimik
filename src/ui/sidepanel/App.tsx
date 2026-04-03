@@ -228,7 +228,7 @@ export default function App() {
             placeholder="Search guides..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-3 rounded-xl border-[#ede8e0] bg-white !text-[13px]"
+            className="w-full pl-10 pr-3 rounded-xl border-border bg-card !text-[13px]"
           />
         </div>
 

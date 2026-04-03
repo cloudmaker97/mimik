@@ -20,11 +20,55 @@ interface GuideData {
   screenshots: Map<string, Screenshot>;
 }
 
+function SadMascot() {
+  return (
+    <svg width="64" height="54" viewBox="20 55 160 108">
+      <rect x="30" y="95" width="140" height="68" rx="8" fill="#451a03" />
+      <path d="M30 95 L30 80 Q30 58, 100 58 Q170 58, 170 80 L170 95 Z" fill="#572508" />
+      <rect x="30" y="93" width="140" height="3" fill="#FDE68A" />
+      <circle cx="74" cy="118" r="10" fill="#2D1305" />
+      <circle cx="126" cy="118" r="10" fill="#2D1305" />
+      <circle cx="74" cy="120" r="6" fill="#FDE68A" />
+      <circle cx="126" cy="120" r="6" fill="#FDE68A" />
+      <path d="M88 146 Q100 138 112 146" stroke="#FDE68A" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ExitConfirmation({ onCancel, onConfirm }: { onCancel: () => void; onConfirm: () => void }) {
+  return (
+    <div className="fixed inset-0 z-20 flex items-center justify-center bg-card/80 backdrop-blur-[2px]">
+      <div className="bg-card rounded-2xl border border-border shadow-lg p-6 w-[280px] text-center flex flex-col items-center">
+        <SadMascot />
+        <h3 className="text-[15px] font-bold text-foreground mt-3 mb-1">Heading out?</h3>
+        <p className="text-[12px] text-muted-foreground leading-relaxed mb-5">
+          Your walkthrough will stop and the page overlay will be removed.
+        </p>
+        <div className="flex gap-2.5 w-full">
+          <button
+            onClick={onCancel}
+            className="flex-1 py-2.5 rounded-lg font-semibold text-sm bg-secondary text-foreground hover:bg-secondary/80 transition-colors"
+          >
+            Stay
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex-1 py-2.5 rounded-lg font-semibold text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+          >
+            Exit
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeViewProps) {
   const [data, setData] = useState<GuideData | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [viewedStepIndex, setViewedStepIndex] = useState(0);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
   const objectUrlsRef = useRef<Map<string, string>>(new Map());
 
   const loadGuide = useCallback(async () => {
@@ -116,9 +160,13 @@ export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeView
   const totalSteps = data.steps.length;
 
   return (
-    <div className="min-h-screen bg-card flex flex-col">
+    <div className="min-h-screen bg-card flex flex-col relative">
+      {showExitConfirm && <ExitConfirmation onCancel={() => setShowExitConfirm(false)} onConfirm={onExit} />}
       <div className="px-4 pt-3 pb-2 flex items-center gap-2">
-        <button onClick={onExit} className="shrink-0 p-1 rounded text-warm hover:text-foreground">
+        <button
+          onClick={() => setShowExitConfirm(true)}
+          className="shrink-0 p-1 rounded text-warm hover:text-foreground"
+        >
           <ArrowLeft size={18} />
         </button>
         <span className="flex-1 text-sm font-semibold text-foreground truncate">{data.guide.title}</span>
@@ -133,14 +181,14 @@ export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeView
           <div
             key={step.id}
             className={`flex-1 h-[3px] rounded-[1.5px] ${
-              idx < activeStepIndex ? 'bg-[#059669]' : idx === activeStepIndex ? 'bg-amber' : 'bg-border'
+              idx < activeStepIndex ? 'bg-success' : idx === activeStepIndex ? 'bg-amber' : 'bg-border'
             }`}
           />
         ))}
       </div>
 
       <div className="px-4 pb-3">
-        <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
+        <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
           <div className="p-4 pb-3">
             <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold bg-secondary text-amber-800 px-2.5 py-1 rounded-full mb-2.5">
               <span className="w-5 h-5 rounded-full bg-amber text-white flex items-center justify-center text-[10px] font-bold">
@@ -224,7 +272,7 @@ export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeView
               }`}
             >
               {isDone ? (
-                <span className="shrink-0 w-5 h-5 rounded-full bg-[#059669] flex items-center justify-center mt-0.5">
+                <span className="shrink-0 w-5 h-5 rounded-full bg-success flex items-center justify-center mt-0.5">
                   <Check size={12} className="text-white" strokeWidth={3} />
                 </span>
               ) : isActive ? (

@@ -53,7 +53,7 @@ export default function GuideMeCompletion({ guideId, onDone, onRunAgain }: Guide
         <div className="flex flex-col gap-2">
           {steps.map((step) => (
             <div key={step.id} className="flex items-center gap-2.5 text-left">
-              <div className="w-[22px] h-[22px] rounded-full bg-[#059669] flex items-center justify-center shrink-0">
+              <div className="w-[22px] h-[22px] rounded-full bg-success flex items-center justify-center shrink-0">
                 <CheckIcon />
               </div>
               <span className="text-[13px] text-muted-foreground">{step.description}</span>
@@ -65,13 +65,13 @@ export default function GuideMeCompletion({ guideId, onDone, onRunAgain }: Guide
       <div className="flex gap-2.5 py-5">
         <button
           onClick={onDone}
-          className="flex-1 py-3.5 rounded-xl font-semibold text-sm bg-secondary border border-border text-foreground"
+          className="flex-1 py-3.5 rounded-lg font-semibold text-sm bg-secondary border border-border text-foreground hover:bg-secondary/80 transition-colors"
         >
           All Done
         </button>
         <button
           onClick={() => onRunAgain(guideId)}
-          className="flex-1 py-3.5 rounded-xl font-semibold text-sm bg-primary text-primary-foreground"
+          className="flex-1 py-3.5 rounded-lg font-semibold text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
         >
           Run Again
         </button>

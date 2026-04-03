@@ -187,18 +187,18 @@ export default function GuideContent({ guideId }: GuideContentProps) {
       </div>
 
       <div className="flex items-center gap-1.5 mt-2 mb-4 flex-wrap">
-        <span className="inline-flex items-center text-[11px] font-medium text-muted-foreground bg-white border border-border px-2.5 py-0.5 rounded-full">
+        <span className="inline-flex items-center text-[11px] font-medium text-muted-foreground bg-card border border-border px-2.5 py-0.5 rounded-full">
           {new Date(data.guide.createdAt).toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
             year: 'numeric',
           })}
         </span>
-        <span className="inline-flex items-center text-[11px] font-medium text-muted-foreground bg-white border border-border px-2.5 py-0.5 rounded-full">
+        <span className="inline-flex items-center text-[11px] font-medium text-muted-foreground bg-card border border-border px-2.5 py-0.5 rounded-full">
           {data.steps.length} step{data.steps.length !== 1 ? 's' : ''}
         </span>
         {domain && (
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground bg-white border border-border pl-1.5 pr-2.5 py-0.5 rounded-full">
+          <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground bg-card border border-border pl-1.5 pr-2.5 py-0.5 rounded-full">
             <img
               src={getFaviconUrl(domain, 16)}
               alt=""
@@ -210,16 +210,18 @@ export default function GuideContent({ guideId }: GuideContentProps) {
             {domain}
           </span>
         )}
-        <button
-          onClick={async () => {
-            await sendMessage('startGuideMe', { guideId });
-          }}
-          disabled={!data.steps.some((s) => s.elementMeta)}
-          className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-primary-foreground bg-primary hover:bg-primary/90 px-3 py-0.5 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed ml-auto"
-        >
-          <Play size={11} />
-          Guide Me
-        </button>
+        {data.steps.length > 0 && (
+          <button
+            onClick={async () => {
+              await sendMessage('startGuideMe', { guideId });
+            }}
+            disabled={!data.steps.some((s) => s.elementMeta)}
+            className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-primary-foreground bg-primary hover:bg-primary/90 px-3 py-0.5 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed ml-auto"
+          >
+            <Play size={11} />
+            Guide Me
+          </button>
+        )}
       </div>
 
       <GuideStepList

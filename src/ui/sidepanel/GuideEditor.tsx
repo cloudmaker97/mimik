@@ -155,17 +155,19 @@ export default function GuideEditor({ guideId, onBack, onGuideMe }: GuideEditorP
           >
             <Maximize2 size={15} />
           </button>
-          <button
-            onClick={async () => {
-              await sendMessage('startGuideMe', { guideId });
-              onGuideMe?.(guideId);
-            }}
-            disabled={!data.steps.some((s) => s.elementMeta)}
-            className="shrink-0 p-1.5 rounded-md transition-colors text-warm hover:text-accent hover:bg-secondary disabled:opacity-30 disabled:cursor-not-allowed"
-            title="Guide Me"
-          >
-            <Play size={15} />
-          </button>
+          {data.steps.length > 0 && (
+            <button
+              onClick={async () => {
+                await sendMessage('startGuideMe', { guideId });
+                onGuideMe?.(guideId);
+              }}
+              disabled={!data.steps.some((s) => s.elementMeta)}
+              className="shrink-0 p-1.5 rounded-md transition-colors text-warm hover:text-accent hover:bg-secondary disabled:opacity-30 disabled:cursor-not-allowed"
+              title="Guide Me"
+            >
+              <Play size={15} />
+            </button>
+          )}
           <div className="ml-auto shrink-0">
             <ExportMenu guideId={guideId} guide={data.guide} steps={data.steps} screenshots={data.screenshots} />
           </div>

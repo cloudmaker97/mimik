@@ -113,7 +113,7 @@ export default function LibraryView({ onOpen, searchQuery = '' }: LibraryViewPro
         return (
           <div
             key={guide.id}
-            className="flex items-start gap-3 px-3.5 py-2.5 rounded-xl cursor-pointer group transition-all bg-white border border-[#ede8e0] hover:border-amber hover:shadow-sm"
+            className="flex items-start gap-3 px-3.5 py-2.5 rounded-xl cursor-pointer group transition-all bg-card border border-border hover:border-amber hover:shadow-sm"
             onClick={() => onOpen(guide.id)}
           >
             <div className="w-7 h-7 mt-0.5 rounded-full flex items-center justify-center shrink-0 overflow-hidden">
@@ -148,14 +148,14 @@ export default function LibraryView({ onOpen, searchQuery = '' }: LibraryViewPro
             <div className="flex items-center gap-0.5 shrink-0">
               <button
                 onClick={(e) => handleStar(e, guide.id)}
-                className={`p-1.5 rounded-lg transition-all hover:text-accent ${guide.starred ? 'opacity-100 text-accent' : 'opacity-0 group-hover:opacity-100 text-border'}`}
+                className={`p-1.5 rounded-lg transition-all hover:text-accent ${guide.starred ? 'text-accent' : 'text-border'}`}
                 title={guide.starred ? 'Unstar' : 'Star'}
               >
                 <Star size={13} fill={guide.starred ? 'currentColor' : 'none'} />
               </button>
               <button
                 onClick={(e) => handleDelete(e, guide.id)}
-                className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all text-border hover:text-red-500"
+                className="p-1.5 rounded-lg transition-all text-border hover:text-red-500"
                 title="Move to trash"
               >
                 <Trash2 size={13} />

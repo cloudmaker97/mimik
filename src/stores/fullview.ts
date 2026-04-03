@@ -10,7 +10,6 @@ interface GuideExportData {
 }
 
 interface FullviewStore {
-  // Library
   guides: Guide[];
   setGuides: (guides: Guide[]) => void;
   updateGuide: (id: string, patch: Partial<Guide>) => void;
@@ -21,12 +20,10 @@ interface FullviewStore {
   counts: { all: number; starred: number; trash: number };
   setCounts: (counts: { all: number; starred: number; trash: number }) => void;
 
-  // Search modal
   searchOpen: boolean;
   setSearchOpen: (open: boolean) => void;
   toggleSearch: () => void;
 
-  // Guide view
   guideTitle: string;
   setGuideTitle: (title: string) => void;
   guideStepCount: number;
