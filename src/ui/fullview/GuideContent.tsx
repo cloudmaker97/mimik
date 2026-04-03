@@ -1,3 +1,4 @@
+import { Play } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import {
@@ -9,6 +10,7 @@ import {
   updateStepDescription,
 } from '@/core/guides/service';
 import type { Guide, Screenshot, Step } from '@/core/guides/types';
+import { sendMessage } from '@/lib/messaging';
 import { getFaviconUrl, getMostCommonDomain } from '@/lib/utils';
 import { useFullview } from '@/stores/fullview';
 import BlurCanvas from '@/ui/sidepanel/BlurCanvas';
@@ -208,6 +210,16 @@ export default function GuideContent({ guideId }: GuideContentProps) {
             {domain}
           </span>
         )}
+        <button
+          onClick={async () => {
+            await sendMessage('startGuideMe', { guideId });
+          }}
+          disabled={!data.steps.some((s) => s.elementMeta)}
+          className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-primary-foreground bg-primary hover:bg-primary/90 px-3 py-0.5 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed ml-auto"
+        >
+          <Play size={11} />
+          Guide Me
+        </button>
       </div>
 
       <GuideStepList

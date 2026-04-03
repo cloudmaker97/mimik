@@ -1,4 +1,4 @@
-import { ArrowLeft, Layers, Maximize2 } from 'lucide-react';
+import { ArrowLeft, Layers, Maximize2, Play } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import {
   deleteStep,
@@ -10,6 +10,7 @@ import {
 } from '@/core/guides/service';
 import type { Guide, Screenshot, Step } from '@/core/guides/types';
 import { createTab, focusWindow, getExtensionURL, queryTabs, updateTab } from '@/lib/browser-api';
+import { sendMessage } from '@/lib/messaging';
 import { getFaviconUrl, getMostCommonDomain } from '@/lib/utils';
 import { Input } from '@/ui/components/ui/input';
 import EmptyGuideState from '@/ui/shared/EmptyGuideState';
@@ -152,6 +153,17 @@ export default function GuideEditor({ guideId, onBack }: GuideEditorProps) {
             title="Open in full view"
           >
             <Maximize2 size={15} />
+          </button>
+          <button
+            onClick={async () => {
+              await sendMessage('startGuideMe', { guideId });
+              window.close();
+            }}
+            disabled={!data.steps.some((s) => s.elementMeta)}
+            className="shrink-0 p-1.5 rounded-md transition-colors text-warm hover:text-accent hover:bg-secondary disabled:opacity-30 disabled:cursor-not-allowed"
+            title="Guide Me"
+          >
+            <Play size={15} />
           </button>
           <div className="ml-auto shrink-0">
             <ExportMenu guideId={guideId} guide={data.guide} steps={data.steps} screenshots={data.screenshots} />
