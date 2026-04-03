@@ -87,6 +87,8 @@ export default defineContentScript({
     const blurManager = new BlurManager();
     guideMe.start();
     const handleTabMessage = createTabMessageHandler(session, guideMe);
+    const isTopFrame = window.self === window.top;
+    let removeBlurListener: (() => void) | null = null;
 
     document.addEventListener(CLEANUP_EVENT, () => {
       session.dispose();
@@ -99,9 +101,6 @@ export default defineContentScript({
     window.addEventListener('beforeunload', () => session.stop());
     browser.runtime.onMessage.addListener(handleTabMessage);
     syncWithBackground(session);
-
-    const isTopFrame = window.self === window.top;
-    let removeBlurListener: (() => void) | null = null;
     if (isTopFrame) {
       const blurHandler = (changes: Record<string, { newValue?: unknown }>) => {
         if (!('mimikBlurMode' in changes)) return;

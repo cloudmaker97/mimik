@@ -11,8 +11,6 @@ import { registerNavigationListeners } from './navigation';
 import { handleCaptureStep, handleFinalizeInputStep, handleUpdateInputStep } from './step-pipeline';
 import { broadcastStartCapture, broadcastStopCapture, showNotificationOnTab } from './tab-manager';
 
-let offscreenReady = false;
-
 async function ensureOffscreen() {
   const contexts = await chrome.offscreen.getContexts({
     contextTypes: ['OFFSCREEN_DOCUMENT' as chrome.offscreen.ContextType],
@@ -225,10 +223,7 @@ export default defineBackground(() => {
   });
 
   chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
-    if (msg.type === 'offscreen:ready') {
-      offscreenReady = true;
-      return false;
-    }
+    if (msg.type === 'offscreen:ready') return false;
 
     if (msg.type === 'BLUR_AI_DETECT') {
       ensureOffscreen()

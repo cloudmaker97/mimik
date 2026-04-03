@@ -256,15 +256,7 @@ export class BlurPanel {
 
   mount() {
     if (!customElements.get(PANEL_TAG)) {
-      customElements.define(
-        PANEL_TAG,
-        class extends HTMLElement {
-          constructor() {
-            super();
-            this.attachShadow({ mode: 'closed' });
-          }
-        },
-      );
+      customElements.define(PANEL_TAG, class extends HTMLElement {});
     }
 
     this.host = document.createElement(PANEL_TAG);

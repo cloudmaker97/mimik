@@ -31,10 +31,14 @@ export class BlurScanner {
   }
 
   stop() {
+    this.detach();
+    this.unblurAll();
+  }
+
+  detach() {
     this.observer?.disconnect();
     this.observer = null;
     if (this.debounceTimer) clearTimeout(this.debounceTimer);
-    this.unblurAll();
   }
 
   private getActivePatterns(): RegExp[] {

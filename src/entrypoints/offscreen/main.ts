@@ -90,6 +90,20 @@ function postProcess(tokens: TokenResult[], originalText: string): Entity[] {
   return entities;
 }
 
+const CHUNK_SIZE = 2000;
+const CHUNK_OVERLAP = 150;
+
+function chunkText(text: string): string[] {
+  if (text.length <= CHUNK_SIZE) return [text];
+  const chunks: string[] = [];
+  let offset = 0;
+  while (offset < text.length) {
+    chunks.push(text.slice(offset, offset + CHUNK_SIZE));
+    offset += CHUNK_SIZE - CHUNK_OVERLAP;
+  }
+  return chunks;
+}
+
 async function detect(text: string): Promise<{ entities: Entity[] }> {
   if (!ner) {
     const init = await initModel();
@@ -97,9 +111,23 @@ async function detect(text: string): Promise<{ entities: Entity[] }> {
   }
 
   try {
-    const results = await ner!(text, { ignore_labels: ['O'] });
-    const tokens = (Array.isArray(results) ? results : [results]) as unknown as TokenResult[];
-    return { entities: postProcess(tokens, text) };
+    const chunks = chunkText(text);
+    const allEntities: Entity[] = [];
+    const seen = new Set<string>();
+
+    for (const chunk of chunks) {
+      const results = await ner!(chunk, { ignore_labels: ['O'] });
+      const tokens = (Array.isArray(results) ? results : [results]) as unknown as TokenResult[];
+      for (const entity of postProcess(tokens, text)) {
+        const key = `${entity.text}:${entity.label}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          allEntities.push(entity);
+        }
+      }
+    }
+
+    return { entities: allEntities };
   } catch {
     return { entities: [] };
   }

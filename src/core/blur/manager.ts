@@ -70,7 +70,7 @@ export class BlurManager {
   private onDone = (() => {
     this.panel?.unmount();
     this.panel = null;
-    this.scanner.stop();
+    this.scanner.detach();
     this.picker.stop();
     document.removeEventListener('mimik-blur:update-presets', this.onUpdatePresets);
     document.removeEventListener('mimik-blur:start-picker', this.onStartPicker);
