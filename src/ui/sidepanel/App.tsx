@@ -12,6 +12,7 @@ import { Button } from '@/ui/components/ui/button';
 import { Input } from '@/ui/components/ui/input';
 import SettingsView from '@/ui/shared/SettingsView';
 import GuideEditor from './GuideEditor';
+import GuideMeCompletion from './GuideMeCompletion';
 import GuideMeView from './GuideMeView';
 import LibraryView from './LibraryView';
 import RecordingView from './RecordingView';
@@ -151,7 +152,16 @@ export default function App() {
   }
 
   if (view.name === 'guideme-done') {
-    return <p className="p-8 text-center text-foreground font-semibold">Completed! (placeholder)</p>;
+    return (
+      <GuideMeCompletion
+        guideId={view.guideId}
+        onDone={() => setView({ name: 'library' })}
+        onRunAgain={async (id) => {
+          await sendMessage('startGuideMe', { guideId: id });
+          setView({ name: 'guideme', guideId: id });
+        }}
+      />
+    );
   }
 
   if (view.name === 'editor') {
