@@ -11,6 +11,20 @@ import { registerNavigationListeners } from './navigation';
 import { handleCaptureStep, handleFinalizeInputStep, handleUpdateInputStep } from './step-pipeline';
 import { broadcastStartCapture, broadcastStopCapture, showNotificationOnTab } from './tab-manager';
 
+let offscreenReady = false;
+
+async function ensureOffscreen() {
+  const contexts = await chrome.offscreen.getContexts({
+    contextTypes: ['OFFSCREEN_DOCUMENT' as chrome.offscreen.ContextType],
+  });
+  if (contexts.length > 0) return;
+  await chrome.offscreen.createDocument({
+    url: 'offscreen/index.html',
+    reasons: ['WORKERS' as chrome.offscreen.Reason],
+    justification: 'AI PII detection via Transformers.js',
+  });
+}
+
 async function generateTitleInBackground(guideId: string) {
   try {
     const settings = await localStorage.get(['aiApiKey', 'aiProvider', 'aiModel']);
@@ -208,5 +222,29 @@ export default defineBackground(() => {
     }
 
     return { moved: true };
+  });
+
+  chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+    if (msg.type === 'offscreen:ready') {
+      offscreenReady = true;
+      return false;
+    }
+
+    if (msg.type === 'BLUR_AI_DETECT') {
+      ensureOffscreen()
+        .then(() => chrome.runtime.sendMessage({ type: 'offscreen:ai:detect', text: msg.text }))
+        .then((res) => {
+          if (res?.entities) {
+            const patterns = res.entities.map((e: { text: string }) => e.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+            sendResponse({ patterns });
+          } else {
+            sendResponse({ patterns: [] });
+          }
+        })
+        .catch(() => sendResponse({ patterns: [] }));
+      return true;
+    }
+
+    return false;
   });
 });
