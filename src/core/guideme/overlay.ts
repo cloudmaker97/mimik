@@ -25,7 +25,12 @@ const STYLES = `
   .spotlight {
     position: fixed;
     inset: 0;
+    pointer-events: none;
+  }
+
+  .spotlight path {
     pointer-events: auto;
+    cursor: default;
   }
 
   .highlight {
@@ -272,7 +277,7 @@ export class GuideMeOverlay {
     path.setAttribute('d', pathD);
 
     svg.appendChild(path);
-    svg.addEventListener('click', (e) => e.stopPropagation());
+    path.addEventListener('click', (e) => e.stopPropagation());
     this.shadow.appendChild(svg);
     this.spotlight = svg;
   }
