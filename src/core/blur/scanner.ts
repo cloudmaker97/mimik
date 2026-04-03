@@ -101,7 +101,7 @@ export class BlurScanner {
   }
 
   private blurInputFields(patterns: RegExp[]) {
-    const inputs = document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea');
+    const inputs = Array.from(document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea'));
     for (const input of inputs) {
       if (input.getAttribute(BLUR_ATTR)) continue;
       const value = input.value;
@@ -117,18 +117,18 @@ export class BlurScanner {
   }
 
   unblurAll() {
-    const spans = document.querySelectorAll(`span[${BLUR_ATTR}]`);
+    const spans = Array.from(document.querySelectorAll(`span[${BLUR_ATTR}]`));
     for (const span of spans) {
       const text = document.createTextNode(span.textContent || '');
       span.parentNode?.replaceChild(text, span);
       text.parentNode?.normalize();
     }
-    const inputs = document.querySelectorAll<HTMLElement>(`[${BLUR_ATTR}="input"]`);
-    for (const input of inputs) {
+    const blurredInputs = Array.from(document.querySelectorAll<HTMLElement>(`[${BLUR_ATTR}="input"]`));
+    for (const input of blurredInputs) {
       input.style.removeProperty('filter');
       input.removeAttribute(BLUR_ATTR);
     }
-    const manuals = document.querySelectorAll('.mimik-manual-blur');
+    const manuals = Array.from(document.querySelectorAll('.mimik-manual-blur'));
     for (const el of manuals) {
       el.classList.remove('mimik-manual-blur');
     }
