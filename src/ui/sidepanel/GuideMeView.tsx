@@ -1,11 +1,12 @@
-import { ArrowLeft, Check, ChevronLeft, ChevronRight, Globe } from 'lucide-react';
+import { ArrowLeft, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { browser } from '#imports';
 import type { GuideMeSession } from '@/core/guideme/session';
 import { SESSION_KEY } from '@/core/guideme/session';
 import { getGuide } from '@/core/guides/service';
 import type { Guide, Screenshot, Step } from '@/core/guides/types';
-import { extractDomain } from '@/lib/utils';
+import { sendMessage } from '@/lib/messaging';
+import { extractDomain, getFaviconUrl } from '@/lib/utils';
 
 interface GuideMeViewProps {
   guideId: string;
@@ -151,8 +152,19 @@ export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeView
               {viewedStep?.description || 'No description'}
             </p>
             {viewedStep?.url && (
-              <span className="flex items-center gap-1 text-[11px] text-muted-foreground mt-1.5">
-                <Globe size={11} />
+              <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground mt-1.5">
+                <img
+                  src={getFaviconUrl(extractDomain(viewedStep.url), 16)}
+                  alt=""
+                  className="w-3.5 h-3.5 rounded-full"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).replaceWith(
+                      Object.assign(document.createElement('span'), {
+                        innerHTML: `<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+                      }),
+                    );
+                  }}
+                />
                 {extractDomain(viewedStep.url)}
               </span>
             )}
@@ -181,11 +193,18 @@ export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeView
               Prev
             </button>
             <button
-              onClick={() => setViewedStepIndex((i) => Math.min(totalSteps - 1, i + 1))}
-              disabled={viewedStepIndex === totalSteps - 1}
+              onClick={() => {
+                if (viewedStepIndex === activeStepIndex) {
+                  sendMessage('guideMeStepCompleted', { stepIndex: activeStepIndex }).catch(() => {});
+                }
+                if (viewedStepIndex < totalSteps - 1) {
+                  setViewedStepIndex((i) => i + 1);
+                }
+              }}
+              disabled={viewedStepIndex === totalSteps - 1 && viewedStepIndex !== activeStepIndex}
               className="flex items-center gap-1 text-xs font-medium text-warm hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
             >
-              Next
+              {viewedStepIndex === totalSteps - 1 && viewedStepIndex === activeStepIndex ? 'Finish' : 'Next'}
               <ChevronRight size={14} />
             </button>
           </div>
