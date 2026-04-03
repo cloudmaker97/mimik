@@ -42,7 +42,7 @@ export class GuideMeController {
     const session = data[SESSION_KEY] as GuideMeSession | null;
     const step = data[STEP_KEY] as Step | null;
     if (session?.active && step) {
-      this.showStep(step, session.stepIndex);
+      this.showStep(step, session.activeStepIndex);
     }
   }
 
@@ -57,7 +57,7 @@ export class GuideMeController {
       return;
     }
 
-    this.showStep(step, session.stepIndex);
+    this.showStep(step, session.activeStepIndex);
   }
 
   private async showStep(step: Step, stepIndex: number) {

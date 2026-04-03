@@ -3,7 +3,7 @@ import { localStorage } from '@/lib/browser-api';
 
 export interface GuideMeSession {
   guideId: string;
-  stepIndex: number;
+  activeStepIndex: number;
   totalSteps: number;
   active: boolean;
 }
@@ -12,7 +12,7 @@ const SESSION_KEY = 'guideMeSession';
 const STEP_KEY = 'guideMeStep';
 
 export async function startSession(guideId: string, totalSteps: number, firstStep: Step): Promise<void> {
-  const session: GuideMeSession = { guideId, stepIndex: 0, totalSteps, active: true };
+  const session: GuideMeSession = { guideId, activeStepIndex: 0, totalSteps, active: true };
   await localStorage.set({ [SESSION_KEY]: session, [STEP_KEY]: firstStep });
 }
 
@@ -21,7 +21,7 @@ export async function advanceSession(nextStep: Step, nextIndex: number): Promise
   const session = data[SESSION_KEY] as GuideMeSession | undefined;
   if (!session || !session.active) return;
   await localStorage.set({
-    [SESSION_KEY]: { ...session, stepIndex: nextIndex },
+    [SESSION_KEY]: { ...session, activeStepIndex: nextIndex },
     [STEP_KEY]: nextStep,
   });
 }
