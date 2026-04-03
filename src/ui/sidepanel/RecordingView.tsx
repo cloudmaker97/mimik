@@ -1,8 +1,9 @@
-import { Check, X } from 'lucide-react';
+import { Check, EyeOff, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { deleteStep, getScreenshotsForSteps, getStepsForGuide } from '@/core/guides/service';
 import type { Screenshot, Step } from '@/core/guides/types';
 import { getActiveTab } from '@/lib/browser-api';
+import { sendMessage } from '@/lib/messaging';
 import { extractDomain } from '@/lib/utils';
 import { Button } from '@/ui/components/ui/button';
 import ZoomScreenshot from './ZoomScreenshot';
@@ -27,6 +28,7 @@ interface LiveStep {
 export default function RecordingView({ guideId, onStop }: RecordingViewProps) {
   const [steps, setSteps] = useState<LiveStep[]>([]);
   const [siteUrl, setSiteUrl] = useState('');
+  const [isBlurring, setIsBlurring] = useState(false);
   const [, setTick] = useState(0);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -72,6 +74,21 @@ export default function RecordingView({ guideId, onStop }: RecordingViewProps) {
     });
   }, []);
 
+  const handleBlur = useCallback(async () => {
+    await sendMessage('enterBlurMode', undefined);
+    setIsBlurring(true);
+  }, []);
+
+  useEffect(() => {
+    const handler = (changes: Record<string, chrome.storage.StorageChange>) => {
+      if ('mimikBlurMode' in changes && changes.mimikBlurMode.newValue === false) {
+        setIsBlurring(false);
+      }
+    };
+    chrome.storage.local.onChanged.addListener(handler);
+    return () => chrome.storage.local.onChanged.removeListener(handler);
+  }, []);
+
   const handleDeleteStep = useCallback(
     async (stepId: string) => {
       await deleteStep(guideId, stepId);
@@ -85,9 +102,9 @@ export default function RecordingView({ guideId, onStop }: RecordingViewProps) {
     <div className="flex flex-col h-screen bg-card relative">
       {/* Floating recording pill */}
       <div className="absolute top-3 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-border shadow-sm">
-        <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+        <span className={`w-2 h-2 rounded-full ${isBlurring ? 'bg-amber-400' : 'bg-red-500 animate-pulse'}`} />
         <span className="text-xs font-semibold text-foreground">
-          Recording · {steps.length} {steps.length === 1 ? 'step' : 'steps'}
+          {isBlurring ? 'Capture paused' : `Recording · ${steps.length} ${steps.length === 1 ? 'step' : 'steps'}`}
         </span>
       </div>
 
@@ -165,6 +182,14 @@ export default function RecordingView({ guideId, onStop }: RecordingViewProps) {
           <Check size={16} strokeWidth={3} />
           Finish Recording
         </Button>
+        <button
+          onClick={handleBlur}
+          disabled={isBlurring}
+          className="w-10 h-10 rounded-full border border-border flex items-center justify-center transition-colors text-warm hover:border-purple-300 hover:text-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          title="Smart Blur"
+        >
+          <EyeOff size={16} />
+        </button>
         <button
           onClick={onStop}
           className="w-10 h-10 rounded-full border border-border flex items-center justify-center transition-colors text-warm hover:border-red-300 hover:text-red-400"
