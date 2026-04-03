@@ -13,7 +13,9 @@ const RETRY_INTERVAL_MS = 1000;
 export class GuideMeController {
   private overlay: GuideMeOverlay | null = null;
   private storageListener: ((changes: Record<string, { newValue?: unknown }>) => void) | null = null;
-  private active = false;
+  private clickHandler: ((e: Event) => void) | null = null;
+  private currentTarget: HTMLElement | null = null;
+  private currentStepIndex = -1;
 
   start() {
     if (window.self !== window.top) return;
@@ -31,17 +33,16 @@ export class GuideMeController {
       browser.storage.local.onChanged.removeListener(this.storageListener);
       this.storageListener = null;
     }
+    this.removeActionDetection();
     this.destroyOverlay();
-    this.active = false;
   }
 
   private async checkForActiveSession() {
     const data = await browser.storage.local.get([SESSION_KEY, STEP_KEY]);
     const session = data[SESSION_KEY] as GuideMeSession | null;
     const step = data[STEP_KEY] as Step | null;
-
     if (session?.active && step) {
-      this.showStep(step, session.stepIndex, session.totalSteps);
+      this.showStep(step, session.stepIndex);
     }
   }
 
@@ -51,21 +52,20 @@ export class GuideMeController {
     const step = data[STEP_KEY] as Step | null;
 
     if (!session?.active || !step) {
+      this.removeActionDetection();
       this.destroyOverlay();
-      this.active = false;
       return;
     }
 
-    this.showStep(step, session.stepIndex, session.totalSteps);
+    this.showStep(step, session.stepIndex);
   }
 
-  private async showStep(step: Step, stepIndex: number, totalSteps: number) {
+  private async showStep(step: Step, stepIndex: number) {
+    this.removeActionDetection();
     this.destroyOverlay();
+    this.currentStepIndex = stepIndex;
 
-    if (!step.elementMeta) {
-      this.mountOverlay(step, stepIndex, totalSteps, null);
-      return;
-    }
+    if (!step.elementMeta) return;
 
     let element: HTMLElement | null = null;
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
@@ -79,27 +79,48 @@ export class GuideMeController {
       }
     }
 
-    this.mountOverlay(step, stepIndex, totalSteps, element);
+    if (!element) return;
+
+    this.overlay = new GuideMeOverlay();
+    this.overlay.show(step.description, stepIndex + 1, element);
+    this.setupActionDetection(step, element);
   }
 
-  private mountOverlay(step: Step, stepIndex: number, totalSteps: number, element: HTMLElement | null) {
-    this.active = true;
-    this.overlay = new GuideMeOverlay({
-      onAdvance: (idx) => {
-        sendMessage('guideMeStepCompleted', { stepIndex: idx }).catch((err) =>
-          logger.warn('Failed to advance guide me step', err),
-        );
-      },
-      onPrev: (idx) => {
-        sendMessage('guideMePrev', { stepIndex: idx }).catch((err) =>
-          logger.warn('Failed to go to previous step', err),
-        );
-      },
-      onCancel: () => {
-        sendMessage('guideMeCancel', undefined).catch((err) => logger.warn('Failed to cancel guide me', err));
-      },
-    });
-    this.overlay.show(step, stepIndex, totalSteps, element);
+  private setupActionDetection(step: Step, target: HTMLElement) {
+    this.currentTarget = target;
+
+    if (step.action === 'input' && step.inputValue) {
+      if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
+        const proto =
+          target instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+        const nativeSetter = Object.getOwnPropertyDescriptor(proto, 'value')?.set;
+        if (nativeSetter) nativeSetter.call(target, step.inputValue);
+        else target.value = step.inputValue;
+      } else if (target.getAttribute('contenteditable') !== null) {
+        target.textContent = step.inputValue;
+      }
+      target.dispatchEvent(new Event('input', { bubbles: true }));
+      target.dispatchEvent(new Event('change', { bubbles: true }));
+      setTimeout(() => this.advanceStep(), 500);
+      return;
+    }
+
+    this.clickHandler = () => this.advanceStep();
+    target.addEventListener('click', this.clickHandler, { once: true });
+  }
+
+  private advanceStep() {
+    sendMessage('guideMeStepCompleted', { stepIndex: this.currentStepIndex }).catch((err) =>
+      logger.warn('Failed to advance guide me step', err),
+    );
+  }
+
+  private removeActionDetection() {
+    if (this.clickHandler && this.currentTarget) {
+      this.currentTarget.removeEventListener('click', this.clickHandler);
+    }
+    this.clickHandler = null;
+    this.currentTarget = null;
   }
 
   private destroyOverlay() {
