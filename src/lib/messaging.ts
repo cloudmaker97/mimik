@@ -34,6 +34,7 @@ export type CaptureStepResponse = { stepId: string } | { ignored: true } | { err
 export interface UpdateInputStepData {
   stepId: string;
   description: string;
+  inputValue?: string;
 }
 
 export interface UpdateInputStepResponse {

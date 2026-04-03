@@ -4,7 +4,7 @@ import { CaptureState } from '@/core/capture/machine';
 import { buildFallbackDescription } from '@/core/capture/step-description';
 import { db } from '@/core/guides/db';
 import { addStepToGuide, createStep, saveScreenshot, updateStepDescription } from '@/core/guides/service';
-import type { ElementMeta, Screenshot } from '@/core/guides/types';
+import type { ElementMeta, Screenshot, Step } from '@/core/guides/types';
 import { captureVisibleTab, localStorage } from '@/lib/browser-api';
 import { logger } from '@/lib/logger';
 import type { CaptureStepData, CaptureStepResponse } from '@/lib/messaging';
@@ -65,6 +65,7 @@ export async function handleCaptureStep(data: CaptureStepData): Promise<CaptureS
     url: snap.context.currentUrl,
     timestamp: Date.now(),
     screenshotId,
+    elementMeta: data.elementMeta,
   });
   await addStepToGuide(guideId, stepId);
 
@@ -79,8 +80,11 @@ export async function handleCaptureStep(data: CaptureStepData): Promise<CaptureS
   return { stepId };
 }
 
-export async function handleUpdateInputStep(stepId: string, description: string) {
+export async function handleUpdateInputStep(stepId: string, description: string, inputValue?: string) {
   await updateStepDescription(stepId, description);
+  if (inputValue !== undefined) {
+    await db.steps.update(stepId, { inputValue });
+  }
 }
 
 export async function handleFinalizeInputStep(
@@ -89,9 +93,9 @@ export async function handleFinalizeInputStep(
   domContext: DOMContext | undefined,
 ) {
   const screenshotId = await takeScreenshot(stepId, elementMeta);
-  if (screenshotId) {
-    await db.steps.update(stepId, { screenshotId });
-  }
+  const updates: Partial<Step> = { elementMeta };
+  if (screenshotId) updates.screenshotId = screenshotId;
+  await db.steps.update(stepId, updates);
 
   if (domContext) {
     try {

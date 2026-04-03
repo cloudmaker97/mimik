@@ -17,6 +17,8 @@ export interface Step {
   url: string;
   timestamp: number;
   screenshotId?: string;
+  elementMeta?: ElementMeta;
+  inputValue?: string;
 }
 
 export interface ScreenshotBounds {

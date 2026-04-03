@@ -35,8 +35,8 @@ export class InputSession {
     if (!this.stepId) return;
     const val = getFieldValue(target);
     const desc = val ? `Type "${val}" in ${getFieldLabel(target)}` : `Clear ${getFieldLabel(target)}`;
-    sendMessage('updateInputStep', { stepId: this.stepId, description: desc }).catch((err) =>
-      logger.warn('Failed to update input step', err),
+    sendMessage('updateInputStep', { stepId: this.stepId, description: desc, inputValue: val || undefined }).catch(
+      (err) => logger.warn('Failed to update input step', err),
     );
   }
 
