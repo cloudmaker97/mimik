@@ -26,6 +26,7 @@ export default defineConfig({
       "unlimitedStorage",
       "sidePanel",
       "webNavigation",
+      "offscreen",
     ],
     host_permissions: ["<all_urls>"],
     minimum_chrome_version: "118",
