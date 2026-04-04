@@ -99,6 +99,14 @@ export interface ExitBlurModeResponse {
   exited: boolean;
 }
 
+export interface BlurAiDetectData {
+  text: string;
+}
+
+export interface BlurAiDetectResponse {
+  patterns: string[];
+}
+
 interface MimikProtocol {
   getState(): GetStateResponse;
   startRecording(data: StartRecordingData): StartRecordingResponse;
@@ -113,6 +121,7 @@ interface MimikProtocol {
   guideMePrev(data: GuideMe_PrevData): GuideMe_PrevResponse;
   enterBlurMode(): EnterBlurModeResponse;
   exitBlurMode(): ExitBlurModeResponse;
+  blurAiDetect(data: BlurAiDetectData): BlurAiDetectResponse;
 }
 
 export const { sendMessage, onMessage } = defineExtensionMessaging<MimikProtocol>();

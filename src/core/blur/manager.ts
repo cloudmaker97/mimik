@@ -1,4 +1,5 @@
 import { browser } from '#imports';
+import { sendMessage } from '@/lib/messaging';
 import { ElementPicker } from './element-picker';
 import { BlurPanel } from './panel';
 import type { PresetKey } from './regexes';
@@ -16,7 +17,10 @@ export class BlurManager {
     this.active = true;
     injectBlurStyles();
 
-    const stored = await browser.storage.local.get(['blurPresets', 'blurAiEnabled']);
+    let stored: Record<string, unknown> = {};
+    try {
+      stored = await browser.storage.local.get(['blurPresets', 'blurAiEnabled']);
+    } catch {}
     const presets = (stored.blurPresets as Record<PresetKey, boolean>) || {
       email: true,
       phone: true,
@@ -82,11 +86,10 @@ export class BlurManager {
 
   private onToggleAi = ((e: CustomEvent<{ enabled: boolean }>) => {
     if (e.detail.enabled) {
-      browser.runtime
-        .sendMessage({ type: 'BLUR_AI_DETECT', text: document.body.innerText })
-        .then((res: any) => {
+      sendMessage('blurAiDetect', { text: document.body.innerText })
+        .then((res) => {
           if (res?.patterns) {
-            const regexes = res.patterns.map((p: string) => new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'));
+            const regexes = res.patterns.map((p) => new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'));
             this.scanner.setAiPatterns(regexes);
           }
         })

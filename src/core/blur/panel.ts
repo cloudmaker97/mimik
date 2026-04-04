@@ -255,11 +255,8 @@ export class BlurPanel {
   }
 
   mount() {
-    if (!customElements.get(PANEL_TAG)) {
-      customElements.define(PANEL_TAG, class extends HTMLElement {});
-    }
-
-    this.host = document.createElement(PANEL_TAG);
+    this.host = document.createElement('div');
+    this.host.setAttribute('data-mimik-ignore', '');
     this.host.setAttribute('data-mimik-ignore', '');
 
     const shadow = this.host.attachShadow({ mode: 'closed' });

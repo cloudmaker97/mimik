@@ -12,7 +12,7 @@ import { TabMessage } from '@/lib/tab-messages';
 
 const CLEANUP_EVENT = `mimik_cleanup_${browser.runtime.id}`;
 
-function createTabMessageHandler(session: CaptureSession, guideMe: GuideMeController) {
+function createTabMessageHandler(session: CaptureSession, guideMe: GuideMeController, blurManager: BlurManager) {
   return function handleTabMessage(msg: Record<string, unknown>, _sender: unknown, sendResponse: (r: unknown) => void) {
     if (session.isDisabled) return false;
 
@@ -56,6 +56,11 @@ function createTabMessageHandler(session: CaptureSession, guideMe: GuideMeContro
         sendResponse({ stopped: true });
         return true;
 
+      case TabMessage.START_BLUR:
+        if (window.self === window.top) blurManager.start();
+        sendResponse({ started: true });
+        return true;
+
       default:
         return false;
     }
@@ -86,38 +91,22 @@ export default defineContentScript({
     const guideMe = new GuideMeController();
     const blurManager = new BlurManager();
     guideMe.start();
-    const handleTabMessage = createTabMessageHandler(session, guideMe);
-    const isTopFrame = window.self === window.top;
-    let removeBlurListener: (() => void) | null = null;
+    const handleTabMessage = createTabMessageHandler(session, guideMe, blurManager);
 
     document.addEventListener(CLEANUP_EVENT, () => {
       session.dispose();
       guideMe.dispose();
       browser.runtime.onMessage.removeListener(handleTabMessage);
       blurManager.stop();
-      removeBlurListener?.();
     });
 
     window.addEventListener('beforeunload', () => session.stop());
     browser.runtime.onMessage.addListener(handleTabMessage);
     syncWithBackground(session);
-    if (isTopFrame) {
-      const blurHandler = (changes: Record<string, { newValue?: unknown }>) => {
-        if (!('mimikBlurMode' in changes)) return;
-        if (changes.mimikBlurMode?.newValue === true) {
-          blurManager.start();
-        } else {
-          blurManager.stop();
-        }
-      };
-      browser.storage.local.onChanged.addListener(blurHandler);
-      removeBlurListener = () => browser.storage.local.onChanged.removeListener(blurHandler);
 
-      document.addEventListener('mimik-blur:done', () => {
-        browser.storage.local.set({ mimikBlurMode: false });
-        sendMessage('exitBlurMode', undefined).catch(() => {});
-      });
-    }
+    document.addEventListener('mimik-blur:done', () => {
+      sendMessage('exitBlurMode', undefined).catch(() => {});
+    });
 
     logger.info('Content script loaded →', window.location.href);
   },

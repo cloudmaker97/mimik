@@ -85,8 +85,8 @@ export default function RecordingView({ guideId, onStop }: RecordingViewProps) {
         setIsBlurring(false);
       }
     };
-    chrome.storage.local.onChanged.addListener(handler);
-    return () => chrome.storage.local.onChanged.removeListener(handler);
+    chrome.storage.onChanged.addListener(handler);
+    return () => chrome.storage.onChanged.removeListener(handler);
   }, []);
 
   const handleDeleteStep = useCallback(

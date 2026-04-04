@@ -91,48 +91,35 @@ export class ElementPicker {
   }
 
   private mount() {
-    if (!customElements.get(PICKER_TAG)) {
-      customElements.define(
-        PICKER_TAG,
-        class extends HTMLElement {
-          constructor() {
-            super();
-            const shadow = this.attachShadow({ mode: 'closed' });
-            const style = document.createElement('style');
-            style.textContent = STYLES;
-            shadow.appendChild(style);
-
-            const ring = document.createElement('div');
-            ring.className = 'ring';
-            shadow.appendChild(ring);
-
-            const bar = document.createElement('div');
-            bar.className = 'bar';
-            bar.innerHTML = `
-              <div class="bar-left">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
-                Select elements to blur
-              </div>
-            `;
-            const doneBtn = document.createElement('button');
-            doneBtn.className = 'bar-done';
-            doneBtn.textContent = 'Done';
-            doneBtn.addEventListener('click', () => {
-              this.dispatchEvent(new CustomEvent('picker-done'));
-            });
-            bar.appendChild(doneBtn);
-            shadow.appendChild(bar);
-
-            (this as any)._ring = ring;
-          }
-        },
-      );
-    }
-    this.host = document.createElement(PICKER_TAG);
+    this.host = document.createElement('div');
     this.host.setAttribute('data-mimik-ignore', '');
-    this.host.addEventListener('picker-done', () => this.onDone?.());
+
+    const shadow = this.host.attachShadow({ mode: 'closed' });
+    const style = document.createElement('style');
+    style.textContent = STYLES;
+    shadow.appendChild(style);
+
+    const ring = document.createElement('div');
+    ring.className = 'ring';
+    shadow.appendChild(ring);
+
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.innerHTML = `
+      <div class="bar-left">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+        Select elements to blur
+      </div>
+    `;
+    const doneBtn = document.createElement('button');
+    doneBtn.className = 'bar-done';
+    doneBtn.textContent = 'Done';
+    doneBtn.addEventListener('click', () => this.onDone?.());
+    bar.appendChild(doneBtn);
+    shadow.appendChild(bar);
+
+    this.ring = ring;
     document.documentElement.appendChild(this.host);
-    this.ring = (this.host as any)._ring;
   }
 
   private isMimikElement(el: Element): boolean {

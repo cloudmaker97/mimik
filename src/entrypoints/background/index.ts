@@ -2,7 +2,7 @@ import { defineBackground } from '#imports';
 import { generateGuideTitle } from '@/core/capture/ai/title';
 import { advanceSession, cancelSession, completeSession, getSession, startSession } from '@/core/guideme/session';
 import { createGuide, getStepsForGuide, saveRrwebChunk, updateGuideTitle } from '@/core/guides/service';
-import { getActiveTab, localStorage, setSidePanelBehavior, updateTab } from '@/lib/browser-api';
+import { getActiveTab, localStorage, sendMessageToTab, setSidePanelBehavior, updateTab } from '@/lib/browser-api';
 import { logger } from '@/lib/logger';
 import { onMessage } from '@/lib/messaging';
 import { broadcastStateToPanel, setupPortListener } from '@/lib/port';
@@ -109,7 +109,10 @@ export default defineBackground(() => {
   onMessage('enterBlurMode', async () => {
     await waitUntilReady();
     await broadcastStopCapture();
-    await localStorage.set({ mimikBlurMode: true });
+    const activeTab = await getActiveTab();
+    if (activeTab?.id) {
+      sendMessageToTab(activeTab.id, { type: 'START_BLUR' }).catch(() => {});
+    }
     return { entered: true };
   });
 
@@ -222,24 +225,15 @@ export default defineBackground(() => {
     return { moved: true };
   });
 
-  chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
-    if (msg.type === 'offscreen:ready') return false;
-
-    if (msg.type === 'BLUR_AI_DETECT') {
-      ensureOffscreen()
-        .then(() => chrome.runtime.sendMessage({ type: 'offscreen:ai:detect', text: msg.text }))
-        .then((res) => {
-          if (res?.entities) {
-            const patterns = res.entities.map((e: { text: string }) => e.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-            sendResponse({ patterns });
-          } else {
-            sendResponse({ patterns: [] });
-          }
-        })
-        .catch(() => sendResponse({ patterns: [] }));
-      return true;
-    }
-
-    return false;
+  onMessage('blurAiDetect', async ({ data }) => {
+    await ensureOffscreen();
+    try {
+      const res: any = await chrome.runtime.sendMessage({ type: 'offscreen:ai:detect', text: data.text });
+      if (res?.entities) {
+        const patterns = res.entities.map((e: { text: string }) => e.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+        return { patterns };
+      }
+    } catch {}
+    return { patterns: [] };
   });
 });
