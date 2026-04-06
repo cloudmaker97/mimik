@@ -1,33 +1,7 @@
 import { jsPDF } from 'jspdf';
+import { blobToDataUrl, extractDomain, formatDate } from '@/core/export/utils';
 import type { Guide, Screenshot, Step } from '@/core/guides/types';
 import { logger } from '@/lib/logger';
-
-function blobToDataUrl(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
-}
-
-function extractDomain(steps: Step[]): string {
-  const firstUrl = steps[0]?.url;
-  if (!firstUrl) return '';
-  try {
-    return new URL(firstUrl).hostname.replace(/^www\./, '');
-  } catch {
-    return '';
-  }
-}
-
-function formatDate(timestamp: number): string {
-  return new Date(timestamp).toLocaleDateString('en-US', {
-    month: 'short',
-    day: '2-digit',
-    year: 'numeric',
-  });
-}
 
 export async function exportGuideAsPDF(
   guide: Guide,
