@@ -29,6 +29,12 @@ export default defineConfig({
     ],
     host_permissions: ["<all_urls>"],
     minimum_chrome_version: "118",
+    icons: {
+      16: 'icon16.png',
+      32: 'icon32.png',
+      48: 'icon48.png',
+      128: 'icon128.png',
+    },
     action: {},
     side_panel: {
       default_path: "sidepanel/index.html",
