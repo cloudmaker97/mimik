@@ -32,7 +32,7 @@ export default function TopNav({ route }: TopNavProps) {
   }));
 
   return (
-    <header className="flex items-center gap-5 px-7 h-16 shrink-0 bg-gradient-to-br from-amber to-amber-light">
+    <header className="flex items-center gap-5 px-7 h-16 shrink-0 bg-gradient-to-br from-violet to-violet-light">
       {/* Brand */}
       <button
         onClick={() => navigate({ page: 'library', category: 'all' })}
@@ -71,12 +71,12 @@ export default function TopNav({ route }: TopNavProps) {
                 key={item.key}
                 onClick={() => navigate({ page: 'library', category: item.key })}
                 className={`flex items-center gap-1.5 text-[13px] h-8 px-3 rounded-md transition-all
-                ${active ? 'bg-primary text-primary-foreground font-semibold' : 'text-brown font-medium hover:bg-foreground/10'}`}
+                ${active ? 'bg-primary text-primary-foreground font-semibold' : 'text-deep font-medium hover:bg-foreground/10'}`}
               >
                 <item.icon size={13.5} />
                 {item.label}
                 {count > 0 && (
-                  <span className={`text-[11px] ml-0.5 ${active ? 'text-primary-foreground/70' : 'text-amber-dark'}`}>
+                  <span className={`text-[11px] ml-0.5 ${active ? 'text-primary-foreground/70' : 'text-violet-dark'}`}>
                     {count}
                   </span>
                 )}
@@ -91,9 +91,9 @@ export default function TopNav({ route }: TopNavProps) {
           onClick={() => setSearchOpen(true)}
           className="flex items-center gap-2 px-3 h-8 rounded-lg w-52 cursor-pointer bg-white/40 border-0 hover:bg-white/60"
         >
-          <Search size={14} className="shrink-0 text-amber-dark" />
-          <span className="text-[12px] flex-1 text-left text-amber-dark">Search guides...</span>
-          <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-foreground/10 text-amber-dark">⌘K</span>
+          <Search size={14} className="shrink-0 text-violet-dark" />
+          <span className="text-[12px] flex-1 text-left text-violet-dark">Search guides...</span>
+          <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-foreground/10 text-violet-dark">⌘K</span>
         </Button>
         {route.page === 'guide' && exportData && (
           <ExportMenu

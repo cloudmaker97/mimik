@@ -204,7 +204,7 @@ export default function LibraryContent({ category }: LibraryContentProps) {
         <div ref={sortRef} className="relative">
           <button
             onClick={() => setSortOpen(!sortOpen)}
-            className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground px-3 py-1.5 rounded-lg border border-border bg-card hover:border-amber hover:text-warm transition-colors"
+            className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground px-3 py-1.5 rounded-lg border border-border bg-card hover:border-violet hover:text-purple transition-colors"
           >
             <ArrowDownWideNarrow size={13} />
             {sortLabels[sort]}
@@ -230,7 +230,7 @@ export default function LibraryContent({ category }: LibraryContentProps) {
         </div>
         <button
           onClick={toggleDisplay}
-          className="flex items-center justify-center w-8 h-8 rounded-lg border border-border bg-card text-muted-foreground hover:border-amber hover:text-warm transition-colors"
+          className="flex items-center justify-center w-8 h-8 rounded-lg border border-border bg-card text-muted-foreground hover:border-violet hover:text-purple transition-colors"
           title={display === 'list' ? 'Grid view' : 'List view'}
         >
           {display === 'list' ? <LayoutGrid size={15} /> : <LayoutList size={15} />}
@@ -238,7 +238,7 @@ export default function LibraryContent({ category }: LibraryContentProps) {
       </div>
 
       {loading ? (
-        <p className="text-sm py-12 text-center text-warm">Loading...</p>
+        <p className="text-sm py-12 text-center text-purple">Loading...</p>
       ) : allGuidesRef.current.length === 0 ? (
         <div className="text-center py-20">
           <FileText size={40} className="mx-auto mb-3 text-border" />
@@ -261,7 +261,7 @@ export default function LibraryContent({ category }: LibraryContentProps) {
           <button
             onClick={() => applyPage(page - 1)}
             disabled={page === 0}
-            className="flex items-center justify-center w-8 h-8 rounded-lg border border-border bg-card text-muted-foreground hover:border-amber hover:text-warm transition-colors disabled:opacity-30 disabled:pointer-events-none"
+            className="flex items-center justify-center w-8 h-8 rounded-lg border border-border bg-card text-muted-foreground hover:border-violet hover:text-purple transition-colors disabled:opacity-30 disabled:pointer-events-none"
           >
             <ChevronLeft size={15} />
           </button>
@@ -271,7 +271,7 @@ export default function LibraryContent({ category }: LibraryContentProps) {
           <button
             onClick={() => applyPage(page + 1)}
             disabled={page >= totalPages - 1}
-            className="flex items-center justify-center w-8 h-8 rounded-lg border border-border bg-card text-muted-foreground hover:border-amber hover:text-warm transition-colors disabled:opacity-30 disabled:pointer-events-none"
+            className="flex items-center justify-center w-8 h-8 rounded-lg border border-border bg-card text-muted-foreground hover:border-violet hover:text-purple transition-colors disabled:opacity-30 disabled:pointer-events-none"
           >
             <ChevronRight size={15} />
           </button>

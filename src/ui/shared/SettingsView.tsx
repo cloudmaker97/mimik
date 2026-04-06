@@ -156,7 +156,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
         </div>
 
         <div className="flex items-start gap-2 px-3 py-2.5 rounded-lg bg-secondary text-[10px] text-muted-foreground leading-relaxed">
-          <Shield size={12} className="shrink-0 mt-0.5 text-amber" />
+          <Shield size={12} className="shrink-0 mt-0.5 text-violet" />
           <span>
             Your API key is stored locally and only sent to the selected AI provider. No data leaves your browser
             otherwise.

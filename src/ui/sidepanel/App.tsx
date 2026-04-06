@@ -32,9 +32,12 @@ function MascotIcon({ size = 44 }: { size?: number }) {
         <clipPath id="cc">
           <circle cx="100" cy="100" r="95" />
         </clipPath>
+        <clipPath id="ds">
+          <path d="M30 95 L170 60 L170 95 Z" />
+        </clipPath>
       </defs>
       <g clipPath="url(#cc)">
-        <rect x="-50" y="-50" width="300" height="300" className="fill-gold" />
+        <rect x="-50" y="-50" width="300" height="300" className="fill-lavender" />
         <rect
           x="30"
           y="-80"
@@ -44,24 +47,29 @@ function MascotIcon({ size = 44 }: { size?: number }) {
           transform="rotate(45, 100, 100)"
           opacity="0.15"
         />
-        <rect x="90" y="-80" width="50" height="400" fill="#D97706" transform="rotate(45, 100, 100)" opacity="0.12" />
-        <rect x="-30" y="-80" width="50" height="400" fill="#FCD34D" transform="rotate(45, 100, 100)" opacity="0.15" />
-        <rect
-          x="150"
-          y="-80"
-          width="50"
-          height="400"
-          className="fill-amber-light"
-          transform="rotate(45, 100, 100)"
-          opacity="0.1"
-        />
+        <rect x="90" y="-80" width="50" height="400" fill="#818CF8" transform="rotate(45, 100, 100)" opacity="0.12" />
+        <rect x="-30" y="-80" width="50" height="400" fill="#93C5FD" transform="rotate(45, 100, 100)" opacity="0.15" />
+        <rect x="150" y="-80" width="50" height="400" fill="#A5B4FC" transform="rotate(45, 100, 100)" opacity="0.1" />
       </g>
       <rect x="30" y="95" width="140" height="68" rx="5" className="fill-primary" />
-      <path d="M30 95 L30 80 Q30 60, 100 60 Q170 60, 170 80 L170 95 Z" className="fill-brown-dark" />
-      <rect x="30" y="93" width="140" height="3" className="fill-gold" />
-      <path d="M68 122 Q76 112 84 122" className="stroke-gold" strokeWidth="5" fill="none" strokeLinecap="round" />
-      <path d="M116 122 Q124 112 132 122" className="stroke-gold" strokeWidth="5" fill="none" strokeLinecap="round" />
-      <path d="M84 138 Q100 148 116 138" className="stroke-gold" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+      <path d="M30 95 L30 80 Q30 60, 100 60 Q170 60, 170 80 L170 95 Z" className="fill-violet-mid" />
+      <path d="M30 95 L30 80 Q30 60, 100 60 Q170 60, 170 80 L170 95 Z" className="fill-accent" clipPath="url(#ds)" />
+      <rect x="30" y="93" width="140" height="3" className="fill-lavender" />
+      <path d="M68 122 Q76 112 84 122" className="stroke-lavender" strokeWidth="5" fill="none" strokeLinecap="round" />
+      <path
+        d="M116 122 Q124 112 132 122"
+        className="stroke-lavender"
+        strokeWidth="5"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M84 138 Q100 148 116 138"
+        className="stroke-lavender"
+        strokeWidth="3.5"
+        fill="none"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -181,14 +189,14 @@ export default function App() {
   return (
     <div className="min-h-screen bg-card flex flex-col">
       {/* Header */}
-      <div className="relative overflow-hidden px-6 pt-6 pb-7 bg-gradient-to-br from-amber to-amber-light">
-        <div className="absolute -top-12 -right-8 w-44 h-44 rounded-full opacity-15 blur-[40px] bg-gradient-to-br from-gold to-white" />
+      <div className="relative overflow-hidden px-6 pt-6 pb-7 bg-gradient-to-br from-violet to-violet-light">
+        <div className="absolute -top-12 -right-8 w-44 h-44 rounded-full opacity-15 blur-[40px] bg-gradient-to-br from-lavender to-white" />
 
         <div className="relative flex items-center justify-between mb-6">
           <span className="text-[17px] font-bold tracking-tight text-foreground">Mimik</span>
           <div className="flex items-center gap-2">
             <span
-              className={`text-[10px] font-medium px-2.5 py-0.5 rounded-full ${isAlive ? 'text-foreground bg-white/30' : 'text-brown/50 bg-white/15'}`}
+              className={`text-[10px] font-medium px-2.5 py-0.5 rounded-full ${isAlive ? 'text-foreground bg-white/30' : 'text-deep/50 bg-white/15'}`}
             >
               {isAlive ? 'Connected' : 'Connecting...'}
             </span>
@@ -206,7 +214,7 @@ export default function App() {
             <MascotIcon size={44} />
           </div>
           <h3 className="text-base font-medium text-foreground">What would you like to capture?</h3>
-          <p className="text-xs mt-1 text-amber-dark">Record any workflow automatically</p>
+          <p className="text-xs mt-1 text-violet-dark">Record any workflow automatically</p>
         </div>
 
         <Button
@@ -222,7 +230,7 @@ export default function App() {
       {/* Body */}
       <div className="flex-1 px-5 pt-5">
         <div className="relative mb-5">
-          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-warm" />
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple" />
           <Input
             type="text"
             placeholder="Search guides..."
