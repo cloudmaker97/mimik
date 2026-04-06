@@ -39,7 +39,6 @@ export async function exportGuideAsPDF(
   const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 20;
   const contentWidth = pageWidth - margin * 2;
-  const totalPages = 1 + Math.max(1, steps.length);
 
   let y = pageHeight / 2 - 30;
 
@@ -48,21 +47,19 @@ export async function exportGuideAsPDF(
   doc.setFont('helvetica', 'bold');
   const badgeWidth = doc.getTextWidth(badgeText) + 8;
   const badgeHeight = 7;
-  const badgeX = margin;
   doc.setFillColor(79, 70, 229);
-  doc.roundedRect(badgeX, y, badgeWidth, badgeHeight, 2, 2, 'F');
+  doc.roundedRect(margin, y, badgeWidth, badgeHeight, 2, 2, 'F');
   doc.setTextColor(255, 255, 255);
-  doc.text(badgeText, badgeX + 4, y + 4.8);
+  doc.text(badgeText, margin + 4, y + 4.8);
   y += badgeHeight + 6;
 
-  const gradientY = y;
   const segmentWidth = contentWidth / 3;
   doc.setFillColor(139, 92, 246);
-  doc.rect(margin, gradientY, segmentWidth, 1.2, 'F');
+  doc.rect(margin, y, segmentWidth, 1.2, 'F');
   doc.setFillColor(167, 139, 250);
-  doc.rect(margin + segmentWidth, gradientY, segmentWidth, 1.2, 'F');
+  doc.rect(margin + segmentWidth, y, segmentWidth, 1.2, 'F');
   doc.setFillColor(125, 211, 252);
-  doc.rect(margin + segmentWidth * 2, gradientY, segmentWidth, 1.2, 'F');
+  doc.rect(margin + segmentWidth * 2, y, segmentWidth, 1.2, 'F');
   y += 8;
 
   doc.setFontSize(22);
@@ -109,10 +106,38 @@ export async function exportGuideAsPDF(
   const maxImgHeight = 90;
   const stepSpacing = 6;
 
+  doc.addPage();
+  y = margin;
+
   for (let i = 0; i < steps.length; i++) {
     const step = steps[i];
-    doc.addPage();
-    y = margin;
+
+    const descWidth = contentWidth - stepIndent;
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    const descLines = doc.splitTextToSize(step.description, descWidth);
+    const descHeight = descLines.length * 5;
+
+    const screenshot = screenshots.get(step.id);
+    let imgDataUrl: string | null = null;
+    const imgWidth = contentWidth - stepIndent;
+    let imgHeight = 0;
+
+    if (screenshot) {
+      try {
+        imgDataUrl = await blobToDataUrl(screenshot.blob);
+        imgHeight = Math.min((screenshot.height / screenshot.width) * imgWidth, maxImgHeight);
+      } catch (err) {
+        logger.warn('PDF: failed to load screenshot for step', step.index, err);
+      }
+    }
+
+    const stepBlockHeight = 6 + descHeight + 6 + imgHeight + stepSpacing;
+
+    if (y + stepBlockHeight > pageHeight - margin && y > margin) {
+      doc.addPage();
+      y = margin;
+    }
 
     doc.setDrawColor(199, 210, 254);
     doc.setLineWidth(0.3);
@@ -128,36 +153,30 @@ export async function exportGuideAsPDF(
     doc.setFontSize(11);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(30, 27, 75);
-    const descWidth = contentWidth - stepIndent;
-    const descLines = doc.splitTextToSize(step.description, descWidth);
     doc.text(descLines, margin + stepIndent, y + 4);
-    y += descLines.length * 5 + 6;
+    y += descHeight + 6;
 
-    const screenshot = screenshots.get(step.id);
-    if (screenshot) {
-      try {
-        const dataUrl = await blobToDataUrl(screenshot.blob);
-        const imgWidth = contentWidth - stepIndent;
-        const imgHeight = Math.min((screenshot.height / screenshot.width) * imgWidth, maxImgHeight);
-
-        if (y + imgHeight > pageHeight - margin) {
-          doc.addPage();
-          y = margin;
-        }
-
-        doc.addImage(dataUrl, 'JPEG', margin + stepIndent, y, imgWidth, imgHeight);
-        y += imgHeight + stepSpacing;
-      } catch (err) {
-        logger.warn('PDF: failed to embed screenshot for step', step.index, err);
-        y += stepSpacing;
+    if (imgDataUrl) {
+      if (y + imgHeight > pageHeight - margin) {
+        doc.addPage();
+        y = margin;
       }
-    }
 
-    const currentPage = doc.getNumberOfPages();
+      doc.addImage(imgDataUrl, 'JPEG', margin + stepIndent, y, imgWidth, imgHeight);
+      y += imgHeight + stepSpacing;
+    } else {
+      y += stepSpacing;
+    }
+  }
+
+  const totalPages = doc.getNumberOfPages();
+  const stepPages = totalPages - 1;
+  for (let p = 2; p <= totalPages; p++) {
+    doc.setPage(p);
     doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(107, 114, 128);
-    doc.text(`${currentPage - 1} of ${totalPages - 1}`, pageWidth - margin, pageHeight - margin, { align: 'right' });
+    doc.text(`${p - 1} of ${stepPages}`, pageWidth - margin, pageHeight - margin, { align: 'right' });
   }
 
   return doc.output('blob');
