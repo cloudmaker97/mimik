@@ -123,12 +123,13 @@ export default function ZoomScreenshot({
   const [fullUrl, setFullUrl] = useState<string | null>(null);
   const [croppedUrl, setCroppedUrl] = useState<string | null>(null);
   const [showCropped, setShowCropped] = useState(false);
-  const processedIdRef = useRef<string | null>(null);
+  const processedKeyRef = useRef<string | null>(null);
   const urlsRef = useRef<string[]>([]);
 
   useEffect(() => {
     if (!screenshot.blob) return;
-    if (processedIdRef.current === screenshot.id) return;
+    const cacheKey = `${screenshot.id}:${screenshot.blob.size}`;
+    if (processedKeyRef.current === cacheKey) return;
 
     let cancelled = false;
 
@@ -140,7 +141,7 @@ export default function ZoomScreenshot({
         return;
       }
 
-      processedIdRef.current = screenshot.id;
+      processedKeyRef.current = cacheKey;
 
       for (const u of urlsRef.current) URL.revokeObjectURL(u);
 

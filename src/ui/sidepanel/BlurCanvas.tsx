@@ -1,4 +1,4 @@
-import { Check, Undo, X } from 'lucide-react';
+import { Check, EyeOff, Undo, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Screenshot } from '@/core/guides/types';
 
@@ -186,33 +186,40 @@ export default function BlurCanvas({ screenshot, onSave, onCancel }: BlurCanvasP
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg overflow-hidden flex flex-col max-w-full max-h-full">
-        <div className="p-3 border-b border-gray-200 flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-700">Draw rectangles to blur sensitive areas</span>
-          <div className="flex items-center gap-2">
+      <div className="bg-card rounded-xl overflow-hidden flex flex-col max-w-full max-h-full shadow-2xl">
+        <div className="px-4 py-2.5 bg-primary flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <span className="w-7 h-7 rounded-full bg-primary-foreground/10 flex items-center justify-center">
+              <EyeOff size={14} className="text-primary-foreground" />
+            </span>
+            <span className="text-xs font-medium text-primary-foreground">Draw rectangles to blur</span>
+            {blurRects.length > 0 && (
+              <span className="text-[10px] font-semibold text-primary-foreground bg-primary-foreground/10 px-2 py-0.5 rounded-full">
+                {blurRects.length} region{blurRects.length !== 1 ? 's' : ''}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-1.5">
             <button
               onClick={handleUndo}
               disabled={blurRects.length === 0}
-              className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 disabled:opacity-40 rounded border border-gray-200 hover:border-gray-300"
-              title="Undo last blur"
+              className="flex items-center gap-1 px-3 py-1.5 text-[11px] font-semibold text-primary-foreground rounded-lg border border-primary-foreground/10 bg-primary-foreground/[0.06] hover:bg-primary-foreground/15 disabled:opacity-30 transition-colors"
             >
-              <Undo size={14} />
+              <Undo size={12} />
               Undo
             </button>
             <button
               onClick={onCancel}
-              className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 rounded border border-gray-200 hover:border-gray-300"
-              title="Cancel"
+              className="flex items-center gap-1 px-3 py-1.5 text-[11px] font-semibold text-primary-foreground rounded-lg border border-primary-foreground/10 bg-primary-foreground/[0.06] hover:bg-red-500/15 hover:text-red-300 transition-colors"
             >
-              <X size={14} />
+              <X size={12} />
               Cancel
             </button>
             <button
               onClick={handleSave}
-              className="flex items-center gap-1 px-3 py-1.5 text-sm text-white bg-violet-600 hover:bg-violet-700 rounded"
-              title="Save blurred screenshot"
+              className="flex items-center gap-1 px-3 py-1.5 text-[11px] font-bold text-primary bg-primary-foreground rounded-lg hover:bg-primary-foreground/90 transition-colors"
             >
-              <Check size={14} />
+              <Check size={12} />
               Save
             </button>
           </div>
