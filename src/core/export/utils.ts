@@ -42,3 +42,15 @@ export function formatDate(timestamp: number): string {
 export function escapeHtml(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+
+export async function fetchFaviconBase64(domain: string): Promise<string | null> {
+  try {
+    const url = `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent(`https://${domain}`)}&size=32&drop_404_icon=true`;
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const blob = await res.blob();
+    return await blobToDataUrl(blob);
+  } catch {
+    return null;
+  }
+}

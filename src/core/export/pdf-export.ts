@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf';
-import { blobToDataUrl, extractDomain, formatDate } from '@/core/export/utils';
+import { blobToDataUrl, extractDomain, fetchFaviconBase64, formatDate } from '@/core/export/utils';
 import type { Guide, Screenshot, Step } from '@/core/guides/types';
 import { logger } from '@/lib/logger';
 
@@ -17,6 +17,7 @@ export async function exportGuideAsPDF(
   const centerX = pageWidth / 2;
   const domain = extractDomain(steps);
   const dateStr = formatDate(guide.createdAt);
+  const faviconDataUrl = domain ? await fetchFaviconBase64(domain) : null;
 
   const badgeText = `${steps.length} Steps`;
   doc.setFontSize(10);
@@ -88,10 +89,20 @@ export async function exportGuideAsPDF(
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(107, 114, 128);
     doc.text('SOURCE', metaX, y);
+    const faviconSize = 4;
+    let domainTextX = metaX;
+    if (faviconDataUrl) {
+      try {
+        doc.addImage(faviconDataUrl, 'PNG', metaX, y + 2.5, faviconSize, faviconSize);
+        domainTextX = metaX + faviconSize + 2;
+      } catch {
+        domainTextX = metaX;
+      }
+    }
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(79, 70, 229);
-    doc.text(domain, metaX, y + 6);
+    doc.text(domain, domainTextX, y + 6);
   }
 
   const stepIndent = 16;

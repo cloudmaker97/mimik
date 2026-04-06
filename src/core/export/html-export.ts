@@ -1,4 +1,4 @@
-import { blobToBase64, escapeHtml, extractDomain, formatDate } from '@/core/export/utils';
+import { blobToBase64, escapeHtml, extractDomain, fetchFaviconBase64, formatDate } from '@/core/export/utils';
 import type { Guide, Screenshot, Step } from '@/core/guides/types';
 
 export async function exportGuideAsHTML(
@@ -31,6 +31,7 @@ export async function exportGuideAsHTML(
   }
 
   const domain = extractDomain(steps);
+  const favicon = domain ? await fetchFaviconBase64(domain) : null;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -60,7 +61,7 @@ export async function exportGuideAsHTML(
         domain
           ? `<div style="text-align:left;">
         <div style="font-size:10px;font-weight:600;color:#6B7280;text-transform:uppercase;letter-spacing:0.06em;">Source</div>
-        <div style="font-size:14px;font-weight:600;color:#4F46E5;">${escapeHtml(domain)}</div>
+        <div style="font-size:14px;font-weight:600;color:#4F46E5;display:flex;align-items:center;gap:6px;">${favicon ? `<img src="${favicon}" width="18" height="18" style="border-radius:4px;" />` : ''}${escapeHtml(domain)}</div>
       </div>`
           : ''
       }
