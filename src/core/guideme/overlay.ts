@@ -37,13 +37,13 @@ const STYLES = `
     width: 22px;
     height: 22px;
     border-radius: 50%;
-    background: #4F46E5;
+    background: #1E1B4B;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 10px;
     font-weight: 800;
-    color: #1E1B4B;
+    color: #C7D2FE;
     flex-shrink: 0;
   }
 
