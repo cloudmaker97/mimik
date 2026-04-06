@@ -23,14 +23,14 @@ interface GuideData {
 function SadMascot() {
   return (
     <svg width="64" height="54" viewBox="20 55 160 108">
-      <rect x="30" y="95" width="140" height="68" rx="8" fill="#451a03" />
-      <path d="M30 95 L30 80 Q30 58, 100 58 Q170 58, 170 80 L170 95 Z" fill="#572508" />
-      <rect x="30" y="93" width="140" height="3" fill="#FDE68A" />
-      <circle cx="74" cy="118" r="10" fill="#2D1305" />
-      <circle cx="126" cy="118" r="10" fill="#2D1305" />
-      <circle cx="74" cy="120" r="6" fill="#FDE68A" />
-      <circle cx="126" cy="120" r="6" fill="#FDE68A" />
-      <path d="M88 146 Q100 138 112 146" stroke="#FDE68A" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      <rect x="30" y="95" width="140" height="68" rx="8" fill="#4C1D95" />
+      <path d="M30 95 L30 80 Q30 58, 100 58 Q170 58, 170 80 L170 95 Z" fill="#6D28D9" />
+      <rect x="30" y="93" width="140" height="3" fill="#DDD6FE" />
+      <circle cx="74" cy="118" r="10" fill="#1E1040" />
+      <circle cx="126" cy="118" r="10" fill="#1E1040" />
+      <circle cx="74" cy="120" r="6" fill="#DDD6FE" />
+      <circle cx="126" cy="120" r="6" fill="#DDD6FE" />
+      <path d="M88 146 Q100 138 112 146" stroke="#DDD6FE" strokeWidth="2.5" fill="none" strokeLinecap="round" />
     </svg>
   );
 }

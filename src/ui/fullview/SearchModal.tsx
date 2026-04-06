@@ -115,15 +115,15 @@ export default function SearchModal() {
             ) : (
               <div className="flex flex-col items-center py-7 gap-2.5">
                 <svg width="56" height="52" viewBox="0 0 56 52" fill="none">
-                  <rect x="8" y="16" width="40" height="24" rx="3" fill="#451a03" />
-                  <path d="M8 16 L8 11 Q8 3, 28 3 Q48 3, 48 11 L48 16 Z" fill="#572508" />
-                  <rect x="8" y="15" width="40" height="1.5" fill="#FDE68A" />
-                  <path d="M17 27 Q20.5 23 24 27" stroke="#FDE68A" strokeWidth="2" fill="none" strokeLinecap="round" />
-                  <path d="M22 36 Q28 40 34 36" stroke="#FDE68A" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-                  <circle cx="38" cy="24" r="8" stroke="#F59E0B" strokeWidth="2" fill="none" />
-                  <line x1="44" y1="30" x2="50" y2="36" stroke="#F59E0B" strokeWidth="2.5" strokeLinecap="round" />
-                  <circle cx="38" cy="24" r="3" fill="#FDE68A" />
-                  <circle cx="39" cy="23.5" r="1" fill="#451a03" />
+                  <rect x="8" y="16" width="40" height="24" rx="3" fill="#4C1D95" />
+                  <path d="M8 16 L8 11 Q8 3, 28 3 Q48 3, 48 11 L48 16 Z" fill="#6D28D9" />
+                  <rect x="8" y="15" width="40" height="1.5" fill="#DDD6FE" />
+                  <path d="M17 27 Q20.5 23 24 27" stroke="#DDD6FE" strokeWidth="2" fill="none" strokeLinecap="round" />
+                  <path d="M22 36 Q28 40 34 36" stroke="#DDD6FE" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+                  <circle cx="38" cy="24" r="8" stroke="#8B5CF6" strokeWidth="2" fill="none" />
+                  <line x1="44" y1="30" x2="50" y2="36" stroke="#8B5CF6" strokeWidth="2.5" strokeLinecap="round" />
+                  <circle cx="38" cy="24" r="3" fill="#DDD6FE" />
+                  <circle cx="39" cy="23.5" r="1" fill="#4C1D95" />
                 </svg>
                 <span className="text-[13px] font-medium text-muted-foreground/50">Start typing to find a guide</span>
               </div>

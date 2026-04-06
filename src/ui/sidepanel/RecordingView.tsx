@@ -96,21 +96,21 @@ export default function RecordingView({ guideId, onStop }: RecordingViewProps) {
         {steps.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full gap-3">
             <svg width="64" height="64" viewBox="0 0 200 200" fill="none">
-              <rect x="30" y="105" width="140" height="68" rx="5" fill="#451a03" />
-              <path d="M30 105 L30 90 Q30 70, 100 70 Q170 70, 170 90 L170 105 Z" fill="#572508" />
-              <rect x="30" y="103" width="140" height="3" fill="#FDE68A" />
-              <path d="M68 132 Q76 122 84 132" stroke="#FDE68A" strokeWidth="5" fill="none" strokeLinecap="round" />
-              <path d="M116 132 Q124 122 132 132" stroke="#FDE68A" strokeWidth="5" fill="none" strokeLinecap="round" />
-              <path d="M84 148 Q100 158 116 148" stroke="#FDE68A" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-              <rect x="60" y="38" width="80" height="50" rx="8" fill="#92400E" stroke="#B45309" strokeWidth="2" />
-              <circle cx="100" cy="62" r="16" fill="#451a03" stroke="#B45309" strokeWidth="2" />
-              <circle cx="100" cy="62" r="9" fill="#1a0d02" />
-              <circle cx="100" cy="62" r="4" fill="#FDE68A" opacity="0.4" />
-              <rect x="112" y="42" width="18" height="8" rx="3" fill="#FDE68A" opacity="0.7" />
-              <circle cx="121" cy="38" r="20" fill="#FDE68A" className="animate-[cam-flash_3s_ease_infinite]" />
-              <circle cx="80" cy="42" r="5" fill="#F59E0B" />
-              <ellipse cx="54" cy="64" rx="10" ry="8" fill="#451a03" />
-              <ellipse cx="146" cy="64" rx="10" ry="8" fill="#451a03" />
+              <rect x="30" y="105" width="140" height="68" rx="5" fill="#4C1D95" />
+              <path d="M30 105 L30 90 Q30 70, 100 70 Q170 70, 170 90 L170 105 Z" fill="#6D28D9" />
+              <rect x="30" y="103" width="140" height="3" fill="#DDD6FE" />
+              <path d="M68 132 Q76 122 84 132" stroke="#DDD6FE" strokeWidth="5" fill="none" strokeLinecap="round" />
+              <path d="M116 132 Q124 122 132 132" stroke="#DDD6FE" strokeWidth="5" fill="none" strokeLinecap="round" />
+              <path d="M84 148 Q100 158 116 148" stroke="#DDD6FE" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+              <rect x="60" y="38" width="80" height="50" rx="8" fill="#5B21B6" stroke="#6D28D9" strokeWidth="2" />
+              <circle cx="100" cy="62" r="16" fill="#4C1D95" stroke="#6D28D9" strokeWidth="2" />
+              <circle cx="100" cy="62" r="9" fill="#0E0620" />
+              <circle cx="100" cy="62" r="4" fill="#DDD6FE" opacity="0.4" />
+              <rect x="112" y="42" width="18" height="8" rx="3" fill="#DDD6FE" opacity="0.7" />
+              <circle cx="121" cy="38" r="20" fill="#DDD6FE" className="animate-[cam-flash_3s_ease_infinite]" />
+              <circle cx="80" cy="42" r="5" fill="#8B5CF6" />
+              <ellipse cx="54" cy="64" rx="10" ry="8" fill="#4C1D95" />
+              <ellipse cx="146" cy="64" rx="10" ry="8" fill="#4C1D95" />
             </svg>
             <div className="text-center">
               <p className="text-sm font-semibold text-violet">Ready to capture!</p>
