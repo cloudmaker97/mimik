@@ -8,6 +8,18 @@ import { InputSession } from './input-session';
 const DEDUP_MS = 300;
 const DRAG_MIN_PX = 30;
 const INTERCEPT_DELAY_MS = 100;
+const PAINT_FRAMES = 3;
+
+function waitForPaint(): Promise<void> {
+  return new Promise((resolve) => {
+    let remaining = PAINT_FRAMES;
+    const tick = () => {
+      if (--remaining <= 0) resolve();
+      else requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+}
 
 let lastClickTarget: Element | null = null;
 let lastClickTime = 0;
@@ -55,6 +67,7 @@ class CaptureController {
   }
 
   private async captureAction(action: string, target: HTMLElement) {
+    await waitForPaint();
     await sendMessage('captureStep', {
       guideId: this.guideId,
       action,
@@ -141,6 +154,8 @@ class CaptureController {
       this.queue.add(() => this.captureAction('input', target));
       return;
     }
+
+    if (target instanceof HTMLInputElement && (target.type === 'checkbox' || target.type === 'radio')) return;
 
     if (this.input.active && this.input.target !== target) {
       this.queue.add(() => this.input.finalize());

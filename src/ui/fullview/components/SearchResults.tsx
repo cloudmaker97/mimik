@@ -1,9 +1,10 @@
 import type { Guide } from '@/core/guides/types';
 import { formatDateShort } from '@/lib/utils';
+import FaviconImg from '@/ui/shared/FaviconImg';
 
 interface GuideResult {
   guide: Guide;
-  favicon: string;
+  domain: string;
 }
 
 interface SearchResultsProps {
@@ -53,18 +54,7 @@ export default function SearchResults({ results, query, selected, onSelect, onHo
                   }
             }
           >
-            {r.favicon ? (
-              <img
-                src={r.favicon}
-                alt=""
-                className="w-3.5 h-3.5"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                }}
-              />
-            ) : (
-              r.guide.title.charAt(0).toUpperCase()
-            )}
+            <FaviconImg domain={r.domain} size={14} />
           </div>
           <div className="flex-1 min-w-0">
             <p

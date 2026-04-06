@@ -9,7 +9,8 @@ import {
   toggleStar,
 } from '@/core/guides/service';
 import type { Guide } from '@/core/guides/types';
-import { formatRelativeTime, getFaviconUrl } from '@/lib/utils';
+import { formatRelativeTime } from '@/lib/utils';
+import FaviconImg from '@/ui/shared/FaviconImg';
 
 interface LibraryViewProps {
   onOpen: (guideId: string) => void;
@@ -19,7 +20,6 @@ interface LibraryViewProps {
 }
 
 interface GuideWithMeta extends Guide {
-  favicon: string;
   domain: string;
 }
 
@@ -36,7 +36,6 @@ export default function LibraryView({ onOpen, searchQuery = '' }: LibraryViewPro
           const domain = await getGuideDomain(guide.id);
           return {
             ...guide,
-            favicon: domain ? getFaviconUrl(domain) : '',
             domain,
           };
         }),
@@ -117,19 +116,7 @@ export default function LibraryView({ onOpen, searchQuery = '' }: LibraryViewPro
             onClick={() => onOpen(guide.id)}
           >
             <div className="w-7 h-7 mt-0.5 rounded-full flex items-center justify-center shrink-0 overflow-hidden">
-              {guide.favicon ? (
-                <img
-                  src={guide.favicon}
-                  alt=""
-                  className="w-5 h-5"
-                  onError={(e) => {
-                    const el = e.target as HTMLImageElement;
-                    el.style.display = 'none';
-                  }}
-                />
-              ) : (
-                <div className="w-full h-full rounded-full border-[1.5px] border-dashed border-border" />
-              )}
+              <FaviconImg domain={guide.domain} size={20} />
             </div>
 
             <div className="flex-1 min-w-0">

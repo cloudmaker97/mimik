@@ -6,7 +6,8 @@ import { SESSION_KEY } from '@/core/guideme/session';
 import { getGuide } from '@/core/guides/service';
 import type { Guide, Screenshot, Step } from '@/core/guides/types';
 import { sendMessage } from '@/lib/messaging';
-import { extractDomain, getFaviconUrl } from '@/lib/utils';
+import { extractDomain } from '@/lib/utils';
+import FaviconImg from '@/ui/shared/FaviconImg';
 
 interface GuideMeViewProps {
   guideId: string;
@@ -201,18 +202,7 @@ export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeView
             </p>
             {viewedStep?.url && (
               <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground mt-1.5">
-                <img
-                  src={getFaviconUrl(extractDomain(viewedStep.url), 16)}
-                  alt=""
-                  className="w-3.5 h-3.5 rounded-full"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).replaceWith(
-                      Object.assign(document.createElement('span'), {
-                        innerHTML: `<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
-                      }),
-                    );
-                  }}
-                />
+                <FaviconImg domain={extractDomain(viewedStep.url)} size={14} className="rounded-full" />
                 {extractDomain(viewedStep.url)}
               </span>
             )}

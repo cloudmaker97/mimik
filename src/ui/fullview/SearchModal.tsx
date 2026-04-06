@@ -2,7 +2,7 @@ import { Search, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getGuideDomain, getGuides } from '@/core/guides/service';
 import type { Guide } from '@/core/guides/types';
-import { getFaviconUrl } from '@/lib/utils';
+
 import { useFullview } from '@/stores/fullview';
 import { Dialog, DialogPortal } from '@/ui/components/ui/dialog';
 import { Input } from '@/ui/components/ui/input';
@@ -12,7 +12,7 @@ import { navigate } from './router';
 
 interface GuideResult {
   guide: Guide;
-  favicon: string;
+  domain: string;
 }
 
 export default function SearchModal() {
@@ -31,7 +31,7 @@ export default function SearchModal() {
     const withFavicons = await Promise.all(
       guides.map(async (guide) => {
         const domain = await getGuideDomain(guide.id);
-        return { guide, favicon: domain ? getFaviconUrl(domain) : '' };
+        return { guide, domain: domain || '' };
       }),
     );
     setResults(withFavicons);

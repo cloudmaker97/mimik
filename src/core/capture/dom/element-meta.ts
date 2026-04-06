@@ -1,6 +1,27 @@
 import { getCssSelector } from 'css-selector-generator';
 import type { ElementMeta } from '@/core/guides/types';
 
+function getCleanText(el: HTMLElement): string | null {
+  const clone = el.cloneNode(true) as HTMLElement;
+  clone.style.position = 'absolute';
+  clone.style.left = '-9999px';
+  clone.style.pointerEvents = 'none';
+  document.body.appendChild(clone);
+  try {
+    const hidden = clone.querySelectorAll('[aria-hidden="true"], [hidden], script, style');
+    for (const h of Array.from(hidden)) h.remove();
+    const text = clone.innerText?.trim();
+    if (!text) return null;
+    const firstLine = text
+      .split('\n')
+      .find((l) => l.trim().length > 2)
+      ?.trim();
+    return firstLine?.slice(0, 80) || null;
+  } finally {
+    clone.remove();
+  }
+}
+
 export function extractElementMeta(el: HTMLElement): ElementMeta {
   const rect = el.getBoundingClientRect();
   let cssSelector: string;
@@ -12,7 +33,7 @@ export function extractElementMeta(el: HTMLElement): ElementMeta {
   return {
     tag: el.tagName?.toLowerCase() ?? 'unknown',
     cssSelector,
-    textContent: el.textContent?.trim().slice(0, 200) || null,
+    textContent: getCleanText(el),
     ariaLabel: el.getAttribute('aria-label'),
     placeholder: el.getAttribute('placeholder'),
     altText: el instanceof HTMLImageElement ? el.alt : null,

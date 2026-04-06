@@ -52,5 +52,37 @@ export function getFieldValue(el: HTMLElement): string {
 }
 
 export function getFieldLabel(el: HTMLElement): string {
-  return el.getAttribute('aria-label') || el.getAttribute('placeholder') || el.getAttribute('name') || 'text field';
+  const ariaLabel = el.getAttribute('aria-label');
+  if (ariaLabel) return ariaLabel;
+
+  const placeholder = el.getAttribute('placeholder');
+  if (placeholder) return placeholder;
+
+  if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+    const labels = el.labels;
+    if (labels && labels.length > 0) {
+      const labelText = labels[0].innerText?.trim();
+      if (labelText) return labelText;
+    }
+  }
+
+  const id = el.getAttribute('id');
+  if (id) {
+    const label = document.querySelector(`label[for="${CSS.escape(id)}"]`);
+    if (label) {
+      const labelText = (label as HTMLElement).innerText?.trim();
+      if (labelText) return labelText;
+    }
+  }
+
+  const parentLabel = el.closest('label');
+  if (parentLabel) {
+    const labelText = parentLabel.innerText?.trim();
+    if (labelText) return labelText;
+  }
+
+  const name = el.getAttribute('name');
+  if (name && !/[-_]test|[-_]id|[-_]key/i.test(name)) return name;
+
+  return 'text field';
 }

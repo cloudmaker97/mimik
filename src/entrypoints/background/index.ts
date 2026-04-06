@@ -16,7 +16,7 @@ async function generateTitleInBackground(guideId: string) {
     const settings = await localStorage.get(['aiApiKey', 'aiProvider', 'aiModel']);
     if (!settings.aiApiKey) {
       const domain = await getGuideDomain(guideId);
-      if (domain) await updateGuideTitle(guideId, `Guide on ${domain}`);
+      await updateGuideTitle(guideId, domain ? `Guide on ${domain}` : 'New Guide');
       return;
     }
 
@@ -31,11 +31,14 @@ async function generateTitleInBackground(guideId: string) {
     if (title) {
       await updateGuideTitle(guideId, title);
       logger.info('Generated guide title:', title);
+    } else {
+      const domain = await getGuideDomain(guideId);
+      await updateGuideTitle(guideId, domain ? `Guide on ${domain}` : 'New Guide');
     }
   } catch (err) {
     logger.error('Guide title generation failed', err);
     const domain = await getGuideDomain(guideId);
-    if (domain) await updateGuideTitle(guideId, `Guide on ${domain}`);
+    await updateGuideTitle(guideId, domain ? `Guide on ${domain}` : 'New Guide');
   }
 }
 

@@ -11,9 +11,10 @@ import {
 import type { Guide, Screenshot, Step } from '@/core/guides/types';
 import { createTab, focusWindow, getExtensionURL, queryTabs, updateTab } from '@/lib/browser-api';
 import { sendMessage } from '@/lib/messaging';
-import { getFaviconUrl, getMostCommonDomain } from '@/lib/utils';
+import { getMostCommonDomain } from '@/lib/utils';
 import { Input } from '@/ui/components/ui/input';
 import EmptyGuideState from '@/ui/shared/EmptyGuideState';
+import FaviconImg from '@/ui/shared/FaviconImg';
 import BlurCanvas from './BlurCanvas';
 import ExportMenu from './ExportMenu';
 import StepCard from './StepCard';
@@ -183,14 +184,7 @@ export default function GuideEditor({ guideId, onBack, onGuideMe }: GuideEditorP
             return (
               <span className="flex items-center gap-1">
                 <span className="text-border">·</span>
-                <img
-                  src={getFaviconUrl(d, 16)}
-                  alt=""
-                  className="w-3 h-3 rounded-full"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = 'none';
-                  }}
-                />
+                <FaviconImg domain={d} size={12} className="rounded-full" />
                 {d}
               </span>
             );

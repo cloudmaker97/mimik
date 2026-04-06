@@ -11,8 +11,9 @@ import {
 } from '@/core/guides/service';
 import type { Guide, Screenshot, Step } from '@/core/guides/types';
 import { sendMessage } from '@/lib/messaging';
-import { getFaviconUrl, getMostCommonDomain } from '@/lib/utils';
+import { getMostCommonDomain } from '@/lib/utils';
 import { useFullview } from '@/stores/fullview';
+import FaviconImg from '@/ui/shared/FaviconImg';
 import BlurCanvas from '@/ui/sidepanel/BlurCanvas';
 import GuideStepList from './components/GuideStepList';
 
@@ -199,20 +200,14 @@ export default function GuideContent({ guideId }: GuideContentProps) {
         </span>
         {domain && (
           <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground bg-card border border-border pl-1.5 pr-2.5 py-0.5 rounded-full">
-            <img
-              src={getFaviconUrl(domain, 16)}
-              alt=""
-              className="w-3.5 h-3.5 rounded-full"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-              }}
-            />
+            <FaviconImg domain={domain} size={14} className="rounded-full" />
             {domain}
           </span>
         )}
         {data.steps.length > 0 && (
           <button
             onClick={async () => {
+              await chrome.sidePanel.open({ windowId: chrome.windows.WINDOW_ID_CURRENT });
               await sendMessage('startGuideMe', { guideId });
             }}
             disabled={!data.steps.some((s) => s.elementMeta)}
