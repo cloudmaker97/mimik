@@ -81,7 +81,9 @@ export default function StepCard({
           className="!rounded-none !border-0"
         />
       ) : (
-        <div className="w-full h-32 flex items-center justify-center text-sm bg-secondary text-warm">No screenshot</div>
+        <div className="w-full h-32 flex items-center justify-center text-sm bg-secondary text-purple">
+          No screenshot
+        </div>
       )}
 
       <div className="px-3 pt-2 pb-2">

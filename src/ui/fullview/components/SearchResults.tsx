@@ -18,7 +18,7 @@ export default function SearchResults({ results, query, selected, onSelect, onHo
   if (results.length === 0) {
     return (
       <div className="py-8 text-center">
-        <p className="text-sm text-warm">{query ? 'No matching guides' : 'No guides yet'}</p>
+        <p className="text-sm text-purple">{query ? 'No matching guides' : 'No guides yet'}</p>
       </div>
     );
   }
@@ -42,8 +42,8 @@ export default function SearchResults({ results, query, selected, onSelect, onHo
             style={
               i === selected
                 ? {
-                    background: 'rgba(253,230,138,0.15)',
-                    border: '1px solid rgba(253,230,138,0.2)',
+                    background: 'rgba(199,210,254,0.15)',
+                    border: '1px solid rgba(199,210,254,0.2)',
                     color: 'var(--color-gold)',
                   }
                 : {
@@ -75,7 +75,7 @@ export default function SearchResults({ results, query, selected, onSelect, onHo
             </p>
             <p
               className="text-[10px] mt-0.5"
-              style={{ color: i === selected ? 'rgba(253,230,138,0.6)' : 'var(--color-warm)' }}
+              style={{ color: i === selected ? 'rgba(199,210,254,0.6)' : 'var(--color-warm)' }}
             >
               {r.guide.stepIds.length} step{r.guide.stepIds.length !== 1 ? 's' : ''} ·{' '}
               {formatDateShort(r.guide.updatedAt)}

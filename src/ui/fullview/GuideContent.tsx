@@ -114,7 +114,7 @@ export default function GuideContent({ guideId }: GuideContentProps) {
           {[0, 1, 2].map((i) => (
             <div key={i} className="rounded-xl border border-border/50 p-4">
               <div
-                className="aspect-video rounded-lg bg-[#f5f2ee] animate-pulse mb-3"
+                className="aspect-video rounded-lg bg-[#f2f4fa] animate-pulse mb-3"
                 style={{ animationDelay: `${i * 150}ms` }}
               />
               <div
@@ -126,7 +126,7 @@ export default function GuideContent({ guideId }: GuideContentProps) {
         </div>
       </div>
     );
-  if (!data) return <p className="text-sm py-12 text-center text-warm">Guide not found.</p>;
+  if (!data) return <p className="text-sm py-12 text-center text-purple">Guide not found.</p>;
 
   const domain = getMostCommonDomain(data.steps);
   const blurScreenshot = blurringStepId ? data.screenshots.get(blurringStepId) : undefined;
@@ -139,7 +139,7 @@ export default function GuideContent({ guideId }: GuideContentProps) {
 
       <div className={title === 'Untitled Guide' && !typingTitle && data.steps.length > 0 ? 'min-h-[88px]' : ''}>
         {title === 'Untitled Guide' && !typingTitle && data.steps.length > 0 ? (
-          <div className="text-[32px] font-extrabold leading-tight animate-gradient-text bg-[length:300%_100%] bg-clip-text text-transparent bg-gradient-to-r from-muted-foreground via-amber to-muted-foreground max-w-[480px]">
+          <div className="text-[32px] font-extrabold leading-tight animate-gradient-text bg-[length:300%_100%] bg-clip-text text-transparent bg-gradient-to-r from-muted-foreground via-violet to-muted-foreground max-w-[480px]">
             Writing a title from your captured steps...
           </div>
         ) : typingTitle ? (
@@ -160,7 +160,7 @@ export default function GuideContent({ guideId }: GuideContentProps) {
                 speed={70}
                 cursor={false}
               />
-              <span className="inline-block w-[3px] h-[30px] bg-amber ml-0.5 align-text-bottom animate-blink" />
+              <span className="inline-block w-[3px] h-[30px] bg-violet ml-0.5 align-text-bottom animate-blink" />
             </div>
           </div>
         ) : (

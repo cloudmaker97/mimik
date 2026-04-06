@@ -23,14 +23,14 @@ interface GuideData {
 function SadMascot() {
   return (
     <svg width="64" height="54" viewBox="20 55 160 108">
-      <rect x="30" y="95" width="140" height="68" rx="8" fill="#451a03" />
-      <path d="M30 95 L30 80 Q30 58, 100 58 Q170 58, 170 80 L170 95 Z" fill="#572508" />
-      <rect x="30" y="93" width="140" height="3" fill="#FDE68A" />
-      <circle cx="74" cy="118" r="10" fill="#2D1305" />
-      <circle cx="126" cy="118" r="10" fill="#2D1305" />
-      <circle cx="74" cy="120" r="6" fill="#FDE68A" />
-      <circle cx="126" cy="120" r="6" fill="#FDE68A" />
-      <path d="M88 146 Q100 138 112 146" stroke="#FDE68A" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      <rect x="30" y="95" width="140" height="68" rx="8" fill="#1E1B4B" />
+      <path d="M30 95 L30 80 Q30 58, 100 58 Q170 58, 170 80 L170 95 Z" fill="#3730A3" />
+      <rect x="30" y="93" width="140" height="3" fill="#C7D2FE" />
+      <circle cx="74" cy="118" r="10" fill="#0F0E2A" />
+      <circle cx="126" cy="118" r="10" fill="#0F0E2A" />
+      <circle cx="74" cy="120" r="6" fill="#C7D2FE" />
+      <circle cx="126" cy="120" r="6" fill="#C7D2FE" />
+      <path d="M88 146 Q100 138 112 146" stroke="#C7D2FE" strokeWidth="2.5" fill="none" strokeLinecap="round" />
     </svg>
   );
 }
@@ -154,8 +154,8 @@ export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeView
     };
   }, [viewedStep, viewedScreenshot]);
 
-  if (loading) return <p className="text-sm text-warm p-4">Loading...</p>;
-  if (!data) return <p className="text-sm text-warm p-4">Guide not found</p>;
+  if (loading) return <p className="text-sm text-purple p-4">Loading...</p>;
+  if (!data) return <p className="text-sm text-purple p-4">Guide not found</p>;
 
   const totalSteps = data.steps.length;
 
@@ -165,7 +165,7 @@ export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeView
       <div className="px-4 pt-3 pb-2 flex items-center gap-2">
         <button
           onClick={() => setShowExitConfirm(true)}
-          className="shrink-0 p-1 rounded text-warm hover:text-foreground"
+          className="shrink-0 p-1 rounded text-purple hover:text-foreground"
         >
           <ArrowLeft size={18} />
         </button>
@@ -181,7 +181,7 @@ export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeView
           <div
             key={step.id}
             className={`flex-1 h-[3px] rounded-[1.5px] ${
-              idx < activeStepIndex ? 'bg-success' : idx === activeStepIndex ? 'bg-amber' : 'bg-border'
+              idx < activeStepIndex ? 'bg-success' : idx === activeStepIndex ? 'bg-violet' : 'bg-border'
             }`}
           />
         ))}
@@ -190,8 +190,8 @@ export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeView
       <div className="px-4 pb-3">
         <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
           <div className="p-4 pb-3">
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold bg-secondary text-amber-800 px-2.5 py-1 rounded-full mb-2.5">
-              <span className="w-5 h-5 rounded-full bg-amber text-white flex items-center justify-center text-[10px] font-bold">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold bg-secondary text-violet-800 px-2.5 py-1 rounded-full mb-2.5">
+              <span className="w-5 h-5 rounded-full bg-violet text-white flex items-center justify-center text-[10px] font-bold">
                 {viewedStepIndex + 1}
               </span>
               Step {viewedStepIndex + 1} of {totalSteps}
@@ -226,7 +226,10 @@ export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeView
                 className="w-full block"
               />
               {highlightStyle && (
-                <div className="absolute border-2 border-amber rounded-sm pointer-events-none" style={highlightStyle} />
+                <div
+                  className="absolute border-2 border-violet rounded-sm pointer-events-none"
+                  style={highlightStyle}
+                />
               )}
             </div>
           )}
@@ -235,7 +238,7 @@ export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeView
             <button
               onClick={() => setViewedStepIndex((i) => Math.max(0, i - 1))}
               disabled={viewedStepIndex === 0}
-              className="flex items-center gap-1 text-xs font-medium text-warm hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center gap-1 text-xs font-medium text-purple hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <ChevronLeft size={14} />
               Prev
@@ -250,7 +253,7 @@ export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeView
                 }
               }}
               disabled={viewedStepIndex === totalSteps - 1 && viewedStepIndex !== activeStepIndex}
-              className="flex items-center gap-1 text-xs font-medium text-warm hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center gap-1 text-xs font-medium text-purple hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
             >
               {viewedStepIndex === totalSteps - 1 && viewedStepIndex === activeStepIndex ? 'Finish' : 'Next'}
               <ChevronRight size={14} />
@@ -276,7 +279,7 @@ export default function GuideMeView({ guideId, onExit, onComplete }: GuideMeView
                   <Check size={12} className="text-white" strokeWidth={3} />
                 </span>
               ) : isActive ? (
-                <span className="shrink-0 w-5 h-5 rounded-full bg-amber flex items-center justify-center text-[10px] font-bold text-white mt-0.5">
+                <span className="shrink-0 w-5 h-5 rounded-full bg-violet flex items-center justify-center text-[10px] font-bold text-white mt-0.5">
                   {idx + 1}
                 </span>
               ) : (

@@ -83,17 +83,17 @@ export default function LibraryView({ onOpen, searchQuery = '' }: LibraryViewPro
     : guides;
 
   if (loading) {
-    return <p className="text-sm py-4 text-warm">Loading...</p>;
+    return <p className="text-sm py-4 text-purple">Loading...</p>;
   }
 
   if (guides.length === 0) {
     return (
       <div className="py-10 text-center">
-        <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3 bg-gold border border-amber-light">
+        <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3 bg-lavender border border-violet-light">
           <FileText size={20} className="text-muted-foreground" />
         </div>
         <p className="text-sm font-medium text-foreground">No guides yet</p>
-        <p className="text-xs mt-1 text-warm">Start a capture to create your first guide</p>
+        <p className="text-xs mt-1 text-purple">Start a capture to create your first guide</p>
       </div>
     );
   }
@@ -101,7 +101,7 @@ export default function LibraryView({ onOpen, searchQuery = '' }: LibraryViewPro
   if (filtered.length === 0) {
     return (
       <div className="py-8 text-center">
-        <p className="text-sm text-warm">No matching guides</p>
+        <p className="text-sm text-purple">No matching guides</p>
       </div>
     );
   }
@@ -113,7 +113,7 @@ export default function LibraryView({ onOpen, searchQuery = '' }: LibraryViewPro
         return (
           <div
             key={guide.id}
-            className="flex items-start gap-3 px-3.5 py-2.5 rounded-xl cursor-pointer group transition-all bg-card border border-border hover:border-amber hover:shadow-sm"
+            className="flex items-start gap-3 px-3.5 py-2.5 rounded-xl cursor-pointer group transition-all bg-card border border-border hover:border-violet hover:shadow-sm"
             onClick={() => onOpen(guide.id)}
           >
             <div className="w-7 h-7 mt-0.5 rounded-full flex items-center justify-center shrink-0 overflow-hidden">
@@ -133,10 +133,10 @@ export default function LibraryView({ onOpen, searchQuery = '' }: LibraryViewPro
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className={`text-[13px] font-medium truncate ${isEmpty ? 'text-[#b8a48e]' : 'text-foreground'}`}>
+              <p className={`text-[13px] font-medium truncate ${isEmpty ? 'text-[#8B92A8]' : 'text-foreground'}`}>
                 {guide.title}
               </p>
-              <p className="text-[10px] mt-0.5 text-[#b8a48e]">{formatRelativeTime(guide.updatedAt)}</p>
+              <p className="text-[10px] mt-0.5 text-[#8B92A8]">{formatRelativeTime(guide.updatedAt)}</p>
             </div>
 
             {guide.stepIds.length > 0 && (

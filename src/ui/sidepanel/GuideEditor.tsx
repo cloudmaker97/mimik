@@ -102,12 +102,12 @@ export default function GuideEditor({ guideId, onBack, onGuideMe }: GuideEditorP
     [blurringStepId, data],
   );
 
-  if (loading) return <p className="text-sm text-warm p-4">Loading...</p>;
+  if (loading) return <p className="text-sm text-purple p-4">Loading...</p>;
 
   if (notFound || !data) {
     return (
       <div className="p-4">
-        <button onClick={onBack} className="flex items-center gap-1 text-sm text-warm hover:text-foreground mb-4">
+        <button onClick={onBack} className="flex items-center gap-1 text-sm text-purple hover:text-foreground mb-4">
           <ArrowLeft size={18} />
           Back
         </button>
@@ -127,7 +127,7 @@ export default function GuideEditor({ guideId, onBack, onGuideMe }: GuideEditorP
         <div className="flex items-center gap-2">
           <button
             onClick={onBack}
-            className="shrink-0 p-1 rounded text-warm hover:text-foreground"
+            className="shrink-0 p-1 rounded text-purple hover:text-foreground"
             title="Back to library"
           >
             <ArrowLeft size={18} />
@@ -150,7 +150,7 @@ export default function GuideEditor({ guideId, onBack, onGuideMe }: GuideEditorP
                 }
               });
             }}
-            className="shrink-0 p-1.5 rounded-md transition-colors text-warm hover:text-accent hover:bg-secondary"
+            className="shrink-0 p-1.5 rounded-md transition-colors text-purple hover:text-accent hover:bg-secondary"
             title="Open in full view"
           >
             <Maximize2 size={15} />
@@ -162,7 +162,7 @@ export default function GuideEditor({ guideId, onBack, onGuideMe }: GuideEditorP
                 onGuideMe?.(guideId);
               }}
               disabled={!data.steps.some((s) => s.elementMeta)}
-              className="shrink-0 p-1.5 rounded-md transition-colors text-warm hover:text-accent hover:bg-secondary disabled:opacity-30 disabled:cursor-not-allowed"
+              className="shrink-0 p-1.5 rounded-md transition-colors text-purple hover:text-accent hover:bg-secondary disabled:opacity-30 disabled:cursor-not-allowed"
               title="Guide Me"
             >
               <Play size={15} />
