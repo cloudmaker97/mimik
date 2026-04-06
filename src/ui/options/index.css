@@ -11,6 +11,6 @@ html, body, #root {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(ellipse at center, #fffdf8 0%, #f5f0e8 60%, #ede5d8 100%);
+  background: radial-gradient(ellipse at center, #fcfaff 0%, #f5f0fa 60%, #ede5f4 100%);
   min-height: 100vh;
 }

@@ -133,10 +133,10 @@ export default function LibraryView({ onOpen, searchQuery = '' }: LibraryViewPro
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className={`text-[13px] font-medium truncate ${isEmpty ? 'text-[#b8a48e]' : 'text-foreground'}`}>
+              <p className={`text-[13px] font-medium truncate ${isEmpty ? 'text-[#9B8BB4]' : 'text-foreground'}`}>
                 {guide.title}
               </p>
-              <p className="text-[10px] mt-0.5 text-[#b8a48e]">{formatRelativeTime(guide.updatedAt)}</p>
+              <p className="text-[10px] mt-0.5 text-[#9B8BB4]">{formatRelativeTime(guide.updatedAt)}</p>
             </div>
 
             {guide.stepIds.length > 0 && (

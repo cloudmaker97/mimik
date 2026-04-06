@@ -59,7 +59,7 @@ async function renderScreenshot(
   const bw = bounds.width * dpr;
   const bh = bounds.height * dpr;
 
-  fullCtx.strokeStyle = '#F59E0B';
+  fullCtx.strokeStyle = '#8B5CF6';
   fullCtx.lineWidth = 3.5;
   fullCtx.setLineDash([8, 5]);
   drawRoundedRect(fullCtx, bx, by, bw, bh, 12);
@@ -100,7 +100,7 @@ async function renderScreenshot(
 
   const scaleX = imgW / visW;
   const scaleY = imgH / visH;
-  cropCtx.strokeStyle = '#F59E0B';
+  cropCtx.strokeStyle = '#8B5CF6';
   cropCtx.lineWidth = 3.5;
   cropCtx.setLineDash([8, 5]);
   drawRoundedRect(cropCtx, (bx - cropX) * scaleX, (by - cropY) * scaleY, bw * scaleX, bh * scaleY, 12);
@@ -187,7 +187,7 @@ export default function ZoomScreenshot({
 
   if (!fullUrl) {
     return (
-      <div className={`rounded-lg bg-[#f5f2ee] p-4 flex flex-col gap-2.5 ${className}`} style={{ aspectRatio: ratio }}>
+      <div className={`rounded-lg bg-[#f5f2f9] p-4 flex flex-col gap-2.5 ${className}`} style={{ aspectRatio: ratio }}>
         <div className="h-7 rounded-md bg-border/60 animate-pulse" />
         <div className="flex-1 flex gap-3">
           <div className="w-[30%] flex flex-col gap-2">

@@ -114,7 +114,7 @@ export default function GuideContent({ guideId }: GuideContentProps) {
           {[0, 1, 2].map((i) => (
             <div key={i} className="rounded-xl border border-border/50 p-4">
               <div
-                className="aspect-video rounded-lg bg-[#f5f2ee] animate-pulse mb-3"
+                className="aspect-video rounded-lg bg-[#f5f2f9] animate-pulse mb-3"
                 style={{ animationDelay: `${i * 150}ms` }}
               />
               <div
