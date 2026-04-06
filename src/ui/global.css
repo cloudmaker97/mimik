@@ -8,35 +8,34 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: #faf9f7;
-  --color-foreground: #451a03;
+  --color-background: #faf8fc;
+  --color-foreground: #2E1065;
   --color-card: #fff;
-  --color-card-foreground: #451a03;
+  --color-card-foreground: #2E1065;
   --color-popover: #fff;
-  --color-popover-foreground: #451a03;
-  --color-primary: #451a03;
-  --color-primary-foreground: #FDE68A;
-  --color-secondary: #FEF3C7;
-  --color-secondary-foreground: #451a03;
-  --color-muted: #FEF3C7;
-  --color-muted-foreground: #92400E;
-  --color-accent: #F59E0B;
-  --color-accent-foreground: #451a03;
-  --color-destructive: #B45309;
+  --color-popover-foreground: #2E1065;
+  --color-primary: #4C1D95;
+  --color-primary-foreground: #DDD6FE;
+  --color-secondary: #F3F0FF;
+  --color-secondary-foreground: #2E1065;
+  --color-muted: #F3F0FF;
+  --color-muted-foreground: #7C6B94;
+  --color-accent: #8B5CF6;
+  --color-accent-foreground: #2E1065;
+  --color-destructive: #DC2626;
   --color-destructive-foreground: #fff;
-  --color-border: #E8E2DA;
-  --color-input: #E8E2DA;
-  --color-ring: #F59E0B;
+  --color-border: #E8E2F0;
+  --color-input: #E8E2F0;
+  --color-ring: #8B5CF6;
   --radius: 0.5rem;
 
-  /* amber palette extras */
-  --color-amber: #F59E0B;
-  --color-amber-light: #FBBF24;
-  --color-amber-dark: #92400E;
-  --color-gold: #FDE68A;
-  --color-warm: #B45309;
-  --color-brown: #78350F;
-  --color-brown-dark: #572508;
+  --color-violet: #7C3AED;
+  --color-violet-light: #8B5CF6;
+  --color-violet-dark: #5B21B6;
+  --color-violet-mid: #6D28D9;
+  --color-lavender: #DDD6FE;
+  --color-purple: #6D28D9;
+  --color-deep: #4C1D95;
   --color-success: #059669;
 }
 
