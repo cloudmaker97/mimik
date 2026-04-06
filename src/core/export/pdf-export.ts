@@ -11,6 +11,24 @@ function blobToDataUrl(blob: Blob): Promise<string> {
   });
 }
 
+function extractDomain(steps: Step[]): string {
+  const firstUrl = steps[0]?.url;
+  if (!firstUrl) return '';
+  try {
+    return new URL(firstUrl).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+}
+
+function formatDate(timestamp: number): string {
+  return new Date(timestamp).toLocaleDateString('en-US', {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+  });
+}
+
 export async function exportGuideAsPDF(
   guide: Guide,
   steps: Step[],
@@ -18,64 +36,129 @@ export async function exportGuideAsPDF(
 ): Promise<Blob> {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const pageWidth = doc.internal.pageSize.getWidth();
-  const margin = 15;
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 20;
   const contentWidth = pageWidth - margin * 2;
-  let y = margin;
+  const totalPages = 1 + Math.max(1, steps.length);
 
-  doc.setFontSize(20);
+  let y = pageHeight / 2 - 30;
+
+  const badgeText = `${steps.length} Steps`;
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
-  doc.text(guide.title, margin, y + 7);
-  y += 14;
+  const badgeWidth = doc.getTextWidth(badgeText) + 8;
+  const badgeHeight = 7;
+  const badgeX = margin;
+  doc.setFillColor(79, 70, 229);
+  doc.roundedRect(badgeX, y, badgeWidth, badgeHeight, 2, 2, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.text(badgeText, badgeX + 4, y + 4.8);
+  y += badgeHeight + 6;
 
+  const gradientY = y;
+  const segmentWidth = contentWidth / 3;
+  doc.setFillColor(139, 92, 246);
+  doc.rect(margin, gradientY, segmentWidth, 1.2, 'F');
+  doc.setFillColor(167, 139, 250);
+  doc.rect(margin + segmentWidth, gradientY, segmentWidth, 1.2, 'F');
+  doc.setFillColor(125, 211, 252);
+  doc.rect(margin + segmentWidth * 2, gradientY, segmentWidth, 1.2, 'F');
+  y += 8;
+
+  doc.setFontSize(22);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(30, 27, 75);
+  const titleLines = doc.splitTextToSize(guide.title, contentWidth);
+  doc.text(titleLines, margin, y);
+  y += titleLines.length * 9 + 10;
+
+  const cardPadding = 6;
+  const domain = extractDomain(steps);
+  const dateStr = formatDate(guide.createdAt);
+
+  let cardHeight = cardPadding * 2 + 10;
+  if (domain) cardHeight += 14;
+
+  doc.setFillColor(238, 242, 255);
+  doc.roundedRect(margin, y, contentWidth, cardHeight, 3, 3, 'F');
+
+  let cardY = y + cardPadding;
+
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(107, 114, 128);
+  doc.text('CREATED', margin + cardPadding, cardY + 4);
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(107, 114, 128);
-  doc.text(`${steps.length} steps — Created ${new Date(guide.createdAt).toLocaleDateString()}`, margin, y);
-  doc.setTextColor(0, 0, 0);
-  y += 10;
+  doc.setTextColor(30, 27, 75);
+  doc.text(dateStr, margin + cardPadding, cardY + 10);
 
-  for (const step of steps) {
-    if (y > doc.internal.pageSize.getHeight() - 60) {
-      doc.addPage();
-      y = margin;
-    }
+  if (domain) {
+    cardY += 14;
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(107, 114, 128);
+    doc.text('SOURCE', margin + cardPadding, cardY + 4);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(79, 70, 229);
+    doc.text(domain, margin + cardPadding, cardY + 10);
+  }
 
+  const stepIndent = 16;
+  const maxImgHeight = 90;
+  const stepSpacing = 6;
+
+  for (let i = 0; i < steps.length; i++) {
+    const step = steps[i];
+    doc.addPage();
+    y = margin;
+
+    doc.setDrawColor(199, 210, 254);
+    doc.setLineWidth(0.3);
+    doc.line(margin, y, margin + contentWidth, y);
+    y += 6;
+
+    const stepNum = String(step.index + 1).padStart(2, '0');
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text(`${step.index + 1}.`, margin, y + 4);
+    doc.setTextColor(199, 210, 254);
+    doc.text(stepNum, margin, y + 4);
+
+    doc.setFontSize(11);
     doc.setFont('helvetica', 'normal');
-    const descLines = doc.splitTextToSize(step.description, contentWidth - 10);
-    doc.text(descLines, margin + 8, y + 4);
-    y += descLines.length * 5 + 4;
+    doc.setTextColor(30, 27, 75);
+    const descWidth = contentWidth - stepIndent;
+    const descLines = doc.splitTextToSize(step.description, descWidth);
+    doc.text(descLines, margin + stepIndent, y + 4);
+    y += descLines.length * 5 + 6;
 
     const screenshot = screenshots.get(step.id);
     if (screenshot) {
       try {
         const dataUrl = await blobToDataUrl(screenshot.blob);
-        const imgWidth = contentWidth;
-        const imgHeight = (screenshot.height / screenshot.width) * imgWidth;
-        const maxImgHeight = 100; // mm — cap height to prevent single image filling entire page
-        const finalHeight = Math.min(imgHeight, maxImgHeight);
+        const imgWidth = contentWidth - stepIndent;
+        const imgHeight = Math.min((screenshot.height / screenshot.width) * imgWidth, maxImgHeight);
 
-        if (y + finalHeight > doc.internal.pageSize.getHeight() - margin) {
+        if (y + imgHeight > pageHeight - margin) {
           doc.addPage();
           y = margin;
         }
 
-        doc.addImage(dataUrl, 'JPEG', margin, y, imgWidth, finalHeight);
-        y += finalHeight + 8;
+        doc.addImage(dataUrl, 'JPEG', margin + stepIndent, y, imgWidth, imgHeight);
+        y += imgHeight + stepSpacing;
       } catch (err) {
-        logger.warn(' PDF: failed to embed screenshot for step', step.index, err);
-        y += 4;
+        logger.warn('PDF: failed to embed screenshot for step', step.index, err);
+        y += stepSpacing;
       }
     }
 
-    y += 4; // spacing between steps
+    const currentPage = doc.getNumberOfPages();
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(107, 114, 128);
+    doc.text(`${currentPage - 1} of ${totalPages - 1}`, pageWidth - margin, pageHeight - margin, { align: 'right' });
   }
-
-  doc.setFontSize(8);
-  doc.setTextColor(156, 163, 175);
-  doc.text('Generated by Mimik', margin, doc.internal.pageSize.getHeight() - 8);
 
   return doc.output('blob');
 }
