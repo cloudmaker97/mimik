@@ -35,10 +35,10 @@ export async function exportGuideAsPDF(
   const totalBlockH = badgeH + 8 + 1.5 + 10 + titleBlockH + 16 + 12;
   let y = (pageHeight - totalBlockH) / 2;
 
-  doc.setFillColor(79, 70, 229);
+  doc.setFillColor(238, 242, 255);
   doc.roundedRect(centerX - badgeW / 2, y, badgeW, badgeH, 3.5, 3.5, 'F');
   doc.setFontSize(10);
-  doc.setTextColor(255, 255, 255);
+  doc.setTextColor(79, 70, 229);
   doc.text(badgeText, centerX, y + 5, { align: 'center' });
   y += badgeH + 8;
 
@@ -131,7 +131,7 @@ export async function exportGuideAsPDF(
       y = margin;
     }
 
-    doc.setDrawColor(199, 210, 254);
+    doc.setDrawColor(224, 231, 255);
     doc.setLineWidth(0.3);
     doc.line(margin, y, margin + contentWidth, y);
     y += 6;
@@ -139,7 +139,7 @@ export async function exportGuideAsPDF(
     const stepNum = String(step.index + 1).padStart(2, '0');
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(199, 210, 254);
+    doc.setTextColor(165, 180, 252);
     doc.text(stepNum, margin, y + 4);
 
     doc.setFontSize(11);
