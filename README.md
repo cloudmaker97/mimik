@@ -9,11 +9,11 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F59E0B?style=flat-square" alt="MIT License" /></a>
-  <img src="https://img.shields.io/badge/chrome-extension-451a03?style=flat-square&logo=googlechrome&logoColor=FDE68A" alt="Chrome Extension" />
-  <img src="https://img.shields.io/badge/manifest-v3-D97706?style=flat-square" alt="Manifest V3" />
-  <img src="https://img.shields.io/badge/storage-100%25%20local-78350F?style=flat-square" alt="100% Local" />
-  <img src="https://img.shields.io/badge/sign%20up-not%20required-92400E?style=flat-square" alt="No Account Required" />
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-4F46E5?style=flat-square" alt="MIT License" /></a>
+  <img src="https://img.shields.io/badge/chrome-extension-1E1B4B?style=flat-square&logo=googlechrome&logoColor=C7D2FE" alt="Chrome Extension" />
+  <img src="https://img.shields.io/badge/manifest-v3-3730A3?style=flat-square" alt="Manifest V3" />
+  <img src="https://img.shields.io/badge/storage-100%25%20local-1E1B4B?style=flat-square" alt="100% Local" />
+  <img src="https://img.shields.io/badge/sign%20up-not%20required-4F46E5?style=flat-square" alt="No Account Required" />
 </p>
 
 ---
@@ -67,40 +67,27 @@ npx wxt build
 ## Project Structure
 
 ```
-mimik/
-├── entrypoints/
-│   ├── background.ts          # Service worker: message routing, capture queue
-│   ├── content.ts             # Content script: event listeners, highlight overlay
-│   ├── sidepanel/             # Side panel entrypoint
-│   ├── fullview/              # Full dashboard entrypoint
-│   └── options/               # Options page entrypoint
-├── src/
-│   ├── background/
-│   │   ├── machine.ts         # XState capture state machine
-│   │   ├── screenshot.ts      # Tab screenshot capture
-│   │   └── step-description.ts # Auto-generate step descriptions
-│   ├── content/
-│   │   ├── events.ts          # Click, input, keyboard, clipboard, drag capture
-│   │   ├── element-meta.ts    # Extract element metadata (selector, aria, rect)
-│   │   └── spa-nav.ts         # SPA navigation detection
-│   ├── sidepanel/
-│   │   ├── App.tsx            # Home screen with Sunflower Bright design
-│   │   ├── RecordingView.tsx  # Live recording step feed
-│   │   ├── GuideEditor.tsx    # Guide review and editing
-│   │   ├── StepCard.tsx       # Step display with screenshot
-│   │   └── ZoomScreenshot.tsx # Cropped screenshot with highlight
-│   ├── fullview/
-│   │   ├── App.tsx            # Dashboard shell with full-bleed header
-│   │   ├── TopNav.tsx         # Amber gradient navigation bar
-│   │   ├── LibraryContent.tsx # Guide list/grid with search and filters
-│   │   ├── GuideContent.tsx   # Guide viewer with step cards
-│   │   └── GuideOutline.tsx   # Step outline sidebar panel
-│   └── shared/
-│       ├── db-schema.ts       # Dexie database schema and migrations
-│       ├── guide-service.ts   # CRUD operations for guides, steps, screenshots
-│       └── types.ts           # TypeScript interfaces
-└── public/
-    └── mascot.svg             # Mimik chest mascot
+src/
+├── core/                    # Business logic (no UI)
+│   ├── capture/             # Recording pipeline (events, AI, DOM context)
+│   ├── blur/                # Smart blur (regex presets, DOM scanner, panel)
+│   ├── export/              # HTML, PDF, Markdown generators + utils
+│   └── guides/              # Data layer (types, Dexie DB, CRUD)
+├── entrypoints/             # Chrome extension entry points (WXT)
+│   ├── background/          # Service worker
+│   ├── content.ts           # Content script
+│   ├── sidepanel/           # Side panel
+│   ├── fullview/            # Full-page dashboard
+│   ├── onboarding/          # First-install wizard
+│   └── options/             # Settings page
+├── lib/                     # Shared utilities
+├── stores/                  # Zustand state stores
+└── ui/                      # React components
+    ├── fullview/            # Dashboard views
+    ├── sidepanel/           # Side panel views
+    ├── onboarding/          # Onboarding wizard
+    ├── shared/              # Shared components
+    └── components/ui/       # shadcn/ui primitives
 ```
 
 ## Contributing

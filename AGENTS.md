@@ -43,13 +43,15 @@ src/
 │   │   ├── spa-nav.ts        # SPA navigation tracking
 │   │   ├── start-notification.ts # Recording notification overlay
 │   │   └── step-description.ts   # Fallback rule-based descriptions
-│   ├── export/              # HTML, PDF, Markdown export generators
+│   ├── blur/                # Smart blur: regex presets, DOM scanner, element picker, panel UI
+│   ├── export/              # HTML, PDF, Markdown export generators + shared utils
 │   └── guides/              # Data layer: types, Dexie DB, CRUD service
 ├── entrypoints/             # Chrome extension entry points (WXT)
 │   ├── background/          # Service worker: state machine, message handlers, tab management
 │   ├── content.ts           # Content script: CaptureSession, event listeners, rrweb
 │   ├── sidepanel/           # Side panel React mount
 │   ├── fullview/            # Full-page view React mount
+│   ├── onboarding/          # Onboarding wizard (opens on first install)
 │   └── options/             # Settings page React mount
 ├── lib/                     # Shared utilities
 │   ├── messaging.ts         # Extension messaging protocol (webext-core)
@@ -79,6 +81,8 @@ src/
     │   ├── ExportMenu.tsx
     │   ├── BlurCanvas.tsx
     │   └── ZoomScreenshot.tsx
+    ├── onboarding/          # Onboarding wizard UI
+    │   └── App.tsx          # 5-step wizard (welcome, AI, blur, pin, done)
     ├── shared/              # Shared UI components
     │   └── SettingsView.tsx  # AI settings (provider, model, API key)
     └── options/             # Settings page
@@ -104,6 +108,7 @@ src/
 | Content Script | `entrypoints/content.ts` | Injected into all tabs: CaptureSession, event listeners, rrweb |
 | Side Panel | `entrypoints/sidepanel/` | Recording controls, library, guide editor, settings |
 | Full View | `entrypoints/fullview/` | Dashboard: library browse, guide viewer, Ctrl+K search |
+| Onboarding | `entrypoints/onboarding/` | First-install wizard: AI setup, smart blur, pin extension |
 | Options | `entrypoints/options/` | Settings page (shared SettingsView in centered card) |
 
 ## Messaging
@@ -206,19 +211,22 @@ Extraction walks up from the target element to find:
 
 ## Design System
 
-All colors are defined as CSS variables in `src/ui/sidepanel/index.css` and used via Tailwind classes:
+All colors are defined as CSS variables in `src/ui/global.css` and used via Tailwind classes:
 
 | Token | Color | Usage |
 |-------|-------|-------|
-| `--color-foreground` | `#451a03` | Primary text |
-| `--color-muted-foreground` | `#92400E` | Secondary text |
-| `--color-warm` | `#B45309` | Tertiary text |
-| `--color-border` | `#E8E2DA` | Borders, dividers |
-| `--color-secondary` | `#FEF3C7` | Light wash backgrounds |
-| `--color-gold` | `#FDE68A` | Accent highlights |
-| `--color-amber` | `#F59E0B` | Primary amber |
-| `--color-primary` | `#451a03` | Dark backgrounds, badges |
-| `--color-primary-foreground` | `#FDE68A` | Text on dark backgrounds |
+| `--color-foreground` | `#1E1B4B` | Primary text (deep navy) |
+| `--color-muted-foreground` | `#6B7280` | Secondary text |
+| `--color-border` | `#C7D2FE` | Borders, dividers (lavender) |
+| `--color-secondary` | `#EEF2FF` | Light wash backgrounds |
+| `--color-accent` | `#4F46E5` | Accent / interactive (indigo) |
+| `--color-primary` | `#1E1B4B` | Dark backgrounds, badges |
+| `--color-primary-foreground` | `#C7D2FE` | Text on dark backgrounds |
+| `--color-lavender` | `#C7D2FE` | Soft accent |
+| `--color-purple` | `#4F46E5` | Primary indigo |
+| `--color-deep` | `#1E1B4B` | Deepest navy |
+| `--color-violet` | `#38BDF8` | Sky blue accent |
+| `--color-success` | `#059669` | Success green |
 
 Font: Poppins (loaded via `@fontsource/poppins`).
 
