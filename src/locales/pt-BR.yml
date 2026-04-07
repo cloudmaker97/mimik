@@ -1,0 +1,229 @@
+meta:
+  locale: pt-BR
+
+app:
+  name: Mimik
+  description: Capture fluxos de trabalho no navegador e gere guias passo a passo com capturas de tela.
+
+common:
+  loading: Carregando...
+  cancel: Cancelar
+  save: Salvar
+  delete: Excluir
+  back: Voltar
+  continue: Continuar
+  skip: Pular
+  export: Exportar
+  close: Fechar
+  undo: Desfazer
+  star: Favoritar
+  unstar: Tirar dos favoritos
+  restore: Restaurar
+
+sidepanel:
+  connected: Conectado
+  connecting: Conectando...
+  heroTitle: "O que você quer capturar?"
+  heroSubtitle: Grave qualquer fluxo de trabalho na hora
+  startCapture: Começar a capturar
+  searchPlaceholder: Buscar guias...
+  recentLabel: Recentes
+
+library:
+  noGuidesTitle: Nenhum guia ainda
+  noGuidesSub: Faça sua primeira captura pra criar um guia
+  noStarredTitle: Sem favoritos
+  noStarredSub: Marque um guia como favorito pra achar mais fácil
+  trashEmptyTitle: Lixeira vazia
+  trashEmptySub: "Tudo limpo por aqui!"
+  noMatchingGuides: Nenhum guia encontrado
+  moveToTrash: Mover pra lixeira
+  deletePermanently: Excluir de vez
+  openInFullView: Abrir em tela cheia
+
+guideme:
+  live: Ao vivo
+  stepOf: "Passo $1 de $2"
+  noDescription: Sem descrição
+  prev: Anterior
+  next: Próximo
+  finish: Terminar
+  exitTitle: "Vai sair?"
+  exitMessage: O passo a passo vai parar e a sobreposição vai ser removida.
+  stay: Ficar
+  exit: Sair
+  guideNotFound: Guia não encontrado
+
+guidemeCompletion:
+  title: "Arrasou, campeão!"
+  stepsCompleted: "$1 passo concluído."
+  stepsCompletedPlural: "Todos os $1 passos concluídos."
+  allDone: Pronto
+  runAgain: Repetir
+
+recording:
+  capturePaused: Captura em pausa
+  recording: "Gravando \xB7 $1 passo"
+  recordingPlural: "Gravando \xB7 $1 passos"
+  readyTitle: "Pronto pra gravar!"
+  readySub: Clica na página pra começar
+  finishRecording: Terminar gravação
+  smartBlur: Desfoque inteligente
+  discard: Descartar
+  deleteStep: Excluir passo
+  justNow: Agora
+  secondsAgo: "$1s atrás"
+  minutesAgo: "$1min atrás"
+
+settings:
+  title: Ajustes
+  aiDescriptions: Descrições com IA
+  provider: Provedor
+  model: Modelo
+  apiKey: Chave da API
+  aiLanguage: "Idioma das descrições"
+  saveSettings: Salvar ajustes
+  saved: Salvo
+  smartBlur: Desfoque inteligente
+  privacyNotice: Sua chave API fica salva no navegador e só é enviada pro provedor de IA que você escolher. Nada mais sai daqui.
+  bugReport: "Achou um bug? Reporta no GitHub"
+  starCtaTitle: "Curtiu o Mimik?"
+  starCtaMessage: Uma estrela no GitHub ajuda outras pessoas a descobrir o Mimik e nos dá aquela motivação!
+  starOnGithub: Dar estrela no GitHub
+
+blurPresets:
+  email: E-mail
+  phoneNumbers: Telefones
+  ssn: SSN
+  creditCard: Cartão de crédito
+  ipAddress: Endereço IP
+  macAddress: Endereço MAC
+
+fullview:
+  allGuides: Todos os guias
+  starred: Favoritos
+  trash: Lixeira
+  searchPlaceholder: Buscar guias...
+  guideMe: "Me guia!"
+  untitledGuide: Guia sem título
+  writingTitle: Escrevendo um título com os passos capturados...
+  guideNotFound: "Guia não encontrado."
+  stepCount: "$1 passo"
+  stepCountPlural: "$1 passos"
+  pageOf: "$1 / $2"
+
+sort:
+  recentFirst: Mais recentes
+  oldestFirst: Mais antigos
+  alphaAZ: "A \u2014 Z"
+  mostSteps: Mais passos
+  gridView: Ver em grade
+  listView: Ver em lista
+
+search:
+  startTyping: Digita pra buscar um guia
+  noMatchingGuides: Nenhum guia encontrado
+  noGuidesYet: Nenhum guia ainda
+
+keyboard:
+  navigate: navegar
+  open: abrir
+  close: fechar
+
+confirmDelete:
+  title: "Excluir esse guia?"
+  message: Vai ser excluído de vez. Não tem como desfazer.
+  confirm: Excluir de vez
+
+editor:
+  backToLibrary: Voltar pra biblioteca
+  guideMe: "Me guia!"
+  deleteThisStep: "Excluir esse passo?"
+  blurSensitiveArea: Desfocar área sensível
+  copyScreenshot: Copiar captura
+  noScreenshot: Sem captura
+
+emptyGuide:
+  title: Esse guia tá vazio
+  subtitle: Grava alguns passos pra dar vida a ele
+
+blurCanvas:
+  drawInstructions: Desenhe retângulos pra desfocar
+  regionCount: "$1 região"
+  regionCountPlural: "$1 regiões"
+
+blurPanel:
+  title: Desfoque inteligente
+  manualMode: Modo manual
+  selectElements: Selecione elementos pra desfocar
+  done: Pronto
+  doneResume: "Pronto \xB7 Continuar gravação"
+  resetAll: Limpar tudo
+
+exportMenu:
+  html: HTML
+  markdown: Markdown
+  pdf: PDF
+
+onboarding:
+  welcomeBadge: Bem-vindo
+  welcomeTitle: "Mimik instalado!"
+  welcomeMessage: "Em poucos passos você vai poder capturar fluxos de trabalho e gerar guias automáticos. Sem conta, sem cadastro \u2014 tudo fica no seu navegador."
+  getStarted: Bora começar
+  aiStepLabel: Passo 1 de 3
+  aiTitle: Descrições com IA
+  aiMessage: Conecta sua chave API pra ter descrições dos passos geradas por IA. É opcional e dá pra mudar depois nos ajustes.
+  aiGenerated: Gerado por IA
+  aiGeneratedDescription: Descrição gerada por IA
+  blurStepLabel: Passo 2 de 3
+  blurTitle: Desfoque inteligente
+  blurMessage: Desfoca automaticamente dados sensíveis nas capturas. Escolha quais padrões ativar.
+  screenshotPreview: Pré-visualização
+  notEnabled: Não ativado
+  categoriesProtected: "$1 categorias protegidas"
+  pinStepLabel: Passo 3 de 3
+  pinTitle: Fixa o Mimik
+  pinMessage: Fixa a extensão na barra pra ter acesso rápido. Clica no ícone de quebra-cabeça no Chrome e fixa o Mimik.
+  pinStep1Title: Clica no ícone de quebra-cabeça
+  pinStep1Sub: Lá em cima à direita na barra do navegador
+  pinStep2Title: Acha o Mimik
+  pinStep2Sub: No menu de extensões
+  pinStep3Title: Clica no pin
+  pinStep3Sub: O Mimik vai aparecer na sua barra
+  pinScreenshotAlt: Fixar extensão Mimik
+  doneTitle: "Tudo pronto!"
+  doneMessage: "O Mimik tá pronto pra capturar. Clica em \"Começar a capturar\" na extensão pra gravar seu primeiro guia."
+  featureAutoCapture: Captura automática
+  featureAIDescriptions: Descrições com IA
+  featureSmartBlur: Desfoque inteligente
+  openMimik: Abrir Mimik
+
+steps:
+  pressKey: "Pressionar $1 em $2"
+  toggleCheckbox: "Marcar $1"
+  selectRadio: "Selecionar $1"
+  toggleSwitch: "Alternar $1"
+  clickLink: 'Clicar no link "$1"'
+  click: "Clicar em $1"
+  typeIntoField: "Digitar no campo $1 $2"
+  typeInto: "Digitar em $1"
+  copyFrom: "Copiar de $1"
+  pasteInto: "Colar em $1"
+  cutFrom: "Recortar de $1"
+  drag: "Arrastar $1"
+  navigate: Ir pra página
+  defaultAction: "$1 $2"
+
+export:
+  created: Criado
+  source: Origem
+  step: Passo
+  steps: Passos
+  stepLabel: "Passo $1"
+  stepsCount: "$1 passos"
+  createdLabel: "Criado em $1"
+  sourceLabel: "Origem: $1"
+
+background:
+  guideOnDomain: "Guia em $1"
+  newGuide: Novo guia
