@@ -25,3 +25,28 @@ Examples:
 - "Create Repository in GitHub Organization"
 
 Just the title, no quotes, no preamble. Under 60 characters.`;
+
+export const AI_LANGUAGES = [
+  { code: 'en', label: 'English' },
+  { code: 'es', label: 'Español' },
+  { code: 'pt-BR', label: 'Português (Brasil)' },
+  { code: 'fr', label: 'Français' },
+] as const;
+
+export type AILanguageCode = (typeof AI_LANGUAGES)[number]['code'];
+
+const LANGUAGE_NAMES: Record<string, string> = {
+  es: 'Spanish',
+  fr: 'French',
+  pt: 'Brazilian Portuguese',
+  de: 'German',
+  ja: 'Japanese',
+  ko: 'Korean',
+  zh: 'Chinese',
+};
+
+export function getLanguageSuffix(locale: string): string {
+  if (locale.startsWith('en')) return '';
+  const lang = LANGUAGE_NAMES[locale.split('-')[0]] || locale;
+  return `\nIMPORTANT: Write the description in ${lang}.`;
+}
