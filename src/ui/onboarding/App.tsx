@@ -3,7 +3,7 @@ import { browser, i18n } from '#imports';
 import { PRESET_LABELS, type PresetKey } from '@/core/blur/regexes';
 import { AI_PROVIDERS, type AIProviderKey } from '@/core/capture/ai/models';
 import { AI_LANGUAGES, type AILanguageCode } from '@/core/capture/ai/prompts';
-import { localStorage } from '@/lib/browser-api';
+import { localStorage, requestHostPermissions } from '@/lib/browser-api';
 
 const BLUR_PRESET_I18N: Record<PresetKey, string> = {
   email: 'email',
@@ -489,7 +489,9 @@ function PinExtensionStep({ onNext, onSkip }: { onNext: () => void; onSkip: () =
 }
 
 function DoneStep() {
-  const handleOpen = () => {
+  const handleOpen = async () => {
+    const permissionsPromise = requestHostPermissions();
+    await permissionsPromise;
     browser.tabs.create({ url: browser.runtime.getURL('/fullview.html') });
   };
 

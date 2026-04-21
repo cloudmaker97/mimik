@@ -61,6 +61,11 @@ export default defineBackground(() => {
   });
 
   setSidePanelBehavior(true);
+  if (import.meta.env.BROWSER === 'firefox') {
+    browser.action.onClicked.addListener(() => {
+      browser.sidebarAction.toggle();
+    });
+  }
   initActor().catch(initActorFallback);
   cancelSession();
   registerNavigationListeners();

@@ -4,7 +4,15 @@ import { browser, i18n } from '#imports';
 import { CaptureState } from '@/core/capture/machine';
 import type { GuideMeSession } from '@/core/guideme/session';
 import { SESSION_KEY } from '@/core/guideme/session';
-import { createTab, focusWindow, getActiveTab, getExtensionURL, queryTabs, updateTab } from '@/lib/browser-api';
+import {
+  createTab,
+  focusWindow,
+  getActiveTab,
+  getExtensionURL,
+  queryTabs,
+  requestHostPermissions,
+  updateTab,
+} from '@/lib/browser-api';
 import { logger } from '@/lib/logger';
 import { sendMessage } from '@/lib/messaging';
 import { connectToBackground } from '@/lib/port';
@@ -117,6 +125,12 @@ export default function App() {
   }, []);
 
   const handleStartRecording = useCallback(async () => {
+    const permissionsPromise = requestHostPermissions();
+    const granted = await permissionsPromise;
+    if (!granted) {
+      logger.warn('Host permissions not granted, cannot start recording');
+      return;
+    }
     const tab = await getActiveTab();
     const url = tab?.url || '';
 

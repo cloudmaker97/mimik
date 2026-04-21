@@ -11,6 +11,7 @@ import {
   updateStepDescription,
 } from '@/core/guides/service';
 import type { Guide, Screenshot, Step } from '@/core/guides/types';
+import { openSidebar } from '@/lib/browser-api';
 import { sendMessage } from '@/lib/messaging';
 import { formatDate, getMostCommonDomain } from '@/lib/utils';
 import { useFullview } from '@/stores/fullview';
@@ -213,9 +214,9 @@ export default function GuideContent({ guideId }: GuideContentProps) {
         )}
         {data.steps.length > 0 && (
           <button
-            onClick={async () => {
-              await chrome.sidePanel.open({ windowId: chrome.windows.WINDOW_ID_CURRENT });
-              await sendMessage('startGuideMe', { guideId });
+            onClick={() => {
+              openSidebar();
+              void sendMessage('startGuideMe', { guideId });
             }}
             disabled={!data.steps.some((s) => s.elementMeta)}
             className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-primary-foreground bg-primary hover:bg-primary/90 px-3 py-0.5 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed ml-auto"

@@ -109,9 +109,42 @@ export const localStorage = {
 };
 
 export function setSidePanelBehavior(openOnActionClick: boolean): void {
+  if (import.meta.env.BROWSER === 'firefox') return;
   browser.sidePanel.setPanelBehavior({
     openPanelOnActionClick: openOnActionClick,
   });
+}
+
+export function openSidebar(): void {
+  if (import.meta.env.BROWSER === 'firefox') {
+    browser.sidebarAction.open();
+  } else {
+    browser.sidePanel.open({ windowId: chrome.windows.WINDOW_ID_CURRENT });
+  }
+}
+
+export function toggleSidebar(): void {
+  if (import.meta.env.BROWSER === 'firefox') {
+    browser.sidebarAction.toggle();
+  }
+}
+
+export function requestHostPermissions(): Promise<boolean> {
+  if (import.meta.env.BROWSER !== 'firefox') return Promise.resolve(true);
+  try {
+    return browser.permissions.request({ origins: ['<all_urls>'] }).catch(() => false);
+  } catch {
+    return Promise.resolve(false);
+  }
+}
+
+export async function hasHostPermissions(): Promise<boolean> {
+  if (import.meta.env.BROWSER !== 'firefox') return true;
+  try {
+    return await browser.permissions.contains({ origins: ['<all_urls>'] });
+  } catch {
+    return false;
+  }
 }
 
 export function onNavigationCompleted(

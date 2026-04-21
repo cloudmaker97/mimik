@@ -64,6 +64,19 @@ npx wxt build
 # 4. Select the .output/chrome-mv3 folder
 ```
 
+### Firefox
+
+Mimik builds for Firefox from the same codebase.
+
+```bash
+pnpm dev:firefox           # development
+pnpm build:firefox         # production build
+pnpm zip:firefox           # package for addons.mozilla.org
+pnpm zip:all               # both Chrome and Firefox
+```
+
+Firefox build output lands in `.output/firefox-mv3/`.
+
 ## Project Structure
 
 ```
