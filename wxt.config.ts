@@ -6,7 +6,7 @@ export default defineConfig({
   srcDir: "src",
   imports: false,
   webExt: {
-    chromiumArgs: ['--user-data-dir=/home/light/.config/chromium'],
+    chromiumArgs: ['--user-data-dir=/tmp/mimik-dev-profile', '--window-size=1280,800', '--window-position=0,0', '--force-device-scale-factor=1.25'],
   },
   alias: {
     '@': 'src',
@@ -58,6 +58,9 @@ export default defineConfig({
               gecko: {
                 id: "mimik@westpoint.io",
                 strict_min_version: "112.0",
+                data_collection_permissions: {
+                  required: ["none"],
+                },
               },
             },
           }
