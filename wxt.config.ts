@@ -37,7 +37,7 @@ export default defineConfig({
         "webNavigation",
         ...(isFirefox ? [] : ["sidePanel"]),
       ],
-      host_permissions: ["<all_urls>"],
+      ...(isFirefox ? {} : { host_permissions: ["<all_urls>"] }),
       ...(isFirefox ? {} : { minimum_chrome_version: "118" }),
       icons: {
         16: 'icon16.png',
