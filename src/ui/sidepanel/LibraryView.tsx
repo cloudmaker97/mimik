@@ -157,16 +157,17 @@ export default function LibraryView({ onOpen, searchQuery = '' }: LibraryViewPro
               <p className={`text-[13px] font-medium truncate ${isEmpty ? 'text-[#8B92A8]' : 'text-foreground'}`}>
                 {guide.title}
               </p>
-              <p className="text-[10px] mt-0.5 text-[#8B92A8]">{formatRelativeTime(guide.updatedAt)}</p>
+              <div className="flex items-center gap-2 mt-0.5">
+                <span className="text-[10px] text-[#8B92A8]">{formatRelativeTime(guide.updatedAt)}</span>
+                {guide.stepIds.length > 0 && (
+                  <span className="text-[9px] font-semibold text-muted-foreground bg-secondary px-2 py-0.5 rounded-full leading-none">
+                    {guide.stepIds.length !== 1
+                      ? i18n.t('fullview.stepCountPlural', [String(guide.stepIds.length)])
+                      : i18n.t('fullview.stepCount', [String(guide.stepIds.length)])}
+                  </span>
+                )}
+              </div>
             </div>
-
-            {guide.stepIds.length > 0 && (
-              <span className="text-[9px] font-semibold text-muted-foreground bg-secondary px-2 py-1 rounded-full shrink-0 leading-none mt-0.5">
-                {guide.stepIds.length !== 1
-                  ? i18n.t('fullview.stepCountPlural', [String(guide.stepIds.length)])
-                  : i18n.t('fullview.stepCount', [String(guide.stepIds.length)])}
-              </span>
-            )}
 
             <div className="flex items-center gap-0.5 shrink-0">
               <button

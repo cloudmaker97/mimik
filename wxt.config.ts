@@ -37,8 +37,9 @@ export default defineConfig({
         "webNavigation",
         ...(isFirefox ? [] : ["sidePanel"]),
       ],
-      ...(isFirefox ? {} : { host_permissions: ["<all_urls>"] }),
-      ...(isFirefox ? {} : { minimum_chrome_version: "118" }),
+      ...(isFirefox
+        ? { optional_host_permissions: ["<all_urls>"] }
+        : { host_permissions: ["<all_urls>"], minimum_chrome_version: "118" }),
       icons: {
         16: 'icon16.png',
         32: 'icon32.png',
@@ -57,7 +58,7 @@ export default defineConfig({
             browser_specific_settings: {
               gecko: {
                 id: "mimik@westpoint.io",
-                strict_min_version: "112.0",
+                strict_min_version: "128.0",
                 data_collection_permissions: {
                   required: ["none"],
                 },

@@ -54,10 +54,25 @@ async function generateTitleInBackground(guideId: string) {
 export default defineBackground(() => {
   logger.info('Background service worker started');
 
-  browser.runtime.onInstalled.addListener((details) => {
-    if (details.reason === 'install') {
-      browser.tabs.create({ url: browser.runtime.getURL('/onboarding.html') });
+  browser.runtime.onInstalled.addListener(async (details) => {
+    if (details.reason !== 'install') return;
+    if (import.meta.env.BROWSER === 'firefox') {
+      // Firefox MV3 bug 1758306: the <all_urls> grant lands in the origin
+      // store but is missed by _setupStartupPermissions when populating the
+      // API-permission resolution table that captureVisibleTab consults.
+      // Result: permissions.contains() returns true but captureVisibleTab
+      // silently rejects. Removing the permission here forces a clean state
+      // so the user-gesture permissions.request() in onboarding's "Get
+      // Started" / sidepanel's "Start Recording" goes through the working
+      // re-grant code path. Remove this when Mozilla ships:
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=1758306
+      try {
+        await browser.permissions.remove({ origins: ['<all_urls>'] });
+      } catch (err) {
+        logger.warn('Failed to clear stale host permission on install', err);
+      }
     }
+    browser.tabs.create({ url: browser.runtime.getURL('/onboarding.html') });
   });
 
   setSidePanelBehavior(true);
