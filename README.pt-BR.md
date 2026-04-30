@@ -59,10 +59,10 @@ O Mimik transforma qualquer tarefa repetitiva do navegador num guia documentado 
 
 Seja documentando ferramentas internas, escrevendo tutoriais do produto, ou integrando um colega novo, o Mimik captura cada clique, tecla e navegação automaticamente pra tu focar no que importa.
 
-| Navegador | Status | Instalação |
+| Navegador | Versão | Instalação |
 | --------- | ------ | ---------- |
-| Chrome    | [![Coming Soon][chrome-soon-shield]][chrome-soon-link] | Em breve |
-| Firefox   | [![Coming Soon][firefox-soon-shield]][firefox-soon-link] | Em breve |
+| Chrome    | [![Chrome Version][chrome-version-shield]][chrome-link]   | [Chrome Web Store][chrome-link] |
+| Firefox   | [![Firefox Version][firefox-version-shield]][firefox-link] | [Firefox Add-ons][firefox-link]  |
 
 > \[!IMPORTANT]
 >
@@ -217,7 +217,7 @@ MIT © [Westpoint](https://github.com/westpoint-io). Olha o [LICENSE](./LICENSE)
 [issues-shield]: https://img.shields.io/github/issues/westpoint-io/mimik?style=flat-square&labelColor=1E1B4B
 [issues-link]: https://github.com/westpoint-io/mimik/issues
 
-[chrome-soon-shield]: https://img.shields.io/badge/chrome-coming%20soon-1E1B4B?style=flat-square&logo=googlechrome&logoColor=C7D2FE
-[chrome-soon-link]: https://github.com/westpoint-io/mimik/issues
-[firefox-soon-shield]: https://img.shields.io/badge/firefox-coming%20soon-1E1B4B?style=flat-square&logo=firefoxbrowser&logoColor=C7D2FE
-[firefox-soon-link]: https://github.com/westpoint-io/mimik/issues
+[chrome-version-shield]: https://img.shields.io/chrome-web-store/v/jmfohdaflahliammccpiadmkcibohgha?label=Chrome%20Version&style=flat-square&logo=googlechrome&logoColor=C7D2FE&color=4F46E5&labelColor=1E1B4B
+[chrome-link]: https://chromewebstore.google.com/detail/mimik/jmfohdaflahliammccpiadmkcibohgha
+[firefox-version-shield]: https://img.shields.io/amo/v/mimik?label=Firefox%20Version&style=flat-square&logo=firefoxbrowser&logoColor=C7D2FE&color=4F46E5&labelColor=1E1B4B
+[firefox-link]: https://addons.mozilla.org/en-US/firefox/addon/mimik/
