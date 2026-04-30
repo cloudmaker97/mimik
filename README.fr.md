@@ -68,6 +68,10 @@ Que tu documentes des outils internes, que tu rédiges des tutoriels, ou que tu 
 >
 > **⭐️ Mets une étoile au repo** si Mimik te fait gagner du temps. Ça aide les autres à le découvrir.
 
+<a href="https://github.com/westpoint-io/mimik">
+  <img width="100%" alt="Mets une étoile à Mimik sur GitHub" src="https://github.com/user-attachments/assets/80d304da-a765-4bde-bf49-b1bdcb4fe804" />
+</a>
+
 <div align="right">
 
 [![Back to top][back-to-top]](#readme-top)

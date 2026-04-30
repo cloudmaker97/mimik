@@ -68,6 +68,10 @@ Ya sea que estés documentando herramientas internas, escribiendo tutoriales de 
 >
 > **⭐️ Dale una estrella al repo** si Mimik te ahorra tiempo. Ayuda a que otras personas lo descubran.
 
+<a href="https://github.com/westpoint-io/mimik">
+  <img width="100%" alt="Dale una estrella a Mimik en GitHub" src="https://github.com/user-attachments/assets/80d304da-a765-4bde-bf49-b1bdcb4fe804" />
+</a>
+
 <div align="right">
 
 [![Back to top][back-to-top]](#readme-top)
