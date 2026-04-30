@@ -3,7 +3,8 @@ meta:
 
 app:
   name: Mimik
-  description: Captura flujos de trabajo en tu navegador y genera guías paso a paso con capturas de pantalla.
+  store_title: "Mimik: guías paso a paso, tutoriales y capturas"
+  description: Convierte cualquier tarea del navegador en una guía paso a paso con capturas. Local, código abierto, con tu propia clave de IA.
 
 common:
   loading: Cargando...

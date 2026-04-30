@@ -3,7 +3,8 @@ meta:
 
 app:
   name: Mimik
-  description: Auto-capture browser workflows and generate step-by-step guides with annotated screenshots.
+  store_title: "Mimik: Step-by-Step Guides, Tutorials & Screenshots"
+  description: Auto-capture any browser workflow into a step-by-step guide with screenshots. Local-first, open source, bring your own AI key.
 
 common:
   loading: Loading...

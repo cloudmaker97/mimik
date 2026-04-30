@@ -3,7 +3,8 @@ meta:
 
 app:
   name: Mimik
-  description: "Capturez vos parcours navigateur et générez des guides étape par étape avec captures d'écran."
+  store_title: "Mimik : guides pas-à-pas, tutoriels et captures"
+  description: "Transformez toute tâche dans le navigateur en guide pas-à-pas avec captures. Local, open source, avec votre propre clé IA."
 
 common:
   loading: "Chargement..."

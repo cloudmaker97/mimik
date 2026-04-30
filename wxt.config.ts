@@ -25,7 +25,7 @@ export default defineConfig({
   manifest: ({ browser }) => {
     const isFirefox = browser === 'firefox';
     return {
-      name: "__MSG_app_name__",
+      name: "__MSG_app_store_title__",
       description: "__MSG_app_description__",
       default_locale: "en",
       permissions: [
