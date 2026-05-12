@@ -8,6 +8,18 @@ export default defineConfig({
   webExt: {
     chromiumArgs: ['--user-data-dir=/tmp/mimik-dev-profile', '--window-size=1280,800', '--window-position=0,0', '--force-device-scale-factor=1.25'],
   },
+  zip: {
+    excludeSources: [
+      "mockups/**",
+      "docs/**",
+      ".claude/**",
+      ".planning/**",
+      ".worktrees/**",
+      "CLAUDE.md",
+      "AGENTS.md",
+      "CONTRIBUTING.md",
+    ],
+  },
   alias: {
     '@': 'src',
   },
