@@ -50,7 +50,7 @@ Click record, do the thing, get a polished guide with annotated screenshots. Edi
 ## 📺 Demo
 
 <div align="center">
-<img src="public/demo.gif" alt="Mimik demo" width="800" />
+<img src="https://github.com/user-attachments/assets/d4c64cb8-ad26-4de1-af02-a04a64e2836e" alt="Mimik demo" width="800" />
 </div>
 
 ## 👋 Getting Started

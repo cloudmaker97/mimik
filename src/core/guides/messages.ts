@@ -38,12 +38,6 @@ export interface UserActionMessage {
   action: 'click' | 'input' | 'scroll';
   elementMeta: ElementMeta;
 }
-export interface RrwebChunkMessage {
-  type: 'RRWEB_CHUNK';
-  guideId: string;
-  events: unknown[];
-  timestamp: number;
-}
 export interface SpaNavigateMessage {
   type: 'URL_CHANGED';
   url: string;
@@ -57,5 +51,4 @@ export type ExtensionMessage =
   | StartRecordingMessage
   | StopRecordingMessage
   | UserActionMessage
-  | RrwebChunkMessage
   | SpaNavigateMessage;
